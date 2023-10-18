@@ -1,35 +1,87 @@
-// src/main/frontend/src/App.js
-
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 function App() {
-   const [hello, setHello] = useState('')
+  const [sigunguCd, setSigunguCd] = useState('');
+  const [bjdongCd, setBjdongCd] = useState('');
+  const [bun, setBun] = useState('');
+  const [ji, setJi] = useState('');
+  const [useYm, setUseYm] = useState('');
+  const [numOfRows, setNumOfRows] = useState('');
+  const [pageNo, setPageNo] = useState('');
+  const [result, setResult] = useState([]);
 
-    useEffect(() => {
-        axios.get('/main/boardid')
-        .then(response => {
-          console.log(response);
-          setHello(response.data.data)
-          console.log(hello)  
+  const handleApiRequest = () => {
+    // API 요청을 보내는 로직
+    axios
+      .get('/main/fetchData', {
+        params: {
+          sigunguCd,
+          bjdongCd,
+          bun,
+          ji,
+          useYm,
+          numOfRows,
+          pageNo,
         }
-        )
-        .catch(error => console.log(error))
-    }, []);
+      })
+      .then(response => {
+        // API 응답을 처리
+        setResult(response.data);
+      })
+      .catch(error => console.error(error));
+  };
 
-    const dataArray = Object.values(hello)
-    return (
+  return (
+    <div>
+      <h1>API 요청 및 응답</h1>
       <div>
-        백엔드에서 가져온 데이터입니다:
-        <ul>
-            {dataArray.map((item, index) => (
-                <li key={index}>
-                    User ID: {item.userId}, User Name: {item.userName}, Board ID: {item.boardId}, Board Name: {item.boardName}
-                </li>
-            ))}
-        </ul>
+        <label>
+          sigunguCd (필수):
+          <input type="text" value={sigunguCd} onChange={e => setSigunguCd(e.target.value)} />
+        </label>
+      </div>
+      <div>
+        <label>
+          bjdongCd (필수):
+          <input type="text" value={bjdongCd} onChange={e => setBjdongCd(e.target.value)} />
+        </label>
+      </div>
+      <div>
+        <label>
+          bun (필수):
+          <input type="text" value={bun} onChange={e => setBun(e.target.value)} />
+        </label>
+      </div>
+      <div>
+        <label>
+          ji (필수):
+          <input type="text" value={ji} onChange={e => setJi(e.target.value)} />
+        </label>
+      </div>
+      <div>
+        <label>
+          useYm (필수):
+          <input type="text" value={useYm} onChange={e => setUseYm(e.target.value)} />
+        </label>
+      </div>
+      <div>
+        <label>
+          numOfRows (선택):
+          <input type="text" value={numOfRows} onChange={e => setNumOfRows(e.target.value)} />
+        </label>
+      </div>
+      <div>
+        <label>
+          pageNo (선택):
+          <input type="text" value={pageNo} onChange={e => setPageNo(e.target.value)} />
+        </label>
+      </div>
+      <button onClick={handleApiRequest}>API 요청</button>
+      <h2>API 응답:</h2>
+      <pre>{JSON.stringify(result, null, 2)}</pre>
     </div>
-    );
+  );
 }
 
 export default App;
