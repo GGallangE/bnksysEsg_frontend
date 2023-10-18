@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 const URL = "/B551182/";
-function App() {
+function App2() {
    //const [hello, setHello] = useState([]);
    const [data, setData] = useState(null);
 const [loading, setLoading] = useState(false);
@@ -47,7 +47,7 @@ const [error, setError] = useState(null);
       }, []);
       
       if(loading) return <div>Loading...</div>;
-      if(error)   return <div>Error...</div>;
+      if(error)   return <div>Errasdsadsadadadasdsadasdaor...</div>;
       if(!data)   return null;
     //const dataArray = Object.values(hello)
     return (
@@ -57,4 +57,4 @@ const [error, setError] = useState(null);
       );
 }
 
-export default App;
+export default App2;
