@@ -7,19 +7,27 @@ function App() {
    const [message, setMessage] = useState([]);
 
     useEffect(() => {
-        axios.get('/main/User')
-        .then((response)=>{
-          setMessage(response.data);
+        axios.get('/main/boardid')
+        .then(response => {
+          console.log(response);
+          setHello(response.data.data)
+          console.log(hello)  
         })
-        // .then((data)=>{
-        //     setMessage(response.data);
-        // })
+        .catch(error => console.log(error))
     }, []);
 
+    const dataArray = Object.values(hello)
     return (
-        <div>
-            백엔드에서 가져온 데이터입니다 : {message}
-        </div>
+      <div>
+        백엔드에서 가져온 데이터입니다:
+        <ul>
+            {dataArray.map((item, index) => (
+                <li key={index}>
+                    User ID: {item.userId}, User Name: {item.userName}, Board ID: {item.boardId}, Board Name: {item.boardName}
+                </li>
+            ))}
+        </ul>
+    </div>
     );
 }
 
