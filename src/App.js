@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './App.css';
 
 function App() {
   const [sigunguCd, setSigunguCd] = useState('');
@@ -10,6 +11,8 @@ function App() {
   const [numOfRows, setNumOfRows] = useState('');
   const [pageNo, setPageNo] = useState('');
   const [result, setResult] = useState([]);
+  const [businessNumber, setBusinessNumber] = useState('');
+  const [response, setResponse] = useState('');
 
   const handleApiRequest = () => {
     // API 요청을 보내는 로직
@@ -27,13 +30,32 @@ function App() {
       })
       .then(response => {
         // API 응답을 처리
-        setResult(response.data);
+      const responseData = response.data.response.body.items.item;
+
+      setResult(responseData);
       })
       .catch(error => console.error(error));
   };
 
+  const handleSearch = () => {
+    axios
+      .post('/main/fetchData', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        setResponse(res.data);
+      })
+      .catch((error) => {
+        console.error('에러:', error);
+      });
+  };
+
+
   return (
-    <div>
+    <div className="split-container">
+      <div className="split-left">
       <h1>API 요청 및 응답</h1>
       <div>
         <label>
@@ -79,7 +101,31 @@ function App() {
       </div>
       <button onClick={handleApiRequest}>API 요청</button>
       <h2>API 응답:</h2>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(result, null, 2)}</pre> */}
+      <div>
+          <p>도로명: {result.newPlatPlc}</p>
+          <p>지번주소: {result.platPlc}</p>
+          <p>전력량: {result.useQty}</p>
+          <p>사용날짜: {result.useYm}</p>
+      </div>
+      </div>
+
+      <div className="split-right">
+      <h1>사업자 조회</h1>
+      <div>
+        <label>
+          사업자 번호:
+          <input
+              type="text"
+              value={businessNumber}
+              onChange={(e) => setBusinessNumber(e.target.value)}
+            />
+        </label>
+      </div>
+      <button onClick={handleSearch}>조회</button>
+      <h2>조회 결과:</h2>
+      <pre>{JSON.stringify(response, null, 2)}</pre>
+      </div>
     </div>
   );
 }
