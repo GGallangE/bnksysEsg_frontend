@@ -4,10 +4,16 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function(app) {
   app.use(
-    '/api',
-    createProxyMiddleware({
+    createProxyMiddleware('/api',{
+      target: 'https://api.odcloud.kr',
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    createProxyMiddleware('/main',{
       target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );
 };
+
