@@ -31,6 +31,7 @@ function App() {
       .then(response => {
         // API 응답을 처리
       const responseData = response.data.response.body.items.item;
+      // const responseData = response;
 
       setResult(responseData);
       })
@@ -49,6 +50,32 @@ function App() {
       })
       .catch((error) => {
         console.error('에러:', error);
+      });
+  };
+
+  const handleSave = () => {
+    const requestData = {
+      sigunguCd,
+      bjdongCd,
+      bun,
+      ji,
+      useYm,
+      // newPlatPlc,
+      // platPlc,
+      // useQty,
+    };
+  
+    axios
+      .post('/main/saveData', requestData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        console.log('저장 요청에 대한 응답:', res.data);
+      })
+      .catch((error) => {
+        console.error('저장 요청에 대한 에러:', error);
       });
   };
 
@@ -108,6 +135,7 @@ function App() {
           <p>전력량: {result.useQty}</p>
           <p>사용날짜: {result.useYm}</p>
       </div>
+      <button onClick={handleSave}>저장</button>
       </div>
 
       <div className="split-right">
