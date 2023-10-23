@@ -38,6 +38,7 @@ function App3() {
   if(error)   return <div>Error...</div>;
   if(!data)   return null;
   console.log(1);
+  console.log(data);
   console.log(data.data[0].시군구);
   return (
     <div className="App">      

@@ -10,7 +10,7 @@ module.exports = function(app) {
     })
   );
   app.use(
-    createProxyMiddleware('/main',{
+    createProxyMiddleware('/spring',{
       target: 'http://localhost:8080',
       changeOrigin: true,
     })

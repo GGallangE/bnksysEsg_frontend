@@ -15,7 +15,7 @@ function App2() {
       setData(null);
       setLoading(true);
 
-      const response = await axios.get('/main/boardid', {
+      const response = await axios.get('/spring/main/boardid', {
       });
       setData(response.data);
       // console.log(response);
@@ -34,7 +34,8 @@ function App2() {
   if(error)   return <div>Error...</div>;
   if(!data)   return null;
   console.log(1);
-  console.log(data.data[0].boardName);
+  console.log(data);
+  // console.log(data.data[0].boardName);
   return (
     <div className="App">      
       <p>병원명 : { data.data[0].boardName}</p>
