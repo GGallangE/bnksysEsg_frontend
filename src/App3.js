@@ -7,23 +7,28 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 const URL = "/api/nts-businessman/v1/status?serviceKey=" + API_KEY;
 
 function App3() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState("");
+//   function Content(){
+//     const inputValues = content.split(',');
+
+//     const cleanedValues = inputValues.map(value => value.trim());
+
+//     setContent(cleanedValues);
+// }
   const businessmanData = async () => {
+    console.log("businessmanData")
     try {
-      // setError(null);
-      // setData(null);
-      // setLoading(true);
-      console.log(content);
+      // Content();
+      setLoading(true);
       const response = await axios.post(URL, {
-        "b_no": [
-          content
-        ]
+        "b_no": [content]
       });
-      setData(response.data);
-      console.log(data);
+      console.log(content);
+      setData(response.data.data); 
+      console.log(response.data.data);
     } catch(e) {
       setError(e);
     }
@@ -31,45 +36,55 @@ function App3() {
     setLoading(false);
     
   };
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
 
-function BoardInput(props) {
- 
+  
+ function BoardInput(props) {
+  console.log("BoardInput");
     const handleContent = (e) => {
-        setContent(e.target.value)
+      setContent(e.target.value);
     }
- 
-    //console.log(data)
-    // console.log(data.data)
-    // console.log(data.data[0].b_no)
+
     return (
             <div>
                 내용: <input type="text" name="content" onChange={handleContent} value={content} />
                 <button onClick={handleButtonClick}>input</button>
-            </div>      
+            </div>
+                 
     );
-}
+ }
 
   useEffect(() => {
     businessmanData();
+    console.log("useEffect");
   }, []);
 
   const handleButtonClick = () => {
+    console.log("handleButtonClick")
     businessmanData();
-    console.log(data);
-    return(
-      <div>
-      <p>결과: { data.data[0].b_no}</p>
-      </div>
-    )
-}
-  //if(loading) return <div>Loading...</div>;
-  //if(error)   return <div>Error...</div>;
-  //if(!data)   return null;
+  }
+
+  if(loading) return <div>Loading...</div>;
+  if(error)   return <div>Error...</div>;
+  if(!data)   return null;
 
   return (
     <div className="App">
       <BoardInput  />
-      
+      {data && (
+      <div>
+        <p>사업자 등록번호: {data[0].b_no}</p>
+        <p>납세자 상태: {data[0].b_stt}</p>
+        <p>과세유형메세지: {data[0].tax_type}</p>
+        <p>폐업일: {data[0].end_dt}</p>
+        <p>단위과세전환폐업여부: {data[0].utcc_yn}</p>
+        <p>최근과세유형전환일자: {data[0].tax_type_change_dt}</p>
+        <p>세금계산서적용일자: {data[0].invoice_apply_dt}</p>
+        <p>직전과세유형메세지: {data[0].rbf_tax_type}</p>
+      </div>
+    )}
     </div>
     
   );
