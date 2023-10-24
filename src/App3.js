@@ -16,23 +16,22 @@ function App3() {
       // setError(null);
       // setData(null);
       // setLoading(true);
-      
+      console.log(content);
       const response = await axios.post(URL, {
         "b_no": [
           content
         ]
       });
       setData(response.data);
-      console.log(response.data);
+      console.log(data);
     } catch(e) {
       setError(e);
     }
     
     setLoading(false);
-    // return(
-    //   <p>결과: { data.data[0].b_no}</p>
-    // )
+    
   };
+
 function BoardInput(props) {
  
     const handleContent = (e) => {
@@ -43,19 +42,26 @@ function BoardInput(props) {
     // console.log(data.data)
     // console.log(data.data[0].b_no)
     return (
-        <div>
             <div>
                 내용: <input type="text" name="content" onChange={handleContent} value={content} />
-                <button onClick={businessmanData}>input</button>
-            </div>
-        </div>
+                <button onClick={handleButtonClick}>input</button>
+            </div>      
     );
 }
 
-  // useEffect(() => {
-  //   businessmanData();
-  // }, []);
+  useEffect(() => {
+    businessmanData();
+  }, []);
 
+  const handleButtonClick = () => {
+    businessmanData();
+    console.log(data);
+    return(
+      <div>
+      <p>결과: { data.data[0].b_no}</p>
+      </div>
+    )
+}
   //if(loading) return <div>Loading...</div>;
   //if(error)   return <div>Error...</div>;
   //if(!data)   return null;
