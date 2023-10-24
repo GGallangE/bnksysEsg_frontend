@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Main.css';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
-import ResultDetail from './ResultDetail';
+import { BrowserRouter, Route, Link, Routes, Router } from 'react-router-dom';
+import DetailApi_Status from './DetailApi_Status';
 
-function App() {
+function Main() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
@@ -31,7 +31,6 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
     <div className='App'>
       <input
         type="text"
@@ -66,12 +65,12 @@ function App() {
             </ul>
         )}
       </div>
-    <Routes>
-      <Route path="/detailapi/:apilistid" component={ResultDetail} />
-    </Routes>
+     
     </div>
-    </BrowserRouter>
+    
+    
+    
   );
 }
 
-export default App;
+export default Main;

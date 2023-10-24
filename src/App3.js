@@ -11,6 +11,7 @@ function App3() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [content, setContent] = useState("");
+  const [array, setArray] = useState([]);
 //   function Content(){
 //     const inputValues = content.split(',');
 
@@ -20,11 +21,13 @@ function App3() {
 // }
   const businessmanData = async () => {
     console.log("businessmanData")
+    const array = content.split(',').map(item => item.trim());
+    setArray(array);
     try {
       // Content();
       setLoading(true);
       const response = await axios.post(URL, {
-        "b_no": [content]
+        "b_no": array
       });
       console.log(content);
       setData(response.data.data); 
@@ -45,6 +48,8 @@ function App3() {
   console.log("BoardInput");
     const handleContent = (e) => {
       setContent(e.target.value);
+
+      
     }
 
     return (
