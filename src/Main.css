@@ -94,3 +94,8 @@
 .item-info {
   margin-left: 60px;
 }
+
+.Link {
+  text-decoration: none; /* 밑줄 제거 */
+  color: black;
+}
