@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Main.css';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import ResultDetail from './ResultDetail';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -29,6 +31,7 @@ function App() {
   }, []);
 
   return (
+    <BrowserRouter>
     <div className='App'>
       <input
         type="text"
@@ -46,12 +49,16 @@ function App() {
             <ul>
             {searchResults.map((result) => (
                 <li key={result.apilistid} className="result-item">
+                  <Link to={`/detailapi/${result.apilistid}`} className="item-name">
+                    {result.apilistid}
+                  </Link>
                 <div className="item">
                     <div className="item-name">{result.apiname}</div>
                     <div className='item-info-container'>
                     <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>
                     <span className='item-info'>조회수: {result.view}</span>
                     <span className='item-info'>사용수: {result.nbruses}</span>
+                    <span style={{ display: "none" }}>{result.apilistid}</span>
                     </div>
                 </div>
                 </li>
@@ -59,7 +66,11 @@ function App() {
             </ul>
         )}
       </div>
+    <Routes>
+      <Route path="/detailapi/:apilistid" component={ResultDetail} />
+    </Routes>
     </div>
+    </BrowserRouter>
   );
 }
 

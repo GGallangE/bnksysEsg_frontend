@@ -2,48 +2,77 @@ import './App3.css';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-const URL = "/api/15002552/v1/uddi:9ac6a282-0e1e-42aa-84ca-d1b6e7d571b3?page=1&perPage=10&returnType=JSON&serviceKey=lpa6NPdQyuq%2BpwSkAhWpdv%2FfB6s2fa4xbwOFpIP%2BvZD3TAv27rUlvYLkmMMUYekiWWK9AicPCh1xoIMkjgy3cA%3D%3D";
+const API_KEY = process.env.REACT_APP_API_KEY;
+
+const URL = "/api/nts-businessman/v1/status?serviceKey=" + API_KEY;
 
 function App3() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const fetchData = async () => {
+  const [content, setContent] = useState('')
+  const businessmanData = async () => {
     try {
-      setError(null);
-      setData(null);
-      setLoading(true);
-
-      const response = await axios.get(URL, {
-        // params: {
-        //   serviceKey: "lpa6NPdQyuq%2BpwSkAhWpdv%2FfB6s2fa4xbwOFpIP%2BvZD3TAv27rUlvYLkmMMUYekiWWK9AicPCh1xoIMkjgy3cA%3D%3D",
-        //   numOfRows: 1,
-        //   pageNo: 10
-        // }
+      // setError(null);
+      // setData(null);
+      // setLoading(true);
+      console.log(content);
+      const response = await axios.post(URL, {
+        "b_no": [
+          content
+        ]
       });
       setData(response.data);
+      console.log(data);
     } catch(e) {
       setError(e);
     }
     
     setLoading(false);
+    
   };
 
+function BoardInput(props) {
+ 
+    const handleContent = (e) => {
+        setContent(e.target.value)
+    }
+ 
+    //console.log(data)
+    // console.log(data.data)
+    // console.log(data.data[0].b_no)
+    return (
+            <div>
+                내용: <input type="text" name="content" onChange={handleContent} value={content} />
+                <button onClick={handleButtonClick}>input</button>
+            </div>      
+    );
+}
+
   useEffect(() => {
-    fetchData();
+    businessmanData();
   }, []);
 
-  if(loading) return <div>Loading...</div>;
-  if(error)   return <div>Error...</div>;
-  if(!data)   return null;
-  console.log(1);
-  console.log(data);
-  console.log(data.data[0].시군구);
+
+  const handleButtonClick = () => {
+    businessmanData();
+    console.log(data);
+    return(
+      <div>
+      <p>결과: { data.data[0].b_no}</p>
+      </div>
+    )
+}
+  //if(loading) return <div>Loading...</div>;
+  //if(error)   return <div>Error...</div>;
+  //if(!data)   return null;
+
   return (
-    <div className="App">      
-      <p>병원명 : { data.data[0].시군구}</p>
+    <div className="App">
+      <BoardInput  />
+      
     </div>
+    
   );
 }
 
