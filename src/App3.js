@@ -11,20 +11,14 @@ function App3() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [content, setContent] = useState("");
-//   function Content(){
-//     const inputValues = content.split(',');
-
-//     const cleanedValues = inputValues.map(value => value.trim());
-
-//     setContent(cleanedValues);
-// }
-  const businessmanData = async () => {
+  const [newContent, setnewContent] = useState([]);
+  const businessmanData = async (newContent) => {
     console.log("businessmanData")
     try {
       // Content();
       setLoading(true);
       const response = await axios.post(URL, {
-        "b_no": [content]
+        "b_no": [newContent]
       });
       console.log(content);
       setData(response.data.data); 
@@ -63,8 +57,10 @@ function App3() {
 
 
   const handleButtonClick = () => {
-    console.log("handleButtonClick")
-    businessmanData();
+    // console.log("handleButtonClick")
+    const contentArray = content.split(',');
+    const newContent = contentArray.join(',');
+  businessmanData(newContent);
   }
 
   if(loading) return <div>Loading...</div>;
