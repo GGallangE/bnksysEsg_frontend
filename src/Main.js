@@ -36,7 +36,7 @@ function App() {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="search-input"
+        className="inputField"
       />
       <button onClick={handleSearch}>검색</button>
       <div>
@@ -48,10 +48,10 @@ function App() {
                 <li key={result.apilistid} className="result-item">
                 <div className="item">
                     <div className="item-name">{result.apiname}</div>
-                    <div className="item-info">
-                    <span>제공기관: {result.prvorg}</span>
-                    <span>,  조회수: {result.view}</span>
-                    <span>,  사용수: {result.nbruses}</span>
+                    <div className='item-info-container'>
+                    <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>
+                    <span className='item-info'>조회수: {result.view}</span>
+                    <span className='item-info'>사용수: {result.nbruses}</span>
                     </div>
                 </div>
                 </li>
