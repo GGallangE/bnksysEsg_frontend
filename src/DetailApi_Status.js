@@ -1,11 +1,7 @@
-import React, { useEffect ,useState} from 'react';
+import React, { useEffect ,useState, Suspense} from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './DetailApi_Status.css';
-import DetailData1 from './DetailData1';
-const API_KEY = process.env.REACT_APP_API_KEY;
-
-const URL = "/api/nts-businessman/v1/status?serviceKey=" + API_KEY;
 
 function DetailApi_Status() {
   const {apilistid} = useParams();
@@ -25,6 +21,10 @@ function DetailApi_Status() {
     fetchApiDetails();
   }, [apilistid]);
 
+  const DynamicComponent = React.lazy(() =>
+    import(`./DetailData${apilistid}`)
+  );
+
   return (
     <div>
       <h3>{searchResults.apiname}</h3>
@@ -35,7 +35,10 @@ function DetailApi_Status() {
         <p>사용 횟수: {searchResults.nbruses}</p>
         <p>API 설명: {searchResults.apiexpl}</p>
       </div>
-      {React.createElement(componentName)}
+      <Suspense fallback={<div>Loading...</div>}>
+            <DynamicComponent />
+      </Suspense>
+      {/* {React.createElement(componentName)} */}
     </div>     
   );
 }

@@ -58,7 +58,7 @@ function App3() {
     <Table striped bordered hover>
       <thead>
         <tr>
-          <th>사업자 등록번호111111</th>
+          <th>사업자 222222</th>
           <th>납세자 상태</th>
           <th>과세유형메세지</th>
           <th>폐업일</th>
