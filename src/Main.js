@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Main.css';
-import { BrowserRouter, Route, Link, Routes, Router } from 'react-router-dom';
-import DetailApi_Status from './DetailApi_Status';
+import {Link} from 'react-router-dom';
 
 function Main() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [sortBy, setSortBy] = useState('');
 
   const handleSearch = async () => {
     console.log(searchTerm)
     try{
         const response = await axios.get('/spring/main/search', {
-            params : {name : searchTerm}
+            params : {
+              name : searchTerm
+            , sortBy : sortBy}
         });
         setSearchResults(response.data.data);
     }catch (error) {
@@ -25,10 +27,27 @@ function Main() {
       handleSearch();
     }
   };
+
   console.log(searchResults);
   useEffect(() => {
     handleSearch();
   }, []);
+
+  const SelectBox = () => {
+    return (
+      <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <option key = "register" value = "register">
+          등록순
+        </option>
+        <option key = "view" value = "view">
+          조회순
+        </option>
+        <option key = "nbruses" value = "nbruses">
+          사용순
+        </option>
+      </select>
+    )
+  }
   
 
   return (
@@ -41,6 +60,7 @@ function Main() {
         onKeyDown={handleKeyDown}
         className="inputField"
       />
+      <SelectBox />
       <button onClick={handleSearch}>검색</button>
       <div>
         {Array.isArray(searchResults) && searchResults.length === 0 ? (

@@ -16,7 +16,6 @@ function DetailApi_Status() {
       }
     };
 
-    // Call the API details fetch function when the component mounts
     fetchApiDetails();
   }, [apilistid]);
 

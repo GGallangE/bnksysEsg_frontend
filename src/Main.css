@@ -55,6 +55,16 @@
     list-style-type: none;
   }
 
+  select {
+    height: 45px;
+    width: 80px;
+    margin-left: 3px;
+    margin-top: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.23);
+    border-radius: 7px;
+    font-size: 15px;
+  }
+
   .inputField { 
     background-color: transparent;
     height: 40px;
