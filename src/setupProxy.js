@@ -15,5 +15,13 @@ module.exports = function(app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    createProxyMiddleware('/1611000',{
+      target: 'https://apis.data.go.kr',
+      changeOrigin: true,
+    })
+  );
+
+  
 };
 
