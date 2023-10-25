@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
   <Routes>
-  <Route path="/" element={<App3 />}/>
+  <Route path="/" element={<Main />}/>
   <Route path="/detailapi/:apilistid" element={<DetailApi_Status />}/>
   
   </Routes>
