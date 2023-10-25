@@ -8,65 +8,45 @@ const URL = "/api/nts-businessman/v1/status?serviceKey=" + API_KEY;
 
 function App3() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [content, setContent] = useState("");
   const [array, setArray] = useState([]);
+  const [error, setError] = useState(null);
   const businessmanData = async () => {
     console.log("businessmanData")
     const array = content.split(',').map(item => item.trim());
     setArray(array);
     try {
-      // Content();
-      setLoading(true);
       const response = await axios.post(URL, {
         "b_no": array
       });
-      console.log(content);
       setData(response.data.data); 
-      console.log(response.data.data);
     } catch(e) {
       setError(e);
     }
-    
-    setLoading(false);
-    
   };
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data]);
 
-  
  function BoardInput(props) {
   console.log("BoardInput");
     const handleContent = (e) => {
       setContent(e.target.value);
-
-      
     }
 
     return (
             <div>
                 내용: <input type="text" name="content" onChange={handleContent} value={content} />
                 <button onClick={handleButtonClick}>input</button>
-            </div>
-                 
+            </div> 
     );
  }
 
   useEffect(() => {
-    businessmanData();
     console.log("useEffect");
+    businessmanData();
   }, []);
 
-
   const handleButtonClick = () => {
-  businessmanData(content);
+    businessmanData(content);
   }
-
-  if(loading) return <div>Loading...</div>;
-  if(error)   return <div>Error...</div>;
-  if(!data)   return null;
 
   return (
     <div className="App">
@@ -84,7 +64,6 @@ function App3() {
       </div>
     )}
     </div>
-    
   );
 }
 
