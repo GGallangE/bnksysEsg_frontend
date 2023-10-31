@@ -6,14 +6,17 @@ import reportWebVitals from './reportWebVitals';
 import App2 from './App2';
 import App3 from './App3';
 import Main from './Main';
+import Login from './User/Login';
+import Register from './User/Register';
 import { BrowserRouter, Route, Link, Routes, Router } from 'react-router-dom';
 import DetailApi_Status from './DetailApi_Status';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
   <Routes>
-  <Route path="/" element={<Main />}/>
+  <Route path="/" element={<Login />}/>
   <Route path="/detailapi/:apilistid" element={<DetailApi_Status />}/>
+  <Route path="/signup" element={<Register />} />
   
   </Routes>
   </BrowserRouter>
