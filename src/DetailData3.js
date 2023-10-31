@@ -7,24 +7,30 @@ import React from 'react';
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 
-const API_KEY = process.env.REACT_APP_API_KEY;
+const API_KEY = process.env.REACT_APP_COMPANY;
 
-const URL = "/api/nts-businessman/v1/status?serviceKey=" + API_KEY;
+const URL = "/fapi?key=" + API_KEY;
 
 function DetailData1() {
   const [data, setData] = useState([]);
   const [content, setContent] = useState("");
   const [array, setArray] = useState([]);
   const [error, setError] = useState(null);
+  const [gb, setGb] = useState("");
+  const [q, setQ] = useState("");
+
+  const NEWURL = URL + "&gb=3&type=JSON&q=" + q;
   const BusinessmanData = async () => {
     //console.log("businessmanData")
     const array = content.split(',').map(item => item.trim());
     setArray(array);
     try {
-      const response = await axios.post(URL, {
-        "b_no": array
+      const response = await axios.post(NEWURL, {
+        // gb : "3",
+        // q : "우리금융지주"
       });
-      setData(prevData => [...prevData, ...response.data.data]);
+      console.log(response.data.items);
+      setData(prevData => [...prevData, ...response.data.items]);
     } catch(e) {
       setError(e);
     }
@@ -35,7 +41,7 @@ function DetailData1() {
   }
 
   const handleContent = (e) => {
-    setContent(e.target.value);
+    setQ(e.target.value);
   }
 
     const excelFileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -46,8 +52,7 @@ function DetailData1() {
       const ws = XLSX.utils.aoa_to_sheet([
         [`국세청_사업자등록정보상태`],
         [],
-        ['사업자 등록번호', '납세자 상태', '과세유형메세지', '폐업일', '단위과세전환폐업여부',
-      '최근과세유형전환일자', '세금계산서적용일자', '직전과세유형메세지']
+        ['사업자 등록번호', '법인등록번호', '회사명', '사업자상태', '과세유형', '폐업일']
       ]);
       excelData.map((data: any) => {
         XLSX.utils.sheet_add_aoa(
@@ -83,34 +88,30 @@ function DetailData1() {
   return (
     <div className="App">
     <div>
-        사업자번호: <input type="text" name="content" onChange={handleContent} value={content} />
+        사업자명: <input type="text" name="content" onChange={handleContent} value={q} />
         <Button onClick={handleButtonClick}>입력</Button>
-    </div> 
+    </div>
     {data && (
     <Table striped bordered hover>
       <thead>
         <tr>
           <th>사업자 등록번호</th>
-          <th>납세자 상태</th>
-          <th>과세유형메세지</th>
+          <th>법인등록번호</th>
+          <th>회사명</th>
+          <th>사업자상태</th>
+          <th>과세유형</th>
           <th>폐업일</th>
-          <th>단위과세전환폐업여부</th>
-          <th>최근과세유형전환일자</th>
-          <th>세금계산서적용일자</th>
-          <th>직전과세유형메세지</th>
         </tr>
       </thead>
       <tbody>
       {data.map((item, index) => (
         <tr key={index}>
-          <td>{item.b_no}</td>
-          <td>{item.b_stt}</td>
-          <td>{item.tax_type}</td>
-          <td>{item.end_dt}</td>
-          <td>{item.utcc_yn}</td>
-          <td>{item.tax_type_change_dt}</td>
-          <td>{item.invoice_apply_dt}</td>
-          <td>{item.rbf_tax_type}</td>
+          <td>{item.bno}</td>
+          <td>{item.cno}</td>
+          <td>{item.company}</td>
+          <td>{item.bstt}</td>
+          <td>{item.taxtype}</td>
+          <td>{item.EndDt}</td>
         </tr>
         ))}
       </tbody>
