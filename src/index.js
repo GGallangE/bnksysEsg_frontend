@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
   <Routes>
-  <Route path="/" element={<Login />}/>
+  <Route path="/" element={<Main />}/>
   <Route path="/detailapi/:apilistid" element={<DetailApi_Status />}/>
   <Route path="/signup" element={<Register />} />
   

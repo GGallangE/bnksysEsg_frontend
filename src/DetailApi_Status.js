@@ -2,11 +2,13 @@ import React, { useEffect ,useState, Suspense} from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './DetailApi_Status.css';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 function DetailApi_Status() {
   const {apilistid} = useParams();
   const [searchResults, setSearchResults] = useState({});
-  const componentName = `DetailData${apilistid}`;
 
   useEffect(() => {
     const fetchApiDetails = async () => {
@@ -24,9 +26,14 @@ function DetailApi_Status() {
   const DynamicComponent = React.lazy(() =>
     import(`./DetailData${apilistid}`)
   );
-
+  const boxStyle = {
+    border: '2px solid #000',
+    padding: '20px',
+    borderRadius: '10px',
+  };
   return (
     <div>
+      <Container style={boxStyle}>
       <h3>{searchResults.apiname}</h3>
       <div>
         <p>API Name: {searchResults.apiname}</p>
@@ -35,10 +42,11 @@ function DetailApi_Status() {
         <p>사용 횟수: {searchResults.nbruses}</p>
         <p>API 설명: {searchResults.apiexpl}</p>
       </div>
+    </Container>
+      
       <Suspense fallback={<div>Loading...</div>}>
             <DynamicComponent />
       </Suspense>
-      {/* {React.createElement(componentName)} */}
     </div>     
   );
 }

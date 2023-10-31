@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Main.css';
 import {Link} from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Main() {
   const [searchTerm, setSearchTerm] = useState("");

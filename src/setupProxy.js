@@ -21,7 +21,11 @@ module.exports = function(app) {
       changeOrigin: true,
     })
   );
-
-  
+  app.use(
+    createProxyMiddleware('/fapi',{
+      target: 'https://bizno.net/api',
+      changeOrigin: true,
+    })
+  );
 };
 
