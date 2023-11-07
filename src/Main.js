@@ -3,6 +3,9 @@ import axios from 'axios';
 import './Main.css';
 import {Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
+import TokenManagement from './TokenManagement';
+import { tokenState } from './TokenState';
 
 function Main() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -10,7 +13,7 @@ function Main() {
   const [sortBy, setSortBy] = useState('');
 
   const handleSearch = async () => {
-    console.log(searchTerm)
+    //console.log(searchTerm)
     try{
         const response = await axios.get('/spring/main/search', {
             params : {
@@ -29,7 +32,7 @@ function Main() {
     }
   };
 
-  console.log(searchResults);
+  //console.log(searchResults);
   useEffect(() => {
     handleSearch();
   }, []);
@@ -52,6 +55,7 @@ function Main() {
   
 
   return (
+    
     <div className='App'>
       <input
         type="text"
@@ -72,10 +76,10 @@ function Main() {
                 <li key={result.apilistid} className="result-item">
                 <Link to={`/detailapi/${result.apilistid}`} className="Link">
                   <div className="item">
-                      <div className="item-name">{result.apiname}</div>
+                      <div className="item-name">{result.apinm}</div>
                       <div className='item-info-container'>
                       <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>
-                      <span className='item-info'>조회수: {result.view}</span>
+                      <span className='item-info'>조회수: {result.apiview}</span>
                       <span className='item-info'>사용수: {result.nbruses}</span>
                       <span style={{ display: "none" }}>{result.apilistid}</span>
                       </div>
@@ -85,9 +89,11 @@ function Main() {
             ))}
             </ul>
         )}
+        
       </div>
-     
+    
     </div>
+    
   );
 }
 

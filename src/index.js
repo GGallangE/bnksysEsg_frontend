@@ -10,17 +10,25 @@ import Login from './User/Login';
 import Register from './User/Register';
 import { BrowserRouter, Route, Link, Routes, Router } from 'react-router-dom';
 import DetailApi_Status from './DetailApi_Status';
+import { RecoilRoot } from 'recoil';
+import TokenManagement from './TokenManagement';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <RecoilRoot>
   <BrowserRouter>
   <Routes>
-  <Route path="/" element={<Main />}/>
+  <Route path="/" element={<Login />}/>
   <Route path="/detailapi/:apilistid" element={<DetailApi_Status />}/>
   <Route path="/signup" element={<Register />} />
   
   </Routes>
   </BrowserRouter>
+  </RecoilRoot>
+
+  
 );
+
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
