@@ -4,8 +4,8 @@ import './Main.css';
 import {Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
-import TokenManagement from './TokenManagement';
-import { tokenState } from './TokenState';
+import TokenManagement from '../TokenManagement';
+import { tokenState } from '../TokenState';
 
 function Main() {
   const [searchTerm, setSearchTerm] = useState("");
