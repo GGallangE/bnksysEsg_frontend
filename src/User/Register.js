@@ -47,7 +47,7 @@ function Register() {
       console.log(1)
     }
   )
-  if (response.status == 400) {
+  if (response.data.success) {
     // 회원가입 성공
     console.log('회원가입 성공');
     navigate('/login');
@@ -63,9 +63,10 @@ function Register() {
   
   } catch (error){
       // 오류 처리
-      if (error.response.status == 400) {
+      if (error.response) {
         // 서버에서 오류 응답을 받았을 때
-        console.error('서버 오류:', error.response.messages);
+        console.log(1)
+        //console.error('서버 오류:', error.response);
         // 사용자에게 오류 메시지를 보여줄 수 있습니다.
       } else if (error.request) {
         // 요청을 보내지 못한 경우

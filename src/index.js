@@ -9,10 +9,12 @@ import { BrowserRouter, Route, Link, Routes, Router } from 'react-router-dom';
 import DetailApi_Status from './Detail/DetailApi_Status';
 import { RecoilRoot } from 'recoil';
 import TokenManagement from './TokenManagement';
+import Navigation from './Navigation';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <RecoilRoot>
   <BrowserRouter>
+  <Navigation />
   <Routes>
   <Route path="/" element={<Register />}/>
   <Route path="/detailapi/:apilistid" element={<DetailApi_Status />}/>
