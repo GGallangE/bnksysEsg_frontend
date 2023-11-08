@@ -4,12 +4,15 @@ import axios from 'axios';
 import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
 //import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
+  const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [token, setToken] = useRecoilState(tokenState);
   const tokenValue = useRecoilValue(tokenState);
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -25,18 +28,31 @@ function App() {
         "email": email,
         "password": password
       }); // 서버로 JWT 토큰 요청
-      const jwtToken = response.data.data.token; // 서버에서 받은 토큰
-      console.log(response.data.data.token);
-      setToken(jwtToken); // Recoil 상태에 토큰 저장
+      if(response.data.success){
+        const jwtToken = response.data.data.token; // 서버에서 받은 토큰
+        setToken(jwtToken); // Recoil 상태에 토큰 저장
+        axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+        // 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
 
-      // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-		axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
-    } catch (error) {
+        navigate('/main');  // 로그인 성공 시 메인 페이지로 이동
+      }else{
+        setError(response.data.errors[0]);
+      }
+		} catch (error) {
       // 오류 처리
+    if (error.response) {
+      // 서버에서 오류 응답을 받았을 때
+      console.error('서버 오류:', error.response.data);
+      // 사용자에게 오류 메시지를 보여줄 수 있습니다.
+    } else if (error.request) {
+      // 요청을 보내지 못한 경우
+      console.error('요청 오류:', error.request);
+    } else {
+      // 다른 오류
+      console.error('오류:', error.message);
     }
-    test();
+    };
   };
-
   const test = async () => {
     try {
       const response = await axios.get('/spring/user/test',{
@@ -77,6 +93,7 @@ function App() {
             >
               로그인
             </button>
+            {error && <div>{error}</div>}
           </form>
           <p className="mt-3">
             아직 계정이 없으신가요? <a href="/signup">회원가입</a>

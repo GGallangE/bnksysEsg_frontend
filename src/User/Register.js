@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -10,6 +11,7 @@ function Register() {
   const [passwordCheck, setPasswordCheck] = useState('');
   const [error, setError] = useState("");
   const [data, setData] = useState(null);
+  const navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -32,20 +34,42 @@ function Register() {
   };
 
   const handleRegister = async () => {
-    // 회원가입 로직을 작성하면 됩니다.
-    // 이 예제에서는 간단하게 입력된 정보를 콘솔에 출력합니다.
-    console.log('Username:', username);
-    console.log('Nickname:', nickname);
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('PasswordCheck:', passwordCheck);
-
-    try{
-        
-
-    }catch(e){
-        setError(e);
-    }
+  try{
+    const response = await axios.post('/spring/user/saveUser',{
+    "username": username,
+    "nickname": nickname,
+    "email": email,
+    "password": password,
+    "passwordCheck": passwordCheck
+    
+  });
+  if (response.data.success) {
+    // 회원가입 성공
+    console.log('회원가입 성공');
+    navigate('/login');
+  } else {
+    // 회원가입 실패
+    console.log('회원가입 실패');
+    // console.log(response);
+    // // 에러 메시지 표시
+    // response.data.messages.forEach((message) => {
+    //   console.log(message);
+    // });
+  }
+  } catch (error){
+      // 오류 처리
+      if (error.response) {
+        // 서버에서 오류 응답을 받았을 때
+        console.error('서버 오류:', error.response.data);
+        // 사용자에게 오류 메시지를 보여줄 수 있습니다.
+      } else if (error.request) {
+        // 요청을 보내지 못한 경우
+        console.error('요청 오류:', error.request);
+      } else {
+        // 다른 오류
+        console.error('오류:', error.message);
+      }
+    };
   };
 
   return (

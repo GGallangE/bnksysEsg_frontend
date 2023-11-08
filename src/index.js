@@ -17,10 +17,11 @@ root.render(
   <RecoilRoot>
   <BrowserRouter>
   <Routes>
-  <Route path="/" element={<Login />}/>
+  <Route path="/" element={<Register />}/>
   <Route path="/detailapi/:apilistid" element={<DetailApi_Status />}/>
   <Route path="/signup" element={<Register />} />
-  
+  <Route path="/main" element={<Main />} />
+  <Route path="/login" element={<Login />} />
   </Routes>
   </BrowserRouter>
   </RecoilRoot>
