@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 //import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
 import { useNavigate } from 'react-router-dom';
+import { isLoggedInAtom } from '../atom'
 
-function App() {
+function Login() {
   const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [token, setToken] = useRecoilState(tokenState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
   const tokenValue = useRecoilValue(tokenState);
   const navigate = useNavigate();
 
@@ -33,6 +35,7 @@ function App() {
         setToken(jwtToken); // Recoil 상태에 토큰 저장
         axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
         // 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+        setIsLoggedIn(true);
 
         navigate('/main');  // 로그인 성공 시 메인 페이지로 이동
       }else{
@@ -43,7 +46,6 @@ function App() {
     if (error.response) {
       // 서버에서 오류 응답을 받았을 때
       console.error('서버 오류:', error.response.data);
-      // 사용자에게 오류 메시지를 보여줄 수 있습니다.
     } else if (error.request) {
       // 요청을 보내지 못한 경우
       console.error('요청 오류:', error.request);
@@ -104,4 +106,4 @@ function App() {
   );
 }
 
-export default App;
+export default Login;

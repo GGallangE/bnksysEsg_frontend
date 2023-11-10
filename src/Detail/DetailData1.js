@@ -82,6 +82,50 @@ function DetailData1() {
 
   return (
     <div className="App">
+      <div>
+      <h5>활용사례</h5>
+    <Table >
+    <thead>
+        <tr>
+          <th>No</th>
+          <th>제목</th>
+          <th>등록자</th>
+          <th>등록일</th>
+        </tr>
+      </thead>
+    </Table >
+    </div>
+
+    <div>
+      <h5>출력예제</h5>
+    <Table >
+    <thead>
+        <tr>
+          <th>사업자 등록번호</th>
+          <th>납세자 상태</th>
+          <th>과세유형메세지</th>
+          <th>폐업일</th>
+          <th>단위과세전환폐업여부</th>
+          <th>최근과세유형전환일자</th>
+          <th>세금계산서적용일자</th>
+          <th>직전과세유형메세지</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>6028154897</td>
+          <td>계속사업자</td>
+          <td>부가가치세 일반과세자</td>
+          <td></td>
+          <td>N</td>
+          <td></td>
+          <td></td>
+          <td>해당없음</td>
+        </tr>
+      </tbody>
+    </Table >
+    </div>
+    
     <div>
         사업자번호: <input type="text" name="content" onChange={handleContent} value={content} />
         <Button onClick={handleButtonClick}>입력</Button>

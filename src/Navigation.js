@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
-
+import { useRecoilState } from 'recoil';
+import { isLoggedInAtom } from './atom'
 
 function Navigation() {
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
   const handleLoginLogout = () => {
+    if(isLoggedIn)
     setIsLoggedIn(!isLoggedIn);
   };
 
@@ -14,13 +14,13 @@ function Navigation() {
         <div>
           <Navbar expand="lg" className="bg-body-tertiary">
           <Container>
-          <Navbar.Brand href="main">API_BNK</Navbar.Brand>
+          <Navbar.Brand href="/">API_BNK</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
 
             <NavDropdown title="OPEN API" id="basic-nav-dropdown">
-              <NavDropdown.Item href="main">목록</NavDropdown.Item>
+              <NavDropdown.Item href="/ApiList">목록</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">API 신청하기</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">활용사례</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.4">데이터 시각화</NavDropdown.Item>

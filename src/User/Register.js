@@ -142,7 +142,7 @@ function Register() {
             </button>
           </form>
           <p className="mt-3">
-            이미 계정이 있으신가요? <Link to="/">로그인</Link>
+            이미 계정이 있으신가요? <Link to="/login">로그인</Link>
           </p>
         </div>
       </div>
