@@ -9,7 +9,7 @@ function Navigation() {
     if(isLoggedIn)
     setIsLoggedIn(!isLoggedIn);
   };
-
+  console.log(isLoggedIn);
     return(
         <div>
           <Navbar expand="lg" className="bg-body-tertiary">

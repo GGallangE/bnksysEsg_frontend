@@ -8,6 +8,8 @@ import './Main.css';
 
 function Main(){
   const [searchNotice, setSearchNotice] = useState([]);
+  const [searchPopular, setSearchPopular] = useState([]);
+  const [searchRecent, setSearchRecent] = useState([]);
 
   const notice = async () => {
     try{
@@ -16,17 +18,47 @@ function Main(){
           mainsort : "yes"
         }
       });
-      setSearchNotice(response.data.data);
-      // console.log(response);
+      setSearchNotice(response.data.data.data);
     } catch(error){
       console.error("Error searching: ", error);
     }
   };
 
+  const popular = async () => {
+    try{
+      const response = await axios.get('/spring/main/view_recent/top5', {
+        params : {
+          sort : "view"
+        }
+      });
+      setSearchPopular(response.data.data.data);
+    } catch(error){
+      console.error("Error searching: ", error);
+    }
+  };
+
+  const recent = async () => {
+    try{
+      const response = await axios.get('/spring/main/view_recent/top5', {
+        params : {
+          sort : "recent"
+        }
+      });
+      setSearchRecent(response.data.data.data);
+      console.log(response);
+    } catch(error){
+      console.error("Error searching: ", error);
+    }
+  };
+
+  
+
   useEffect(() => {
     notice();
+    popular();
+    recent();
   }, []);
-    console.log(searchNotice);
+    // console.log(searchNotice);
     return(
         <Container>
         <Row className = "justify-content-md-center">
@@ -46,12 +78,18 @@ function Main(){
             <Card className = "list-card">
             <Card.Body>
             <Card.Title>공지사항</Card.Title>
-            <ListGroup className = "list-style">
-                <ListGroup.Item><a href="#" className = "link-style"><span className="number-background">1</span> 휴폐업조회</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">2. 사업자조회</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
+            {/* 15자 이상이면 ... 으로 나타내기*/}
+            <ListGroup className="list-style">
+              {searchNotice.map((item, index) => (
+                <ListGroup.Item key={index}>
+                  <a href="#" className="link-style">
+                    <span className="number-background">{index + 1}</span> {" "}
+                    {item.noticenm.length > 15
+                     ? `${item.noticenm.substring(0, 15)}...`
+                    : item.noticenm}
+                  </a>
+                </ListGroup.Item>
+              ))}
             </ListGroup>
             </Card.Body>
             </Card>
@@ -60,13 +98,18 @@ function Main(){
           <Card className = "list-card">
           <Card.Body>
           <Card.Title>인기데이터</Card.Title>
-            <ListGroup className = "list-style">
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-            </ListGroup>
+            <ListGroup className="list-style">
+              {searchPopular.map((item, index) => (
+                <ListGroup.Item key={index}>
+                  <a href="#" className="link-style">
+                    <span className="number-background">{index + 1}</span> {" "}
+                    {item.apinm.length > 15
+                     ? `${item.apinm.substring(0, 15)}...`
+                    : item.apinm}
+                  </a>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>  
             </Card.Body>
             </Card>
           </Col>
@@ -74,12 +117,17 @@ function Main(){
           <Card className = "list-card">
           <Card.Body>
           <Card.Title>최신데이터</Card.Title>
-            <ListGroup className = "list-style">
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
-                <ListGroup.Item><a href="#" className = "link-style">링크</a></ListGroup.Item>
+          <ListGroup className="list-style">
+              {searchRecent.map((item, index) => (
+                <ListGroup.Item key={index}>
+                  <a href="#" className="link-style">
+                    <span className="number-background">{index + 1}</span> {" "}
+                    {item.apinm.length > 15
+                     ? `${item.apinm.substring(0, 15)}...`
+                    : item.apinm}
+                  </a>
+                </ListGroup.Item>
+              ))}
             </ListGroup>
             </Card.Body>
             </Card>

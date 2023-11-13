@@ -3,9 +3,13 @@
     color: #686868; 
     width: 200px;
 }
+
+/* .link-style span{
+    padding: 2px 8px;
+} */
 .link-style:hover span{
-    background-color: #ff7c7c; /* 배경 색상 설정 */
-    padding: 2px 5px; /* 숫자 주변에 여백 추가 (선택사항) */
+    background-color: #2469ff; /* 배경 색상 설정 */
+    padding: 2px 8px; /* 숫자 주변에 여백 추가 (선택사항) */
     border-radius: 3px; /* 모서리를 둥글게 만듭니다. */
     color: #ffffff; 
     font-weight: bold;
