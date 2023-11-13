@@ -41,7 +41,6 @@ function Register() {
     "email": email,
     "password": password,
     "passwordCheck": passwordCheck
-    
   }).then(
     response => {
       console.log(1)
