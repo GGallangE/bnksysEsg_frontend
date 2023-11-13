@@ -35,7 +35,7 @@ function Register() {
 
   const handleRegister = async () => {
   try{
-    const response = await axios.post('/spring/user/saveUser',{
+    const response = await axios.post('/spring/user/signup',{
     "username": username,
     "nickname": nickname,
     "email": email,
