@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -7,7 +7,26 @@ import { Col, Form, Row, Container, ListGroup, Card } from 'react-bootstrap';
 import './Main.css';
 
 function Main(){
-    
+  const [searchNotice, setSearchNotice] = useState([]);
+
+  const notice = async () => {
+    try{
+      const response = await axios.get('/spring/main/notice', {
+        params : {
+          mainsort : "yes"
+        }
+      });
+      setSearchNotice(response.data.data);
+      // console.log(response);
+    } catch(error){
+      console.error("Error searching: ", error);
+    }
+  };
+
+  useEffect(() => {
+    notice();
+  }, []);
+    console.log(searchNotice);
     return(
         <Container>
         <Row className = "justify-content-md-center">
