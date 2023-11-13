@@ -8,6 +8,7 @@ import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import Container from 'react-bootstrap/Container';
 import FormatDate from '../Format'
+import { useLocation } from "react-router-dom";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -20,6 +21,7 @@ function DetailData1(props) {
   const [array, setArray] = useState([]);
   const [error, setError] = useState(null);
   const [usecaseError, setUsecaseError] = useState(null);
+
   const BusinessmanData = async () => {
     const array = content.split(',').map(item => item.trim());
     setArray(array);
@@ -34,7 +36,6 @@ function DetailData1(props) {
   };
 
   useEffect(() => {
-    console.log(props)
     axios.get('/spring/usecase/apidetail', {
       params: {
         apilistid: props.apilistid

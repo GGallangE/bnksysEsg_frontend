@@ -75,10 +75,7 @@ function ApiList() {
             {searchResults.map((result) => (
                 <li key={result.apilistid} className="result-item">
                 <Link 
-                  to={{
-                        pathname:`/detailapi/${result.apilistid}`,
-                        state: {apilistid: result.apilistid}
-                      }}
+                  to={`/detailapi/${result.apilistid}`}
                   className="Link">
                   <div className="item">
                       <div className="item-name">{result.apinm}</div>

@@ -38,7 +38,9 @@ function DetailApiStatus() {
   }, [apilistid]);
 
   const DynamicComponent = React.lazy(() =>
-    import(`./DetailData${apilistid}`)
+    import(`./DetailData${apilistid}`).then((module) => ({
+      default: () => <module.default apilistid={apilistid} />,
+    }))
   );
   const boxStyle = {
     border: '2px solid #000',

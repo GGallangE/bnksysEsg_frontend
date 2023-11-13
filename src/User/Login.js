@@ -37,7 +37,7 @@ function Login() {
         // 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
         setIsLoggedIn(true);
 
-        navigate('/main');  // 로그인 성공 시 메인 페이지로 이동
+        navigate('/');  // 로그인 성공 시 메인 페이지로 이동
       }else{
         setError(response.data.errors[0]);
       }
