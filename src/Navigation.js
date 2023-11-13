@@ -20,14 +20,14 @@ function Navigation() {
           <Nav className="me-auto">
 
             <NavDropdown title="OPEN API" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/ApiList">목록</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">API 신청하기</NavDropdown.Item>
+              <NavDropdown.Item href="/OPENAPI/ApiList">목록</NavDropdown.Item>
+              <NavDropdown.Item href="/OPENAPI/ApiApply">API 신청하기</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">활용사례</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.4">데이터 시각화</NavDropdown.Item>
             </NavDropdown>
 
             <NavDropdown title="이용안내" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">공지사항</NavDropdown.Item>
+              <NavDropdown.Item href="/Information/Notice">공지사항</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">문의하기</NavDropdown.Item>
             </NavDropdown>
 
