@@ -64,12 +64,8 @@ function Register() {
       // 오류 처리
       if (error.response) {
         // 서버에서 오류 응답을 받았을 때
-<<<<<<< HEAD
-        console.error('서버 오류:', error.response.data.messages);
-=======
         console.log(1)
         //console.error('서버 오류:', error.response);
->>>>>>> fce1c43c5639cd0f14efc4789465a90a88dcd649
         // 사용자에게 오류 메시지를 보여줄 수 있습니다.
       } else if (error.request) {
         // 요청을 보내지 못한 경우
