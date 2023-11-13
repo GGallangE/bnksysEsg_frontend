@@ -35,19 +35,15 @@ function Register() {
 
   const handleRegister = async () => {
   try{
-    const response = await axios.post('/spring/user/saveUser',{
+    const response = await axios.post('/spring/user/signup',{
     "username": username,
     "nickname": nickname,
     "email": email,
     "password": password,
     "passwordCheck": passwordCheck
     
-  }).then(
-    response => {
-      console.log(1)
-    }
-  )
-  if (response.status == 400) {
+  });
+  if (response.status == 200) {
     // 회원가입 성공
     console.log('회원가입 성공');
     navigate('/login');
@@ -65,7 +61,7 @@ function Register() {
       // 오류 처리
       if (error.response.status == 400) {
         // 서버에서 오류 응답을 받았을 때
-        console.error('서버 오류:', error.response.messages);
+        console.error('서버 오류:', error.response.data.messages);
         // 사용자에게 오류 메시지를 보여줄 수 있습니다.
       } else if (error.request) {
         // 요청을 보내지 못한 경우
