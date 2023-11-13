@@ -41,9 +41,12 @@ function Register() {
     "email": email,
     "password": password,
     "passwordCheck": passwordCheck
-    
-  });
-  if (response.status == 200) {
+  }).then(
+    response => {
+      console.log(1)
+    }
+  )
+  if (response.data.success) {
     // 회원가입 성공
     console.log('회원가입 성공');
     navigate('/login');
@@ -59,9 +62,14 @@ function Register() {
   
   } catch (error){
       // 오류 처리
-      if (error.response.status == 400) {
+      if (error.response) {
         // 서버에서 오류 응답을 받았을 때
+<<<<<<< HEAD
         console.error('서버 오류:', error.response.data.messages);
+=======
+        console.log(1)
+        //console.error('서버 오류:', error.response);
+>>>>>>> fce1c43c5639cd0f14efc4789465a90a88dcd649
         // 사용자에게 오류 메시지를 보여줄 수 있습니다.
       } else if (error.request) {
         // 요청을 보내지 못한 경우
@@ -137,7 +145,7 @@ function Register() {
             </button>
           </form>
           <p className="mt-3">
-            이미 계정이 있으신가요? <Link to="/">로그인</Link>
+            이미 계정이 있으신가요? <Link to="/login">로그인</Link>
           </p>
         </div>
       </div>
