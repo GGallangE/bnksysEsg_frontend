@@ -1,0 +1,11 @@
+.boxstyle{
+    border: 2px solid #cccccc;
+    padding: 30px;
+    margin: 30px auto;
+    border-radius: 10px;
+}
+
+h5{
+    font-weight: bold;
+    
+}

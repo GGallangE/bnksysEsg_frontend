@@ -9,7 +9,7 @@ function FormatDate({ dateString }){
     const formattedDate = `${year}년 ${month}월 ${day}일`;
 
     return(
-        <p>등록날짜: {formattedDate}</p>
+        formattedDate
     );
 }
 

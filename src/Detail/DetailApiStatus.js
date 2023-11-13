@@ -58,7 +58,7 @@ function DetailApiStatus() {
             <p>조회수: {searchResults.apiview}</p>
             <p>사용 횟수: {searchResults.countapiuses}</p>
             <p>API 설명: {searchResults.apiexpl}</p>
-            <FormatDate dateString={searchResults.apirgdt} />
+            <p>등록날짜: <FormatDate dateString={searchResults.apirgdt} /></p>
           </div>
         )}
       </Container>
