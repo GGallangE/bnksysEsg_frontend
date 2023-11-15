@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
 import TokenManagement from '../TokenManagement';
@@ -8,12 +8,13 @@ import { tokenState } from '../TokenState';
 import './ApiList.css';
 
 function ApiList() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [sortBy, setSortBy] = useState('');
+  const location = useLocation();
 
   const handleSearch = async () => {
-    //console.log(searchTerm)
+    await updateSearchState();
     try{
         const response = await axios.get('/spring/main/search', {
             params : {
@@ -21,10 +22,19 @@ function ApiList() {
             , sortBy : sortBy}
         });
         setSearchResults(response.data.data);
+        console.log(response.data.data);
     }catch (error) {
         console.error("Error searching: ", error);
       }
   }
+  
+  const updateSearchState = async () =>{
+    if (location.state) {
+      console.log(location.state);
+      await setSearchTerm(location.state.name);
+      await setSortBy(location.state.sortBy);
+    }
+  };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -32,7 +42,6 @@ function ApiList() {
     }
   };
 
-  //console.log(searchResults);
   useEffect(() => {
     handleSearch();
   }, []);
@@ -53,9 +62,7 @@ function ApiList() {
     )
   }
   
-
   return (
-    
     <div className='App'>
       <input
         type="text"
@@ -75,7 +82,7 @@ function ApiList() {
             {searchResults.map((result) => (
                 <li key={result.apilistid} className="result-item">
                 <Link 
-                  to={`/detailapi/${result.apilistid}`}
+                  to={`/api/detailapi/${result.apilistid}`}
                   className="Link">
                   <div className="item">
                       <div className="item-name">{result.apinm}</div>

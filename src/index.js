@@ -8,8 +8,11 @@ import Notice from './Information/Notice';
 import NoticeDetail from './Information/NoticeDetail';
 import Login from './User/Login';
 import Register from './User/Register';
+import UseCase from './UseCase/UseCase';
+import UseCaseDetail from './UseCase/UseCaseDetail';
+import UseCaseRgt from './UseCase/UseCaseRgt';
 import { BrowserRouter, Route, Link, Routes, Router } from 'react-router-dom';
-import DetailApi_Status from './Detail/DetailApiStatus';
+import DetailApi_Status from './Api/DetailApiStatus';
 import { RecoilRoot } from 'recoil';
 import TokenManagement from './TokenManagement';
 import Navigation from './Navigation';
@@ -21,13 +24,16 @@ root.render(
   <Navigation />
   <Routes>
   <Route path="/" element={<Main />}/>
-  <Route path="/detailapi/:apilistid" element={<DetailApi_Status />}/>
+  <Route path="/api/detailapi/:apilistid" element={<DetailApi_Status />}/>
   <Route path="/signup" element={<Register />} />
-  <Route path="/OPENAPI/Apilist" element={<ApiList />} />
-  <Route path="/OPENAPI/ApiApply" element={<ApiApply />} />
-  <Route path="/Information/Notice" element={<Notice />} />
-  <Route path="/Information/NoticeDetail/:noticeid" element={<NoticeDetail />} />
+  <Route path="/openapi/apilist" element={<ApiList />} />
+  <Route path="/openapi/apiapply" element={<ApiApply />} />
+  <Route path="/information/notice" element={<Notice />} />
+  <Route path="/information/noticeDetail/:noticeid" element={<NoticeDetail />} />
   <Route path="/login" element={<Login />} />
+  <Route path="/openapi/usecase" element={<UseCase />} />
+  <Route path="/openapi/usecasedetail" element={<UseCaseDetail/>} />
+  <Route path="/openapi/usecaseregister" element={<UseCaseRgt/>} />
   </Routes>
   </BrowserRouter>
   </RecoilRoot>

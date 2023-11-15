@@ -10,6 +10,9 @@ function Main(){
   const [searchNotice, setSearchNotice] = useState([]);
   const [searchPopular, setSearchPopular] = useState([]);
   const [searchRecent, setSearchRecent] = useState([]);
+  const [searchApi, setSearchApi] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const notice = async () => {
     try{
@@ -45,13 +48,36 @@ function Main(){
         }
       });
       setSearchRecent(response.data.data.data);
-      console.log(response);
     } catch(error){
       console.error("Error searching: ", error);
     }
   };
 
-  
+  const handleSearch = async () => {
+    try{
+        const response = await axios.get('/spring/main/search', {
+            params:{
+                sortBy: "조회순",
+                name: searchTerm
+            },
+        });
+        setSearchApi(response.data.data.data);
+        navigate(
+        '/openapi/apilist', 
+        {state: 
+        {name: searchTerm,
+        sortBy: "조회순"}
+        });
+    }catch(error){
+        console.error("Error searching : ", error)
+    }
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   useEffect(() => {
     notice();
@@ -64,12 +90,17 @@ function Main(){
         <Row className = "justify-content-md-center">
           <Col md = "auto">
             <Form.Group className = "mb-3" controlId = "formGridAddress1">
-              <Form.Control style = {{ margin: '150px 0px', width: '500px' }} placeholder = "검색어를 입력하세요" />
+              <Form.Control 
+              onKeyDown={handleKeyDown} 
+              onChange={(e) => setSearchTerm(e.target.value)} 
+              value={searchTerm} 
+              style = {{ margin: '150px 0px', width: '500px' }}
+              placeholder = "검색어를 입력하세요" />
             </Form.Group>
           </Col>
           <Col md = "auto">
-            <Button style = {{margin: '150px 0px'}} variant = "primary" type = "submit">
-              Submit
+            <Button onClick={handleSearch} style = {{margin: '150px 0px'}} variant = "primary" type = "submit">
+              검색
             </Button>
           </Col>
         </Row>
@@ -82,12 +113,10 @@ function Main(){
             <ListGroup className="list-style">
               {searchNotice.map((item, index) => (
                 <ListGroup.Item key={index}>
-                  <a href="#" className="link-style">
-                    <span className="number-background">{index + 1}</span> {" "}
-                    {item.noticenm.length > 15
-                     ? `${item.noticenm.substring(0, 15)}...`
-                    : item.noticenm}
-                  </a>
+                  <Link to={`/Information/Noticedetail/${item.noticeid}`} className="link-style">
+                    <span className="number-background">{index + 1}</span>{" "}
+                    {item.noticenm.length > 15 ? `${item.noticenm.substring(0, 15)}...` : item.noticenm}
+                  </Link>
                 </ListGroup.Item>
               ))}
             </ListGroup>

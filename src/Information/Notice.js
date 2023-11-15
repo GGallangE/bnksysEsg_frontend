@@ -21,7 +21,7 @@ function Notice(){
     useEffect(() => {
         handleSearch();
     }, []);
-    console.log(searchNotice);
+
     return (
     <div className="App">
       <Container style={{margin:'50px auto'}}>

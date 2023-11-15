@@ -6,8 +6,8 @@ import { isLoggedInAtom } from './atom'
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
   const handleLoginLogout = () => {
-    if(isLoggedIn)
-    setIsLoggedIn(!isLoggedIn);
+    if(isLoggedIn != '')
+    setIsLoggedIn('');
   };
   console.log(isLoggedIn);
     return(
@@ -22,7 +22,7 @@ function Navigation() {
             <NavDropdown title="OPEN API" id="basic-nav-dropdown">
               <NavDropdown.Item href="/OPENAPI/ApiList">목록</NavDropdown.Item>
               <NavDropdown.Item href="/OPENAPI/ApiApply">API 신청하기</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">활용사례</NavDropdown.Item>
+              <NavDropdown.Item href="/openapi/usecase">활용사례</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.4">데이터 시각화</NavDropdown.Item>
             </NavDropdown>
 
@@ -40,8 +40,8 @@ function Navigation() {
             </NavDropdown>
 
           </Nav>
-          <Nav.Link onClick={handleLoginLogout} href="login">
-            {isLoggedIn ? "로그아웃" : "로그인"}
+          <Nav.Link onClick={handleLoginLogout} href="/login">
+            {isLoggedIn !='' ? "로그아웃" : "로그인"}
           </Nav.Link>
           </Navbar.Collapse>
           </Container>

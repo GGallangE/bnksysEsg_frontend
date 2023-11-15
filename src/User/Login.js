@@ -31,11 +31,12 @@ function Login() {
         "password": password
       }); // 서버로 JWT 토큰 요청
       if(response.data.success){
-        const jwtToken = response.data.data.token; // 서버에서 받은 토큰
+        const jwtToken = response.data.data.accessToken; // 서버에서 받은 토큰
         setToken(jwtToken); // Recoil 상태에 토큰 저장
         axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
         // 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-        setIsLoggedIn(true);
+        setIsLoggedIn(jwtToken);
+        console.log(response)
 
         navigate('/');  // 로그인 성공 시 메인 페이지로 이동
       }else{
