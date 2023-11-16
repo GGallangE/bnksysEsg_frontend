@@ -2,12 +2,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import Container from 'react-bootstrap/Container';
+import { Button, Container }from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format'
+import NoticeDetail from './NoticeDetail'
 
 function Notice(){
     const [searchNotice, setSearchNotice] = useState([]);
+    const [modalShow, setModalShow] = React.useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
 
     const handleSearch = async () => {
         try{
@@ -17,6 +20,11 @@ function Notice(){
             console.error("Error searching : ", error)
         }
     }
+
+    const handleTitleClick = (item) => {
+        setSelectedItem(item.noticeid);
+        setModalShow(true);
+      };
 
     useEffect(() => {
         handleSearch();
@@ -41,7 +49,12 @@ function Notice(){
                     <tr key={index}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/Information/NoticeDetail/${item.noticeid}`}>{item.noticenm}</Link>
+                    <div
+                    onClick={() => handleTitleClick(item)}
+                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                    {item.noticenm}
+                  </div>
                     </td>
                     <td>관리자</td>
                     <td><FormatDate dateString={item.regdt} /></td>
@@ -51,6 +64,12 @@ function Notice(){
         </Table>
         </div>
       </Container>
+      <NoticeDetail
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        selectedItem = {selectedItem}
+      />
+    
     </div>
         
     )

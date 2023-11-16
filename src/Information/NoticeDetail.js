@@ -7,13 +7,16 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format'
+import { Modal, Button } from 'react-bootstrap';
 
-function NoticeDetail() {
+function NoticeDetail(props) {
 
     const [searchResults, setSearchResults] = useState([]);
     const [searchatchfileResults, setSearchatchfileResults] = useState([]);
-    const { noticeid } = useParams();
+    const noticeid = props.selectedItem;
     const handleSearch = async () => {
+      console.log(props)
+      if(noticeid!=null){
         try{
             const response = await axios.get('/spring/main/notice/detail', {
                 params : {
@@ -25,6 +28,7 @@ function NoticeDetail() {
         }catch (error) {
             console.error("Error searching: ", error);
           }
+        }
       }
 
       const atchfile = async (atchfileid) => {
@@ -52,26 +56,38 @@ function NoticeDetail() {
 
       useEffect(() => {
         handleSearch();
-      }, []);
+      }, [noticeid]);
 
 
     return (
         <div>
-            <h1 style={{marginTop : '50px', textAlign : 'center'}}>공지사항</h1>
+           
+        <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          공지사항
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
         <Container className="border border-dashed p-3" style={{marginTop : '100px'}}>
             <Row className="mb-3">
             <Col xs={12}>
-                <h4>제목: {searchResults.noticenm}</h4>
+                <h5>제목: {searchResults.noticenm}</h5>
             </Col>
             </Row>
             <Row className="mb-3" style={{marginTop : '100px'}}>
             <Col xs={12}>
-                <h4>내용: {searchResults.noticecntn}</h4>
+                <h5>내용: {searchResults.noticecntn}</h5>
             </Col>
             </Row>
             <Row className="mb-3" style={{marginTop : '300px'}}>
             <Col xs={12}>
-                <h4>첨부파일:</h4>
+                <h5>첨부파일:</h5>
                 {searchatchfileResults.map((atchfile, index) => (
                 <div key={index} onClick={() => handledownloadatchfile(atchfile.atchdetailfileid)} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>
                 {atchfile.orgfilename}.{atchfile.atchfileext}
@@ -80,6 +96,11 @@ function NoticeDetail() {
             </Col>
             </Row>
         </Container>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
         </div>
     );
   }
