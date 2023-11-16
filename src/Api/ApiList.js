@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
 import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
+import { isLoggedInAtom } from '../atom'
 import './ApiList.css';
 
 function ApiList() {
@@ -12,6 +13,7 @@ function ApiList() {
   const [searchResults, setSearchResults] = useState([]);
   const [sortBy, setSortBy] = useState('');
   const location = useLocation();
+  const isLoggedIn= useRecoilValue(isLoggedInAtom);
 
   const handleSearch = async () => {
     await updateSearchState();
@@ -19,7 +21,10 @@ function ApiList() {
         const response = await axios.get('/spring/main/search', {
             params : {
               name : searchTerm
-            , sortBy : sortBy}
+            , sortBy : sortBy},
+            headers: {
+              Authorization: `Bearer ${isLoggedIn}`
+          }
         });
         setSearchResults(response.data.data);
         console.log(response.data.data);

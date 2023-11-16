@@ -40,39 +40,81 @@ function NoticeDetail() {
     }
   };
 
+  // const handledownloadatchfile = async (
+  //   atchdetailfileid,
+  //   orgfilename,
+  //   atchfileext
+  // ) => {
+  //   try {
+  //     // 사용자에게 다운로드 폴더를 변경하는 방법에 대한 안내 텍스트
+  //     const downloadGuideText =
+  //       '파일을 다운로드할 폴더를 변경하려면 브라우저 설정으로 이동하세요.\n\n크롬: 설정 -> 다운로드 -> "다운로드 전에 각 파일의 저장 위치 확인"을 체크하세요.\n엣지: 설정 -> 다운로드 -> "각 다운로드 시 수행할 작업에 대해 확인"을 체크하세요.';
+
+  //     // 다운로드 링크 생성
+  //     const response = await axios.get(
+  //       `/spring/atchfile/download/${atchdetailfileid}`,
+  //       { responseType: 'blob' }
+  //     );
+  //     const blob = new Blob([response.data], {
+  //       type: response.headers['content-type'],
+  //     });
+  //     const link = document.createElement('a');
+
+  //     link.href = window.URL.createObjectURL(blob);
+
+  //     // 파일 이름 설정
+  //     const defaultFileName = `${orgfilename}.${atchfileext}`;
+  //     link.download = defaultFileName;
+
+  //     // 다운로드 링크 클릭
+  //     link.click();
+
+  //     // 다운로드 링크 해제
+  //     window.URL.revokeObjectURL(link.href);
+  //   } catch (error) {
+  //     console.error('Error downloading: ', error);
+  //   }
+  // };
+
   const handledownloadatchfile = async (
     atchdetailfileid,
     orgfilename,
     atchfileext
   ) => {
     try {
-      // 사용자에게 다운로드 폴더를 변경하는 방법에 대한 안내 텍스트
-      const downloadGuideText =
-        '파일을 다운로드할 폴더를 변경하려면 브라우저 설정으로 이동하세요.\n\n크롬: 설정 -> 다운로드 -> "다운로드 전에 각 파일의 저장 위치 확인"을 체크하세요.\n엣지: 설정 -> 다운로드 -> "각 다운로드 시 수행할 작업에 대해 확인"을 체크하세요.';
-
-      // 다운로드 링크 생성
+      // 서버로부터 파일 다운로드 링크 가져오기
       const response = await axios.get(
         `/spring/atchfile/download/${atchdetailfileid}`,
         { responseType: 'blob' }
       );
+  
+      // Blob 객체 생성
       const blob = new Blob([response.data], {
         type: response.headers['content-type'],
       });
-      const link = document.createElement('a');
-
-      link.href = window.URL.createObjectURL(blob);
-
-      // 파일 이름 설정
+  
+      // Blob URL 생성
+      const blobUrl = window.URL.createObjectURL(blob);
+  
+      // 새 창 열기
+      const newWindow = window.open(blobUrl, '_blank');
+      if (!newWindow) {
+        console.error('팝업 창을 열 수 없습니다.');
+        return;
+      }
+  
+      // 다운로드 파일의 기본 이름 설정
       const defaultFileName = `${orgfilename}.${atchfileext}`;
-      link.download = defaultFileName;
-
-      // 다운로드 링크 클릭
-      link.click();
-
-      // 다운로드 링크 해제
-      window.URL.revokeObjectURL(link.href);
+  
+      // 다운로드 링크에 기본 이름 설정
+      newWindow.location.href = blobUrl;
+  
+      // 창이 닫힐 때 Blob URL 해제
+      newWindow.onbeforeunload = () => {
+        window.URL.revokeObjectURL(blobUrl);
+      };
     } catch (error) {
-      console.error('Error downloading: ', error);
+      console.error('다운로드 중 오류 발생: ', error);
     }
   };
 
