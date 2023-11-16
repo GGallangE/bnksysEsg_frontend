@@ -5,14 +5,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
 import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
-import { isLoggedInAtom } from '../atom'
 import './ApiList.css';
+import { isLoggedInAtom } from '../atom'
+import { Button } from 'react-bootstrap';
+
 
 function ApiList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [sortBy, setSortBy] = useState('');
   const location = useLocation();
+  const [isFavorite, setIsFavorite] = useState(false);
   const isLoggedIn= useRecoilValue(isLoggedInAtom);
 
   const handleSearch = async () => {
@@ -23,8 +26,8 @@ function ApiList() {
               name : searchTerm
             , sortBy : sortBy},
             headers: {
-              Authorization: `Bearer ${isLoggedIn}`
-          }
+              Authorization: `Bearer ${isLoggedIn}`,
+            },
         });
         setSearchResults(response.data.data);
         console.log(response.data.data);
@@ -32,7 +35,7 @@ function ApiList() {
         console.error("Error searching: ", error);
       }
   }
-  
+
   const updateSearchState = async () =>{
     if (location.state) {
       console.log(location.state);
@@ -66,6 +69,17 @@ function ApiList() {
       </select>
     )
   }
+
+  const handleFavoriteToggle = async (apilistid, isFavorite) => {
+    try {
+      // 서버로 관심 데이터 토글 요청
+      await axios.post('/spring/userapi/interestapi', { apilistid, stcd: isFavorite ? '99' : '01' });
+      // API 목록을 다시 불러오기
+      handleSearch();
+    } catch (error) {
+      console.error('Error toggling favorite: ', error);
+    }
+  };
   
   return (
     <div className='App'>
@@ -92,10 +106,21 @@ function ApiList() {
                   <div className="item">
                       <div className="item-name">{result.apinm}</div>
                       <div className='item-info-container'>
-                      <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>
+                      <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>                      
                       <span className='item-info'>조회수: {result.apiview}</span>
                       <span className='item-info'>사용수: {result.nbruses}</span>
                       <span style={{ display: "none" }}>{result.apilistid}</span>
+                      
+                      <Button
+                        variant={result.isFavorite ? 'success' : 'outline-secondary'}
+                        onClick={(e) => {
+                          e.preventDefault(); // 링크의 기본 동작 막기
+                          handleFavoriteToggle(result.apilistid);
+                        }}
+                        className="favorite-button"
+                      >
+                        {result.isFavorite ? '찜 해제하기' : '찜하기'}
+                      </Button>
                       </div>
                   </div>
                 </Link>
