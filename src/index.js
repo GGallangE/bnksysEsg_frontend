@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import ApiList from './Api/ApiList';
-import ApiApply from './Request/ApiApply';
+import ApiApply from './Apply/ApiApply';
 import Notice from './Information/Notice';
 import NoticeDetail from './Information/NoticeDetail';
 import Login from './User/Login';
@@ -16,6 +16,10 @@ import DetailApi_Status from './Api/DetailApiStatus';
 import { RecoilRoot } from 'recoil';
 import TokenManagement from './TokenManagement';
 import Navigation from './Navigation';
+import InquiryRgt from './Inquiry/InquiryRgt';
+import InterestData from './MyPage/InterestData'
+import MyInquiry from './MyPage/MyInquiry'
+import RecentUseData from './MyPage/RecentUseData'
 import Main from './Main/Main';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -34,6 +38,10 @@ root.render(
   <Route path="/openapi/usecase" element={<UseCase />} />
   <Route path="/openapi/usecasedetail" element={<UseCaseDetail/>} />
   <Route path="/openapi/usecaseregister" element={<UseCaseRgt/>} />
+  <Route path="/information/inquiryregister" element={<InquiryRgt/>} />
+  <Route path="/mypage/interestdata" element={<InterestData/>} />
+  <Route path="/mypage/myinquiry" element={<MyInquiry/>} />
+  <Route path="/mypage/recentusedata" element={<RecentUseData/>} />
   </Routes>
   </BrowserRouter>
   </RecoilRoot>

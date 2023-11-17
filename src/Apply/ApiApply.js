@@ -7,7 +7,7 @@ import { Form, Container, Button, Row, Col } from 'react-bootstrap';
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
 
-function UseCaseRgt(){
+function ApiApply(){
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const isLoggedIn= useRecoilValue(isLoggedInAtom);
@@ -15,32 +15,32 @@ function UseCaseRgt(){
     
     const usecaseRegister = async () => {
         try {
-          const response = await axios.post('/spring/usecase/usecase', {
-            title: title,
-            content: content,
+          const response = await axios.post('/spring/request/apiapply', {
+            applynm: title,
+            applycntn: content,
           }
         );
       
           // 응답 확인
           console.log('응답 데이터:', response.data);
         } catch (error) {
-          if(error.response.status == 403){
-            alert("로그인을 해주세요.");
-          }
+            if(error.response.status == 403){
+                alert("로그인을 해주세요.");
+              }
         }
       };
 
     return(
     <div>
     <Container>
-    <h5>활용사례 등록하기</h5>
+    <h5>API 신청하기</h5>
     <Form>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
         <Form.Label>제목</Form.Label>
         <Form.Control onChange={(e) => setTitle(e.target.value)} type="text" placeholder="제목을 입력하세요" />
       </Form.Group>
       <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-        <Form.Label>내용</Form.Label>
+        <Form.Label>신청이유</Form.Label>
         <Form.Control onChange={(e) => setContent(e.target.value)} as="textarea" rows={3} />
       </Form.Group>
     </Form>
@@ -50,7 +50,8 @@ function UseCaseRgt(){
     </Container>
     </div>
     );
+
     
 };
 
-export default UseCaseRgt;
+export default ApiApply;

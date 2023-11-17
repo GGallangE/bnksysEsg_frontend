@@ -64,7 +64,7 @@ function Register() {
       // 오류 처리
       if (error.response) {
         // 서버에서 오류 응답을 받았을 때
-        console.log(1)
+        console.log(error.response)
         //console.error('서버 오류:', error.response);
         // 사용자에게 오류 메시지를 보여줄 수 있습니다.
       } else if (error.request) {

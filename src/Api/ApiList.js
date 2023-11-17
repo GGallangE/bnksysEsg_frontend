@@ -17,17 +17,15 @@ function ApiList() {
   const location = useLocation();
   const [isFavorite, setIsFavorite] = useState(false);
   const isLoggedIn= useRecoilValue(isLoggedInAtom);
-
+  axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
+  
   const handleSearch = async () => {
     await updateSearchState();
     try{
         const response = await axios.get('/spring/main/search', {
             params : {
               name : searchTerm
-            , sortBy : sortBy},
-            headers: {
-              Authorization: `Bearer ${isLoggedIn}`,
-            },
+            , sortBy : sortBy}
         });
         setSearchResults(response.data.data);
         console.log(response.data.data);
@@ -70,14 +68,21 @@ function ApiList() {
     )
   }
 
-  const handleFavoriteToggle = async (apilistid, isFavorite) => {
+  const handleFavoriteToggle = async (apilistid, favorite) => {
     try {
       // 서버로 관심 데이터 토글 요청
-      await axios.post('/spring/userapi/interestapi', { apilistid, stcd: isFavorite ? '99' : '01' });
+      await axios.post('/spring/userapi/interestapi', 
+      { 
+        apilistid,
+        stcd: favorite ? '99' : '01' 
+      }
+      );
       // API 목록을 다시 불러오기
       handleSearch();
     } catch (error) {
-      console.error('Error toggling favorite: ', error);
+      if(error.response.status == 403){
+        alert("로그인을 해주세요.");
+      }
     }
   };
   
@@ -112,14 +117,14 @@ function ApiList() {
                       <span style={{ display: "none" }}>{result.apilistid}</span>
                       
                       <Button
-                        variant={result.isFavorite ? 'success' : 'outline-secondary'}
+                        variant={result.favorite ? 'primary' : 'outline-secondary'}
                         onClick={(e) => {
                           e.preventDefault(); // 링크의 기본 동작 막기
-                          handleFavoriteToggle(result.apilistid);
+                          handleFavoriteToggle(result.apilistid, result.favorite);
                         }}
                         className="favorite-button"
                       >
-                        {result.isFavorite ? '찜 해제하기' : '찜하기'}
+                        {result.favorite ? '찜 해제하기' : '찜하기'}
                       </Button>
                       </div>
                   </div>

@@ -28,15 +28,15 @@ function Navigation() {
 
             <NavDropdown title="이용안내" id="basic-nav-dropdown">
               <NavDropdown.Item href="/Information/Notice">공지사항</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">문의하기</NavDropdown.Item>
+              <NavDropdown.Item href="/Information/inquiryregister">문의하기</NavDropdown.Item>
             </NavDropdown>
 
             <NavDropdown title="마이페이지" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">관심데이터</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">최근사용데이터</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">MY 문의사항</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.4">API 신청현황</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.4">API 예약현황</NavDropdown.Item>
+              <NavDropdown.Item href="/mypage/interestdata">관심데이터</NavDropdown.Item>
+              <NavDropdown.Item href="/mypage/recentusedata">최근사용데이터</NavDropdown.Item>
+              <NavDropdown.Item href="/mypage/myinquiry">MY 문의사항</NavDropdown.Item>
+              <NavDropdown.Item href="/mypage/apiapply">API 신청현황</NavDropdown.Item>
+              <NavDropdown.Item href="/mypage/apirsv">API 예약현황</NavDropdown.Item>
             </NavDropdown>
 
           </Nav>

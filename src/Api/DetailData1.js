@@ -12,8 +12,6 @@ import { useLocation } from "react-router-dom";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-const URL = "/api/nts-businessman/v1/status?serviceKey=" + API_KEY;
-
 function DetailData1(props) {
   const [data, setData] = useState([]);
   const [usecaseData, setUsecaseData] = useState([]);
@@ -21,19 +19,22 @@ function DetailData1(props) {
   const [array, setArray] = useState([]);
   const [error, setError] = useState(null);
   const [usecaseError, setUsecaseError] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  
+const BusinessmanData = async () => {
+  const array = content.split(',').map(item => item.trim());
+  setArray(array);
+  try {
+    const response = await axios.post("/api/nts-businessman/v1/status?serviceKey=" + API_KEY, {
+      "b_no": array
+    });
+    setData(prevData => [...prevData, ...response.data.data]);
+  } catch(e) {
+    setError(e);
+  }
 
-  const BusinessmanData = async () => {
-    const array = content.split(',').map(item => item.trim());
-    setArray(array);
-    try {
-      const response = await axios.post(URL, {
-        "b_no": array
-      });
-      setData(prevData => [...prevData, ...response.data.data]);
-    } catch(e) {
-      setError(e);
-    }
-  };
+};
+
 
   useEffect(() => {
     axios.get('/spring/usecase/apidetail', {
@@ -63,8 +64,6 @@ function DetailData1(props) {
 
   const excelDownload = (excelData) => {
     const ws = XLSX.utils.aoa_to_sheet([
-      [`국세청_사업자등록정보상태`],
-      [],
       ['사업자 등록번호', '납세자 상태', '과세유형메세지', '폐업일', '단위과세전환폐업여부',
     '최근과세유형전환일자', '세금계산서적용일자', '직전과세유형메세지']
     ]);
@@ -96,11 +95,44 @@ function DetailData1(props) {
     const excelFile = new Blob([excelButter], { type: excelFileType});
     FileSaver.saveAs(excelFile, excelFileName + excelFileExtension);
   }
+
+  const BusinessmanDataExcel = async (selectedFile) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
   
+      // 엑셀에서 데이터 추출
+      const array = XLSX.utils.sheet_to_json(sheet).map(row => row['사업자 등록번호']); // '사업자 등록번호' 컬럼의 데이터만을 선택
+  console.log(array)
+    try {
+      const response = await axios.post("/api/nts-businessman/v1/status?serviceKey=" + API_KEY, {
+        "b_no": array
+      });
+      setData(prevData => [...prevData, ...response.data.data]);
+    } catch(e) {
+      setError(e);
+    }
+  
+  };
+  reader.readAsArrayBuffer(selectedFile);
+  }
 
+  const handleFileUpload = () => {
+    if (selectedFile) {
+      BusinessmanDataExcel(selectedFile);
+    }else{
+      alert('파일을 선택해주세요.');
+    }
+  }
 
+  const handleFileInputChange = (event) => {
+    //파일이 선택되었을 때
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  }
   return (
-    
     <div className="App">
       <Container style={{margin:'50px auto'}}>
       <div>
@@ -196,6 +228,10 @@ function DetailData1(props) {
     )}
     <div>
       <Button onClick={() => excelDownload(data)}>엑셀 다운로드</Button>
+    </div>
+    <div>
+      <input type="file" accept=".xlsx, .xls" onChange={handleFileInputChange}/>
+      <Button onClick={handleFileUpload}>Upload Excel</Button>
     </div>
     </Container>
     </div>
