@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-function RecentUseData(){
+function MyApiRgt(){
 
 
     return(
@@ -10,4 +10,4 @@ function RecentUseData(){
     </div>
     );
 }
-export default RecentUseData;
+export default MyApiRgt;

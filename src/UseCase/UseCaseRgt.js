@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format'
 import { Form, Container, Button, Row, Col } from 'react-bootstrap';
@@ -11,6 +11,7 @@ function UseCaseRgt(){
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const isLoggedIn= useRecoilValue(isLoggedInAtom);
+    const navigate = useNavigate();
     axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
     
     const usecaseRegister = async () => {
@@ -20,9 +21,7 @@ function UseCaseRgt(){
             content: content,
           }
         );
-      
-          // 응답 확인
-          console.log('응답 데이터:', response.data);
+        navigate('/openapi/usecase');
         } catch (error) {
           if(error.response.status == 403){
             alert("로그인을 해주세요.");
