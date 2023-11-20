@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import { Row, Col, Table } from 'react-bootstrap';
-import FormatDate from '../Format'
+import FormatDate from '../Format/FormatDate'
 
 function UseCaseDetail(){
   const [searchResults, setSearchResults] = useState([]);
