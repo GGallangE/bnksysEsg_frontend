@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-function MyApiRgt(){
+function MyApiSchedule(){
 
 
     return(
@@ -10,4 +10,4 @@ function MyApiRgt(){
     </div>
     );
 }
-export default MyApiRgt;
+export default MyApiSchedule;

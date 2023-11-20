@@ -8,7 +8,7 @@ import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import Container from 'react-bootstrap/Container';
 import FormatDate from '../Format/FormatDate'
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -150,7 +150,9 @@ const BusinessmanData = async () => {
       {usecaseData.map((item, index) => (
         <tr key={index}>
           <td>{index + 1}</td>
-          <td>{item.title}</td>
+          <td>
+            <Link to={`/openapi/usecasedetail/${item.usecaseid}`}>{item.title}</Link>
+          </td>
           <td>{item.username}</td>
           <td><FormatDate dateString={item.regdt} /></td>
         </tr>
@@ -196,6 +198,10 @@ const BusinessmanData = async () => {
         사업자번호: <input type="text" name="content" onChange={handleContent} value={content} />
         <Button onClick={handleButtonClick} style = {{margin:'30px 20px'}}>입력</Button>
     </div> 
+    <div>
+      <input type="file" accept=".xlsx, .xls" onChange={handleFileInputChange}/>
+      <Button onClick={handleFileUpload}>Upload Excel</Button>
+    </div>
     {data && (
     <Table striped bordered hover>
       <thead>
@@ -229,9 +235,9 @@ const BusinessmanData = async () => {
     <div>
       <Button onClick={() => excelDownload(data)}>엑셀 다운로드</Button>
     </div>
+    <br/>
     <div>
-      <input type="file" accept=".xlsx, .xls" onChange={handleFileInputChange}/>
-      <Button onClick={handleFileUpload}>Upload Excel</Button>
+      <Button onClick={() => excelDownload(data)}>예약하기</Button>
     </div>
     </Container>
     </div>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container }from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate';
+import FormatCode from '../Format/FormatCode';
 import MyApiApplyDetail from './MyApiApplyDetail'
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
@@ -39,7 +40,7 @@ function MyApiApply(){
     <div className="App">
       <Container style={{margin:'50px auto'}}>
         <div>
-        <h5 style={{marginTop : '50px',marginBottom : '50px'}}>API신청현황</h5>
+        <h5 style={{marginTop : '50px', marginBottom : '50px'}}>API신청현황</h5>
         <Table bordered>
             <thead>
                 <tr>
@@ -63,8 +64,8 @@ function MyApiApply(){
                     </div>
                     </td>
                     <td><FormatDate dateString={item.applydate} /></td>
-                    {/* <td><FormatDate dateString={item.rplydate} /></td>
-                    <td><FormatDate dateString={item.rplydate} /></td> */}
+                    <td>{item.rplydate&&(<FormatDate dateString={item.rplydate} />)}</td>
+                    <td><FormatCode applydvcd={item.applydvcd} /></td>
                   </tr>
                 ))}
             </tbody>
