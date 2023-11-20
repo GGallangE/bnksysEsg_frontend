@@ -7,7 +7,7 @@ import React from 'react';
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import Container from 'react-bootstrap/Container';
-import FormatDate from '../Format'
+import FormatDate from '../Format/FormatDate'
 import { useLocation } from "react-router-dom";
 
 const API_KEY = process.env.REACT_APP_API_KEY;

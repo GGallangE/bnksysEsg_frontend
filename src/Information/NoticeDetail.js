@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
-import FormatDate from '../Format'
+import FormatDate from '../Format/FormatDate'
 import { Modal, Button } from 'react-bootstrap';
 
 function NoticeDetail(props) {

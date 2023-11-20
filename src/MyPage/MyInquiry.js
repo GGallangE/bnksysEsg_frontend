@@ -1,7 +1,7 @@
 import React, { useState, useEffect}  from 'react';
 import { Button, Table, Container } from 'react-bootstrap';
 import axios from 'axios'
-import FormatDate from '../Format'
+import FormatDate from '../Format/FormatDate'
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
 

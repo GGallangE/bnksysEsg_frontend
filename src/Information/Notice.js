@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { Button, Container }from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
-import FormatDate from '../Format'
+import FormatDate from '../Format/FormatDate'
 import NoticeDetail from './NoticeDetail'
 
 function Notice(){
