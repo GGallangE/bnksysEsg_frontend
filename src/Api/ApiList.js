@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
 import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
@@ -133,12 +132,7 @@ function ApiList() {
             ))}
             </ul>
         )}
-        
       </div>
-    
     </div>
-    
-  );
-}
-
+  )}
 export default ApiList;

@@ -9,6 +9,7 @@ import * as FileSaver from "file-saver";
 import Container from 'react-bootstrap/Container';
 import FormatDate from '../Format/FormatDate'
 import { Link, useLocation } from "react-router-dom";
+import ApiSchedule from "./ApiSchedule"
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -20,6 +21,7 @@ function DetailData1(props) {
   const [error, setError] = useState(null);
   const [usecaseError, setUsecaseError] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [modalShow, setModalShow] = React.useState(false);
   
 const BusinessmanData = async () => {
   const array = content.split(',').map(item => item.trim());
@@ -132,6 +134,11 @@ const BusinessmanData = async () => {
     const file = event.target.files[0];
     setSelectedFile(file);
   }
+
+  const apiSchedule = () => {
+    setModalShow(true);
+  };
+
   return (
     <div className="App">
       <Container style={{margin:'50px auto'}}>
@@ -237,9 +244,13 @@ const BusinessmanData = async () => {
     </div>
     <br/>
     <div>
-      <Button onClick={() => excelDownload(data)}>예약하기</Button>
+      <Button onClick={() => apiSchedule()}>예약하기</Button>
     </div>
     </Container>
+    <ApiSchedule
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
     </div>
     
   );

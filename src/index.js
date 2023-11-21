@@ -17,9 +17,9 @@ import { RecoilRoot } from 'recoil';
 import TokenManagement from './TokenManagement';
 import Navigation from './Navigation';
 import InquiryRgt from './Inquiry/InquiryRgt';
-import InterestData from './MyPage/InterestData';
+import MyInterestData from './MyPage/MyInterestData';
 import MyInquiry from './MyPage/MyInquiry';
-import RecentUseData from './MyPage/RecentUseData';
+import MyRecentUseData from './MyPage/MyRecentUseData';
 import MyApiApply from './MyPage/MyApiApply';
 import Main from './Main/Main';
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -40,10 +40,10 @@ root.render(
   <Route path="/openapi/usecase" element={<UseCase />} />
   <Route path="/openapi/usecasedetail/:usecaseid" element={<UseCaseDetail/>} />
   <Route path="/openapi/usecaseregister" element={<UseCaseRgt/>} />
-  <Route path="/mypage/interestdata" element={<InterestData/>} />
+  <Route path="/mypage/myinterestdata" element={<MyInterestData/>} />
   <Route path="/mypage/myinquiry" element={<MyInquiry/>} />
-  <Route path="/mypage/recentusedata" element={<RecentUseData/>} />
-  <Route path="/mypage/apiapply" element={<MyApiApply/>} />
+  <Route path="/mypage/myrecentusedata" element={<MyRecentUseData/>} />
+  <Route path="/mypage/myapiapply" element={<MyApiApply/>} />
   </Routes>
   </BrowserRouter>
   </RecoilRoot>

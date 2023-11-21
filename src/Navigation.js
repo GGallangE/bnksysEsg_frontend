@@ -32,11 +32,11 @@ function Navigation() {
             </NavDropdown>
 
             <NavDropdown title="마이페이지" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/mypage/interestdata">관심데이터</NavDropdown.Item>
-              <NavDropdown.Item href="/mypage/recentusedata">최근사용데이터</NavDropdown.Item>
+              <NavDropdown.Item href="/mypage/myinterestdata">관심데이터</NavDropdown.Item>
+              <NavDropdown.Item href="/mypage/myrecentusedata">최근사용데이터</NavDropdown.Item>
               <NavDropdown.Item href="/mypage/myinquiry">MY 문의사항</NavDropdown.Item>
-              <NavDropdown.Item href="/mypage/apiapply">API 신청현황</NavDropdown.Item>
-              <NavDropdown.Item href="/mypage/apirsv">API 예약현황</NavDropdown.Item>
+              <NavDropdown.Item href="/mypage/myapiapply">API 신청현황</NavDropdown.Item>
+              <NavDropdown.Item href="/mypage/myapirsv">API 예약현황</NavDropdown.Item>
             </NavDropdown>
 
           </Nav>

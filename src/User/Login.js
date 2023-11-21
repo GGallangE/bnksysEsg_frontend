@@ -24,6 +24,12 @@ function Login() {
     setPassword(e.target.value);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   const handleLogin = async () => {
     try {
       const response = await axios.post('/spring/user/login',{
@@ -56,13 +62,6 @@ function Login() {
     }
     };
   };
-  const test = async () => {
-    try {
-      const response = await axios.get('/spring/user/test',{
-      });
-    } catch (error) {
-    }
-  };
 
   return (
     <div className="container">
@@ -77,6 +76,7 @@ function Login() {
                 id="email"
                 value={email}
                 onChange={handleEmailChange}
+                onKeyDown={handleKeyDown}
               />
             </div>
             <div className="mb-3">
@@ -87,12 +87,14 @@ function Login() {
                 id="password"
                 value={password}
                 onChange={handlePasswordChange}
+                onKeyDown={handleKeyDown}
               />
             </div>
             <button
               type="button"
               className="btn btn-primary"
               onClick={handleLogin}
+              onKeyDown={handleKeyDown}
             >
               로그인
             </button>
