@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { useRecoilValue, useRecoilState } from 'recoil';
@@ -15,6 +15,26 @@ function Login() {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
   const tokenValue = useRecoilValue(tokenState);
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   checkTokenValidity();
+  // }, []);
+
+  // const checkTokenValidity = async () => {
+  //   try {
+  //     const response = await axios.get('/spring/user/check-auth', {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     if (!response.data.valid) {
+  //       setIsLoggedIn(false);
+  //       setToken('');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error checking token validity:', error.message);
+  //   }
+  // };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -38,7 +58,8 @@ function Login() {
         setIsLoggedIn(jwtToken);
         console.log(response)
 
-        navigate('/');  // 로그인 성공 시 메인 페이지로 이동
+        navigate("/");
+        // setRedirectUrl('');
       }else{
         setError(response.data.errors[0]);
       }
