@@ -112,7 +112,7 @@ function ApiList() {
                       <div className='item-info-container'>
                       <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>                      
                       <span className='item-info'>조회수: {result.apiview}</span>
-                      <span className='item-info'>사용수: {result.nbruses}</span>
+                      <span className='item-info'>사용수: {result.countapiuses}</span>
                       <span style={{ display: "none" }}>{result.apilistid}</span>
                       
                       <Button

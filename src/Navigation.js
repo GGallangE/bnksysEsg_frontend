@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from './atom';
 import LoginPopup from './User/LoginPopup';
 import { useNavigate } from 'react-router-dom';
+import './Navigation.css';
 
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
@@ -30,6 +31,7 @@ function Navigation() {
     // 로그인이 필요한 페이지에 진입하기 전에 확인
     if (!isLoggedIn && (path.includes('/mypage') || path.includes('/OPENAPI/ApiApply'))) {
       // 현재 URL 저장
+      setRedirectUrl(path);
       setShowLoginModal(true);
       return;
     }
@@ -52,38 +54,39 @@ function Navigation() {
     if (redirectUrl) {
       navigate(redirectUrl);
       setRedirectUrl(''); // 리디렉션 후 초기화
-    } else {
-      handleLoginModalClose();
     }
   };
-  
 
   return (
     <div>
-      <Navbar expand="lg" className="bg-body-tertiary">
+      <Navbar expand="lg" className="bg-body-tertiary custom-navbar">
         <Container>
           <Navbar.Brand href="/">API_BNK</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <NavDropdown title="OPEN API" id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={() => handleNavItemClick('/OPENAPI/ApiList')}>목록</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleNavItemClick('/OPENAPI/ApiApply')}>API 신청하기</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleNavItemClick('/openapi/usecase')}>활용사례</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.4">데이터 시각화</NavDropdown.Item>
+            <Nav className="me-auto custom-nav">
+              <NavDropdown title="OPEN API" id="basic-nav-dropdown" className='custom-nav'>
+                <Nav className="flex-row">
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/OPENAPI/ApiList')}>목록</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/OPENAPI/ApiApply')}>API 신청하기</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/openapi/usecase')}>활용사례</NavDropdown.Item>
+                  <NavDropdown.Item href="#action/3.4">데이터 시각화</NavDropdown.Item>
+                </Nav>
               </NavDropdown>
-
-              <NavDropdown title="이용안내" id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={() => handleNavItemClick('/Information/Notice')}>공지사항</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleNavItemClick('/Information/inquiryregister')}>문의하기</NavDropdown.Item>
+              <NavDropdown title="이용안내" id="basic-nav-dropdown" className='custom-nav'>
+                <Nav className="flex-row">  
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/Information/Notice')}>공지사항</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/Information/inquiryregister')}>문의하기</NavDropdown.Item>
+                </Nav>
               </NavDropdown>
-              
-              <NavDropdown title="마이페이지" id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/interestdata')}>관심데이터</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/recentusedata')}>최근사용데이터</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myinquiry')}>MY 문의사항</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/apiapply')}>API 신청현황</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/apirsv')}>API 예약현황</NavDropdown.Item>
+              <NavDropdown title="마이페이지" id="basic-nav-dropdown" className='custom-nav'>
+                <Nav className="flex-row">
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/interestdata')}>관심데이터</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/recentusedata')}>최근사용데이터</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myinquiry')}>MY 문의사항</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/apiapply')}>API 신청현황</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/apirsv')}>API 예약현황</NavDropdown.Item>
+                </Nav>
               </NavDropdown>
             </Nav>
             <Nav.Link onClick={handleLoginLogout} href="#">
@@ -93,12 +96,7 @@ function Navigation() {
         </Container>
       </Navbar>
 
-      <LoginPopup
-        show={showLoginModal}
-        handleClose={handleLoginModalClose}
-        handleLoginSuccess={handleLoginSuccess}
-        redirectUrl={redirectUrl} 
-      />
+      <LoginPopup show={showLoginModal} handleClose={handleLoginModalClose} handleLoginSuccess={handleLoginSuccess} />
     </div>
   );
 }
