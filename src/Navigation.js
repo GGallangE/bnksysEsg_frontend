@@ -81,8 +81,8 @@ function Navigation() {
               </NavDropdown>
               <NavDropdown title="마이페이지" id="basic-nav-dropdown" className='custom-nav'>
                 <Nav className="flex-row">
-                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/interestdata')}>관심데이터</NavDropdown.Item>
-                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/recentusedata')}>최근사용데이터</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myinterestdata')}>관심데이터</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myrecentusedata')}>최근사용데이터</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myinquiry')}>MY 문의사항</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/apiapply')}>API 신청현황</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/apirsv')}>API 예약현황</NavDropdown.Item>
