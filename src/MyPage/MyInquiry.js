@@ -67,6 +67,7 @@ function MyInquiry(){
                                 <th>No</th>
                                 <th>제목</th>
                                 <th>등록일</th>
+                                <th>답변 현황</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -80,15 +81,19 @@ function MyInquiry(){
                                             </div>
                                         </td>
                                         <td><FormatDate dateString={item.regdt} /></td>
+                                        <td>{item.replycount}</td>
                                     </tr>
                                     {selectedRow === item.inquiryid && (
-                                        <tr>
-                                            <td colSpan="3">
-                                                <div>
-                                                    {inquiryAnswer}
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td colSpan="4">
+                                        <div>
+                                            <strong>질문 내용:</strong> {item.inquirycntn}
+                                        </div>
+                                        <div>
+                                        <strong>답변 상태:</strong> {item.replycount === 0 ? "답변중" : "답변완료"}
+                                        </div>
+                                        </td>
+                                    </tr>
                                     )}
                                 </React.Fragment>
                             ))}

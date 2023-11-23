@@ -3,14 +3,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
-import { Col, Form, Row, Container, ListGroup, Card } from 'react-bootstrap';
+import { Col, Form, Row, Container, ListGroup, Card, Modal } from 'react-bootstrap';
 import './Main.css';
+import NoticeDetail from '../Information/NoticeDetail'
 
 function Main(){
   const [searchNotice, setSearchNotice] = useState([]);
   const [searchPopular, setSearchPopular] = useState([]);
   const [searchRecent, setSearchRecent] = useState([]);
   const [searchApi, setSearchApi] = useState([]);
+  const [showNoticeDetail, setShowNoticeDetail] = useState(false);
+  const [selectedNoticeItem, setSelectedNoticeItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
@@ -79,6 +82,11 @@ function Main(){
     }
   };
 
+  const handleTitleClick = (item) => {
+    setSelectedNoticeItem(item); 
+    setShowNoticeDetail(true); 
+  };
+
   useEffect(() => {
     notice();
     popular();
@@ -113,10 +121,16 @@ function Main(){
             <ListGroup className="list-style">
               {searchNotice.map((item, index) => (
                 <ListGroup.Item key={index}>
-                  <Link to={`/Information/Noticedetail/${item.noticeid}`} className="link-style">
+                  <a
+                    href="#"
+                    className="link-style" 
+                    onClick={() => handleTitleClick(item.noticeid)}
+                  >
                     <span className="number-background">{index + 1}</span>{" "}
-                    {item.noticenm.length > 15 ? `${item.noticenm.substring(0, 15)}...` : item.noticenm}
-                  </Link>
+                    {item.noticenm.length > 15
+                      ? `${item.noticenm.substring(0, 15)}...`
+                      : item.noticenm}
+                  </a>
                 </ListGroup.Item>
               ))}
             </ListGroup>
@@ -127,16 +141,18 @@ function Main(){
           <Card className = "list-card">
           <Card.Body>
           <Card.Title>인기데이터</Card.Title>
-            <ListGroup className="list-style">
+          <ListGroup className="list-style">
               {searchPopular.map((item, index) => (
-                <ListGroup.Item key={index}>
-                  <a href="#" className="link-style">
-                    <span className="number-background">{index + 1}</span> {" "}
-                    {item.apinm.length > 15
-                     ? `${item.apinm.substring(0, 15)}...`
-                    : item.apinm}
-                  </a>
-                </ListGroup.Item>
+                <Link to={`/api/detailapi/${item.apilistid}`} className="link-without-underline">
+                  <ListGroup.Item key={index}>
+                    <a href="#" className="link-style">
+                      <span className="number-background">{index + 1}</span> {" "}
+                      {item.apinm.length > 15
+                      ? `${item.apinm.substring(0, 15)}...`
+                      : item.apinm}
+                    </a>
+                  </ListGroup.Item>
+                </Link>
               ))}
             </ListGroup>  
             </Card.Body>
@@ -148,20 +164,28 @@ function Main(){
           <Card.Title>최신데이터</Card.Title>
           <ListGroup className="list-style">
               {searchRecent.map((item, index) => (
-                <ListGroup.Item key={index}>
-                  <a href="#" className="link-style">
-                    <span className="number-background">{index + 1}</span> {" "}
-                    {item.apinm.length > 15
-                     ? `${item.apinm.substring(0, 15)}...`
-                    : item.apinm}
-                  </a>
-                </ListGroup.Item>
+                <Link to={`/api/detailapi/${item.apilistid}`} className="link-without-underline">
+                  <ListGroup.Item key={index}>
+                    <a href="#" className="link-style">
+                      <span className="number-background">{index + 1}</span> {" "}
+                      {item.apinm.length > 15
+                      ? `${item.apinm.substring(0, 15)}...`
+                      : item.apinm}
+                    </a>
+                  </ListGroup.Item>
+                </Link>
               ))}
             </ListGroup>
             </Card.Body>
             </Card>
           </Col>
         </Row>
+
+        <NoticeDetail
+          show={showNoticeDetail}
+          onHide={() => setShowNoticeDetail(false)}
+          selectedItem={selectedNoticeItem}
+        />
       </Container>
     );
 };

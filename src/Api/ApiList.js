@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate  } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
 import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
 import './ApiList.css';
 import { isLoggedInAtom } from '../atom'
-import { Button } from 'react-bootstrap';
+import { Button, Container } from 'react-bootstrap';
 
 
 function ApiList() {
@@ -14,13 +14,14 @@ function ApiList() {
   const [searchResults, setSearchResults] = useState([]);
   const [sortBy, setSortBy] = useState('');
   const location = useLocation();
+  const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
   const isLoggedIn= useRecoilValue(isLoggedInAtom);
   axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
   
   const handleSearch = async () => {
-    await updateSearchState();
     try{
+        await updateSearchState();
         const response = await axios.get('/spring/main/search', {
             params : {
               name : searchTerm
@@ -38,6 +39,7 @@ function ApiList() {
       console.log(location.state);
       await setSearchTerm(location.state.name);
       await setSortBy(location.state.sortBy);
+      navigate('/OPENAPI/ApiList', { state: null });
     }
   };
 
@@ -48,8 +50,12 @@ function ApiList() {
   };
 
   useEffect(() => {
+    updateSearchState();
+  }, [location.state]);
+
+  useEffect(() => {
     handleSearch();
-  }, []);
+  }, [searchTerm, sortBy]);
 
   const SelectBox = () => {
     return (
@@ -86,7 +92,7 @@ function ApiList() {
   };
   
   return (
-    <div className='App'>
+    <div className='App'  style={{ marginTop: '100px' }}>
       <input
         type="text"
         placeholder="검색어를 입력하세요"
@@ -97,17 +103,19 @@ function ApiList() {
       />
       <SelectBox />
       <button onClick={handleSearch}>검색</button>
-      <div>
+      <div style={{marginTop:"50px"}}>
         {Array.isArray(searchResults) && searchResults.length === 0 ? (
             <p>검색 결과 없음</p>
         ) : (
             <ul>
+              <Container>
+                
             {searchResults.map((result) => (
-                <li key={result.apilistid} className="result-item">
+                <li key={result.apilistid} className="result-item" style={{marginTop:"20px"}}>
                 <Link 
                   to={`/api/detailapi/${result.apilistid}`}
                   className="Link">
-                  <div className="item">
+                  <div className="item" style={{ borderRadius: '10px', padding: '10px' }}>
                       <div className="item-name">{result.apinm}</div>
                       <div className='item-info-container'>
                       <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>                      
@@ -118,7 +126,7 @@ function ApiList() {
                       <Button
                         variant={result.favorite ? 'primary' : 'outline-secondary'}
                         onClick={(e) => {
-                          e.preventDefault(); // 링크의 기본 동작 막기
+                          e.preventDefault();
                           handleFavoriteToggle(result.apilistid, result.favorite);
                         }}
                         className="favorite-button"
@@ -130,6 +138,7 @@ function ApiList() {
                 </Link>
                 </li>
             ))}
+              </Container>
             </ul>
         )}
       </div>

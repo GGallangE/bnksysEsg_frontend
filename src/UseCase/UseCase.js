@@ -18,6 +18,7 @@ function UseCase() {
                 },
             });
             setSearchUseCase(response.data.data.data);
+            
         }catch(error){
             console.error("Error searching : ", error)
         }
@@ -35,7 +36,7 @@ function UseCase() {
 
 return(
 <div className="App">
-    <Container style={{margin:'50px auto'}}>
+    <Container style={{margin:'100px auto'}}>
         <div>
         <h5>활용사례</h5>
         <Row className = "justify-content-md-center">
