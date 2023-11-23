@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
 import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
+import Container from 'react-bootstrap/Container';
 import { isLoggedInAtom } from '../atom'
 import { Button } from 'react-bootstrap';
 
@@ -48,41 +49,44 @@ function MyInterestData(){
     };
 
     return(   
-      <div>
-        {Array.isArray(searchResults) && searchResults.length === 0 ? (
-            <p>검색 결과 없음</p>
-        ) : (
-            <ul>
-            {searchResults.map((result) => (
-                <li key={result.apilistid} className="result-item">
-                <Link 
-                  to={`/api/detailapi/${result.apilistid}`}
-                  className="Link">
-                  <div className="item">
-                      <div className="item-name">{result.apinm}</div>
-                      <div className='item-info-container'>
-                      <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>                      
-                      <span className='item-info'>조회수: {result.apiview}</span>
-                      <span className='item-info'>사용수: {result.nbruses}</span>
-                      <span style={{ display: "none" }}>{result.apilistid}</span>
-                      
-                      <Button
-                        variant={result.favorite ? 'primary' : 'outline-secondary'}
-                        onClick={(e) => {
-                          e.preventDefault(); // 링크의 기본 동작 막기
-                          handleFavoriteToggle(result.apilistid, result.favorite);
-                        }}
-                        className="favorite-button"
-                      >
-                        {result.favorite ? '찜 해제하기' : '찜하기'}
-                      </Button>
-                      </div>
-                  </div>
-                </Link>
-                </li>
-            ))}
-            </ul>
-        )}
-      </div>
+      <Container style={{marginTop:'100px auto'}}>
+        <div className='App'>
+        <h5 style={{ marginTop: '50px', marginBottom: '50px' }}>MY 관심 데이터</h5>
+          {Array.isArray(searchResults) && searchResults.length === 0 ? (
+              <p>검색 결과 없음</p>
+          ) : (
+              <ul>
+              {searchResults.map((result) => (
+                  <li key={result.apilistid} className="result-item">
+                  <Link 
+                    to={`/api/detailapi/${result.apilistid}`}
+                    className="Link">
+                    <div className="item">
+                        <div className="item-name">{result.apinm}</div>
+                        <div className='item-info-container'>
+                        <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>                      
+                        <span className='item-info'>조회수: {result.apiview}</span>
+                        <span className='item-info'>사용수: {result.nbruses}</span>
+                        <span style={{ display: "none" }}>{result.apilistid}</span>
+                        
+                        <Button
+                          variant={result.favorite ? 'primary' : 'outline-secondary'}
+                          onClick={(e) => {
+                            e.preventDefault(); // 링크의 기본 동작 막기
+                            handleFavoriteToggle(result.apilistid, result.favorite);
+                          }}
+                          className="favorite-button"
+                        >
+                          {result.favorite ? '찜 해제하기' : '찜하기'}
+                        </Button>
+                        </div>
+                    </div>
+                  </Link>
+                  </li>
+              ))}
+              </ul>
+          )}
+        </div>
+      </Container>
     )}
 export default MyInterestData;

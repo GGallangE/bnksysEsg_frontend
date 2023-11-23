@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef  } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -22,6 +22,7 @@ function Schedule_business(props) {
   const [excelArray, setExcelArray] = useState([]);
   const hours = Array.from({ length: 24 }, (_, index) => index); // 0부터 23까지의 숫자 배열 생성
   const isLoggedIn= useRecoilValue(isLoggedInAtom);
+  const isMounted = useRef(false);
   axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
 
   const handleOptionChange = (e) => {
@@ -46,46 +47,57 @@ function Schedule_business(props) {
   }
 
   useEffect(() => {
-    const handleSchedule = async () => {
-      console.log(businessmanArray);
-      try {
-        if(selectedFrequency === 'monthly'){
-          const response = await axios.post('/spring/reservation/schedule', {
-            apilistid: props.apilistid,
-            frequency: selectedFrequency,
-            time: selectedTime,
-            dayofmonth: selectedDay,
-            batchDetailargsDto: businessmanArray
-          }
-        );
-        alert(`${selectedFrequency} ${selectedDay} ${selectedTime}에 예약이 완료되었습니다.`);
-        }else if (selectedFrequency === 'weekly'){
-          const response = await axios.post('/spring/reservation/schedule', {
-            apilistid: props.apilistid,
-            frequency: selectedFrequency,
-            time: selectedTime,
-            dayofweek: selectedDay,
-            batchDetailargsDto: businessmanArray
-          }
-        );
-        alert(`${selectedFrequency} ${selectedDay} ${selectedTime}에 예약이 완료되었습니다.`);
-      }else{
-          const response = await axios.post('/spring/reservation/schedule', {
-            apilistid: props.apilistid,
-            frequency: selectedFrequency,
-            time: selectedTime,
-            batchDetailargsDto: businessmanArray
+    if (isMounted.current) {
+      const handleSchedule = async () => {
+        console.log(businessmanArray);
+        try {
+          if(selectedFrequency === 'monthly'){
+            const response = await axios.post('/spring/reservation/schedule', {
+              apilistid: props.apilistid,
+              frequency: selectedFrequency,
+              time: selectedTime,
+              dayofmonth: selectedDay,
+              batchDetailargsDto: businessmanArray  
+            }
+          );
+          alert(`${selectedFrequency} ${selectedDay} ${selectedTime}에 예약이 완료되었습니다.`);
+          }else if (selectedFrequency === 'weekly'){
+            const response = await axios.post('/spring/reservation/schedule', {
+              apilistid: props.apilistid,
+              frequency: selectedFrequency,
+              time: selectedTime,
+              dayofweek: selectedDay,
+              batchDetailargsDto: businessmanArray
+            }
+          );
+          alert(`${selectedFrequency} ${selectedDay} ${selectedTime}에 예약이 완료되었습니다.`);
+        }else{
+            const response = await axios.post('/spring/reservation/schedule', {
+              apilistid: props.apilistid,
+              frequency: selectedFrequency,
+              time: selectedTime,
+              batchDetailargsDto: businessmanArray
+            } 
+          );
+          alert(`${selectedFrequency} ${selectedTime}에 예약이 완료되었습니다.`);
+        }
+        setBusinessmanArray([]);
+        setExcelArray([]);
+        setContent('');
+
+        props.onHide();
+      }catch (error) {
+            if(error.response.status == 403){
+              alert("로그인을 해주세요.");
+            }
+            console.log(error.response.data)
           } 
-        );
-        alert(`${selectedFrequency} ${selectedTime}에 예약이 완료되었습니다.`);
-      }}catch (error) {
-          if(error.response.status == 403){
-            alert("로그인을 해주세요.");
-          }
-          console.log(error)
-        } 
-    };
-    handleSchedule();
+      };
+      handleSchedule();
+    } else{
+      isMounted.current = true;
+    }
+    
   },[businessmanArray])
  
 
