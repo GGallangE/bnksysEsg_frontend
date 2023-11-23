@@ -4,8 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate'
 import { Form, Container, Button, Row, Col } from 'react-bootstrap';
-import { isLoggedInAtom } from '../atom'
+import { isLoggedInAtom } from '../atom';
 import { useRecoilValue } from 'recoil';
+import Editor from '../Editor';
 
 function UseCaseRgt(){
     const [title, setTitle] = useState('');
@@ -43,10 +44,12 @@ function UseCaseRgt(){
         <Form.Control onChange={(e) => setContent(e.target.value)} as="textarea" rows={3} />
       </Form.Group>
     </Form>
+    <Editor/>
     <Button onClick={usecaseRegister} style = {{margin: '50px 0px'}} variant = "primary" type = "submit">
               등록
     </Button>
     </Container>
+    
     </div>
     );
     
