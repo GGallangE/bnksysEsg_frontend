@@ -1,15 +1,14 @@
 import './DetailData1.css';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
+import { Table, Form, Button, Row, Col } from 'react-bootstrap';
 import React from 'react';
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import Container from 'react-bootstrap/Container';
 import FormatDate from '../Format/FormatDate'
 import { Link, useLocation } from "react-router-dom";
-import ApiSchedule from "./ApiSchedule"
+import Schedule_business from "../Schedule/Schedule_business"
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -205,9 +204,23 @@ const BusinessmanData = async () => {
         사업자번호: <input type="text" name="content" onChange={handleContent} value={content} />
         <Button onClick={handleButtonClick} style = {{margin:'30px 20px'}}>입력</Button>
     </div> 
-    <div>
-      <input type="file" accept=".xlsx, .xls" onChange={handleFileInputChange}/>
-      <Button onClick={handleFileUpload}>Upload Excel</Button>
+    <div className="d-flex justify-content-center">
+    <Row className="mb-3 align-items-center">
+      <Col xs={3} >
+        <Form.Label className="mb-0">Excel파일 업로드</Form.Label>
+      </Col>
+      <Col xs={6}>
+        <Form.Control
+          type="file"
+          name="file"
+          onChange={handleFileInputChange}
+          accept=".xlsx, .xls"
+        />
+      </Col>
+      <Col xs={3}>
+        <Button onClick={handleFileUpload}>Upload Excel</Button>
+      </Col>
+    </Row>
     </div>
     {data && (
     <Table striped bordered hover>
@@ -240,16 +253,14 @@ const BusinessmanData = async () => {
     </Table>  
     )}
     <div>
-      <Button onClick={() => excelDownload(data)}>엑셀 다운로드</Button>
-    </div>
-    <br/>
-    <div>
-      <Button onClick={() => apiSchedule()}>예약하기</Button>
+      <Button style = {{margin:'20px'}} onClick={() => excelDownload(data)}>엑셀 다운로드</Button>
+      <Button style = {{margin:'20px'}} onClick={() => apiSchedule()}>예약하기</Button>
     </div>
     </Container>
-    <ApiSchedule
+    <Schedule_business
         show={modalShow}
         onHide={() => setModalShow(false)}
+        apilistid= {props.apilistid}
       />
     </div>
     
