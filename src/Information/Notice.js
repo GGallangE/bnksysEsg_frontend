@@ -32,7 +32,7 @@ function Notice(){
 
     return (
     <div className="App">
-      <Container style={{margin:'50px auto'}}>
+      <Container style={{margin:'120px auto'}}>
         <div>
         <h5 style={{marginTop : '50px',marginBottom : '50px'}}>공지사항</h5>
         <Table bordered>

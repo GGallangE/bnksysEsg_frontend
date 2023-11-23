@@ -38,3 +38,8 @@ div.list-group-item{
     border: none;
     font-weight: bold;
 }
+
+.link-without-underline {
+    text-decoration: none; 
+    color: inherit; 
+  }

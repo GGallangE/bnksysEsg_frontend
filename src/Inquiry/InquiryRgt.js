@@ -34,15 +34,15 @@ function InquiryRgt(){
     return(
     <div>
     <Container>
-    <h5>문의하기</h5>
+    <h5 style={{marginTop : '100px'}}>문의하기</h5>
     <Form>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
         <Form.Label>제목</Form.Label>
-        <Form.Control onChange={(e) => setTitle(e.target.value)} value={title} type="text" placeholder="제목을 입력하세요" />
+        <Form.Control onChange={(e) => setTitle(e.target.value)} value={title} type="text" placeholder="제목을 입력하세요" style={{ height: '50px', fontSize: '18px' }}/>
       </Form.Group>
       <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
         <Form.Label>내용</Form.Label>
-        <Form.Control onChange={(e) => setContent(e.target.value)} value={content} as="textarea" rows={3} />
+        <Form.Control onChange={(e) => setContent(e.target.value)} value={content} placeholder="내용을 입력하세요" as="textarea" rows={3} style={{ height: '200px', fontSize: '15px' }}/>
       </Form.Group>
     </Form>
     <Button onClick={usecaseRegister} style = {{margin: '50px 0px'}} variant = "primary" type = "submit">
