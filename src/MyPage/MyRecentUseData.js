@@ -4,7 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
 import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
-import { isLoggedInAtom } from '../atom'
+import { isLoggedInAtom } from '../atom';
+import Container from 'react-bootstrap/Container';
 import { Button } from 'react-bootstrap';
 
 function MyRecentUseData(){
@@ -32,12 +33,13 @@ function MyRecentUseData(){
     const handleFavoriteToggle = async (apilistid, favorite) => {
       try {
         // 서버로 관심 데이터 토글 요청
-        await axios.post('/spring/userapi/interestapi', 
+        const response = await axios.post('/spring/userapi/interestapi', 
         { 
           apilistid,
           stcd: favorite ? '99' : '01' 
         }
         );
+        console.log(response)
         // API 목록을 다시 불러오기
         handleSearch();
       } catch (error) {
@@ -46,9 +48,12 @@ function MyRecentUseData(){
         }
       }
     };
+    console.log(searchResults);
 
     return(
-        <div>
+      <Container style={{marginTop : '100px'}}>
+        <div className = "App">
+        <h5 style={{ marginTop: '50px', marginBottom: '50px' }}>최근 사용 데이터</h5>
         {Array.isArray(searchResults) && searchResults.length === 0 ? (
             <p>검색 결과 없음</p>
         ) : (
@@ -63,7 +68,7 @@ function MyRecentUseData(){
                       <div className='item-info-container'>
                       <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>                      
                       <span className='item-info'>조회수: {result.apiview}</span>
-                      <span className='item-info'>사용수: {result.nbruses}</span>
+                      <span className='item-info'>사용수: {result.countapiuses}</span>
                       <span style={{ display: "none" }}>{result.apilistid}</span>
                       
                       <Button
@@ -84,6 +89,7 @@ function MyRecentUseData(){
             </ul>
         )}
       </div>
+      </Container>
     );
 }
 export default MyRecentUseData;
