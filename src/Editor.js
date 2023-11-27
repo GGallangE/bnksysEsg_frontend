@@ -4,13 +4,15 @@ import "react-quill/dist/quill.snow.css"
 import {Container} from 'react-bootstrap';
 
 
-function Editor(props){
+function Editor({onQuillChange}){
     const[quillValue, setQuillValue] = useState("");
 
     const handleQuillChange = (content, delta, source, editor) => {
         setQuillValue(editor.getContents());
+        onQuillChange(content);
+        
     };
-console.log(quillValue.ops[0].insert);
+
     const modules = {
         toolbar: [
           [{ header: [1, 2, false] }],
