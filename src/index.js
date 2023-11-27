@@ -22,6 +22,7 @@ import MyInquiry from './MyPage/MyInquiry';
 import MyRecentUseData from './MyPage/MyRecentUseData';
 import MyApiApply from './MyPage/MyApiApply';
 import Main from './Main/Main';
+import MyApiSchedule from './MyPage/MyApiSchedule';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <RecoilRoot>
@@ -44,6 +45,7 @@ root.render(
   <Route path="/mypage/myinquiry" element={<MyInquiry/>} />
   <Route path="/mypage/myrecentusedata" element={<MyRecentUseData/>} />
   <Route path="/mypage/myapiapply" element={<MyApiApply/>} />
+  <Route path="/mypage/myapirsv" element={<MyApiSchedule/>} />
   </Routes>
   </BrowserRouter>
   </RecoilRoot>

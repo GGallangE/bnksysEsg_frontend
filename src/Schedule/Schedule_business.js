@@ -80,6 +80,7 @@ function Schedule_business(props) {
             } 
           );
           alert(`${selectedFrequency} ${selectedTime}에 예약이 완료되었습니다.`);
+          console.log(response)
         }
         setBusinessmanArray([]);
         setExcelArray([]);

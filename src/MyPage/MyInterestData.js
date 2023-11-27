@@ -51,7 +51,7 @@ function MyInterestData(){
     return(   
       <Container style={{marginTop:'100px auto'}}>
         <div className='App'>
-        <h5 style={{ marginTop: '50px', marginBottom: '50px' }}>MY 관심 데이터</h5>
+        <h5 style={{ marginTop: '100px', marginBottom: '50px' }}>MY 관심 데이터</h5>
           {Array.isArray(searchResults) && searchResults.length === 0 ? (
               <p>검색 결과 없음</p>
           ) : (
