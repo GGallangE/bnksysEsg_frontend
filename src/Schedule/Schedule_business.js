@@ -14,6 +14,8 @@ import { useRecoilValue } from 'recoil';
 
 function Schedule_business(props) {
   const [selectedTime, setSelectedTime] = useState('');
+  const [selectedHour, setSelectedHour] = useState('');
+  const [selectedMinute, setSelectedMinute] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedFrequency, setSelectedFrequency] = useState('');
   const [secondOptions, setSecondOptions] = useState([]);
@@ -39,11 +41,16 @@ function Schedule_business(props) {
   };
 
   const clickRsv = () => {
+    // '시:분' 형식의 입력인지 확인
+    if (/^([01]?[0-9]|2[0-3]):([0-5]?[0-9])$/.test(selectedTime)) {
     const array = content.split(',').map(item => item.trim());
     console.log(businessmanArray);
     setBusinessmanArray(excelArray.concat(array).map((item) => {
       return { "arg1": item };
     }));
+    }else{
+      alert("올바른 시간을 입력하세요.");
+    }
   }
 
   useEffect(() => {
@@ -88,12 +95,9 @@ function Schedule_business(props) {
 
         props.onHide();
       }catch (error) {
-            if(error.response.status == 403){
-              alert("로그인을 해주세요.");
-            }
-            console.log(error.response.data)
-          } 
-      };
+        alert(error.response.data.messages)
+      }
+    };
       handleSchedule();
     } else{
       isMounted.current = true;
@@ -124,6 +128,27 @@ function Schedule_business(props) {
     //setSelectedFile(file);
   }
 
+  // const handleTimeChange = (e) => {
+  //   const rawValue = e.target.value;
+
+  //   // 숫자만 추출
+  //   const numericValue = rawValue.replace(/\D/g, '');
+
+  //   // 4자리 숫자인 경우에만 처리
+  //   if (/^\d{0,4}$/.test(numericValue)) {
+  //     // 두 자리로 나누어서 시간 형식으로 만들기
+  //     const formattedValue = `${numericValue.slice(0, 2)}:${numericValue.slice(2)}`;
+  //     setSelectedTime(formattedValue);
+  //   }
+  // };
+
+  const handleHourChange = () => {
+
+  }
+
+  const handleMinuteChange = () => {
+
+  }
   const getDayKorean = (day) => {
     switch (day) {
       case 'MON':
@@ -182,15 +207,31 @@ function Schedule_business(props) {
               ))}
             </Form.Select>
           </Col>
-          <Col xs={3}>
-            <Form.Select onChange={(e) => setSelectedTime(e.target.value)}>
-              <option value="">선택하세요</option>
-              {hours.map((hour) => (
-                <option key={hour} value={`${hour.toString().padStart(2, '0')}:00`}>
-                {`${hour.toString().padStart(2, '0')}:00`}
-                </option>
-              ))}
-            </Form.Select>
+          <Col xs={3} className="d-flex">
+            <Form.Control
+              type="text"
+              placeholder="00"
+              value={selectedHour}
+              onChange={handleHourChange}
+              onKeyDown={(e) => {
+                // 숫자 키 이외의 키 입력 방지
+                if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                  e.preventDefault();
+                }
+              }}
+              />:
+              <Form.Control
+              type="text"
+              placeholder="00"
+              value={selectedMinute}
+              onChange={handleMinuteChange}
+              onKeyDown={(e) => {
+                // 숫자 키 이외의 키 입력 방지
+                if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                  e.preventDefault();
+                }
+              }}
+              />
           </Col>
         </Row>
         <Row className="mb-2">
