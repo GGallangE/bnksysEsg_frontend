@@ -6,14 +6,14 @@ import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
 import { isLoggedInAtom } from '../atom';
 import Container from 'react-bootstrap/Container';
-import { Button } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
+import ScheduleModify from './ScheduleModify'
+import FormatCode from '../Format/FormatCode';
 
 function MyApiSchedule(){
-    const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const [sortBy, setSortBy] = useState('');
-    const location = useLocation();
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [modalShow, setModalShow] = React.useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
     const isLoggedIn= useRecoilValue(isLoggedInAtom);
     axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
     
@@ -27,59 +27,59 @@ function MyApiSchedule(){
         }
     }
 
+    const handleTitleClick = (item) => {
+      setSelectedItem(item.apiapplyid);
+      setModalShow(true);
+    };
+
     useEffect(() => {
       handleSearch();
     }, []);
   
-    // const handleFavoriteToggle = async (apilistid, favorite) => {
-    //   try {
-    //     // 서버로 관심 데이터 토글 요청
-    //     const response = await axios.post('/spring/userapi/interestapi', 
-    //     { 
-    //       apilistid,
-    //       stcd: favorite ? '99' : '01' 
-    //     }
-    //     );
-    //     console.log(response)
-    //     // API 목록을 다시 불러오기
-    //     handleSearch();
-    //   } catch (error) {
-    //     if(error.response.status == 403){
-    //       alert("로그인을 해주세요.");
-    //     }
-    //   }
-    // };
     console.log(searchResults);
 
     return(
-      <Container style={{marginTop : '100px'}}>
-        <div className = "App">
-        <h5 style={{ marginTop: '50px', marginBottom: '50px' }}>My API 예약 현황</h5>
-        {Array.isArray(searchResults) && searchResults.length === 0 ? (
-            <p>검색 결과 없음</p>
-        ) : (
-            <ul>
-            {searchResults.map((result) => (
-                <li key={result.apilistid} className="result-item">
-                <Link 
-                  to={`/api/detailapi/${result.apilistid}`}
-                  className="Link">
-                  <div className="item">
-                      <div className="item-name">{result.apinm}</div>
-                      <div className='item-info-container'>
-                      <span style={{width : "200px"}}>제공기관: {result.prvorg}</span>                      
-                      <span className='item-info'>조회수: {result.apiview}</span>
-                      <span className='item-info'>사용수: {result.countapiuses}</span>
-                      <span style={{ display: "none" }}>{result.apilistid}</span>
+      <div className="App">
+        <Container style={{margin:'100px auto'}}>
+          <div>
+          <h5 style={{marginTop : '50px', marginBottom : '50px'}}>API예약현황</h5>
+          <Table bordered>
+              <thead>
+                  <tr>
+                      <th>No</th>
+                      <th>API이름</th>
+                      <th>주기</th>
+                      <th>날짜</th>
+                      <th>상태</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {searchResults.map((item, index) => (
+                      <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>
+                      <div
+                      onClick={() => handleTitleClick(item)}
+                      style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                      >
+                      {item.apinm}
                       </div>
-                  </div>
-                </Link>
-                </li>
-            ))}
-            </ul>
-        )}
+                      </td>
+                      <td><FormatCode code="frequency" value={item.frequency} /> <FormatCode code="day" value={item.dayofweek} /> {item.dayofmonth} {item.time}</td>
+                      <td>{item.rplydate}</td>
+                      <td>{item.applydvcd}</td>
+                    </tr>
+                  ))}
+              </tbody>
+          </Table>
+          </div>
+        </Container>
+        <ScheduleModify
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          selectedItem = {selectedItem}
+        />
       </div>
-      </Container>
-    );
+      );
 }
 export default MyApiSchedule;

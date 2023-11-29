@@ -27,8 +27,13 @@ function UseCaseRgt(){
           if(error.response.status == 403){
             alert("로그인을 해주세요.");
           }
+          console.log(error)
         }
       };
+    
+    const handleQuillChange = (value) => {
+      setContent(value);
+    };
 
     return(
     <div>
@@ -44,7 +49,7 @@ function UseCaseRgt(){
         <Form.Control onChange={(e) => setContent(e.target.value)} as="textarea" rows={3} />
       </Form.Group>
     </Form>
-    <Editor/>
+    <Editor onQuillChange={handleQuillChange}/>
     <Button onClick={usecaseRegister} style = {{margin: '50px 0px'}} variant = "primary" type = "submit">
               등록
     </Button>

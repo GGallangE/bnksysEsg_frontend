@@ -82,7 +82,7 @@ function Navigation() {
     fetchUserRoles();
   }, [isLoggedIn]);
 
-  console.log(userRoles);
+  // console.log(userRoles);
 
   return (
     <div>
