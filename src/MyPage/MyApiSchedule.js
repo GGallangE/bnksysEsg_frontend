@@ -8,6 +8,7 @@ import { isLoggedInAtom } from '../atom';
 import Container from 'react-bootstrap/Container';
 import { Button, Table } from 'react-bootstrap';
 import ScheduleModify from './ScheduleModify'
+import FormatCode from '../Format/FormatCode';
 
 function MyApiSchedule(){
     const [searchResults, setSearchResults] = useState([]);
@@ -64,7 +65,7 @@ function MyApiSchedule(){
                       {item.apinm}
                       </div>
                       </td>
-                      <td>{item.frequency}</td>
+                      <td><FormatCode code="frequency" value={item.frequency} /> <FormatCode code="day" value={item.dayofweek} /> {item.dayofmonth} {item.time}</td>
                       <td>{item.rplydate}</td>
                       <td>{item.applydvcd}</td>
                     </tr>

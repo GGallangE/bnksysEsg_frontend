@@ -1,9 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState, useRef  } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Table from 'react-bootstrap/Table';
+import { Container, Row, Col, Table } from 'react-bootstrap';
 import FormatDate from '../Format/FormatDate'
 import { Form, Modal, Button } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -11,6 +8,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import * as XLSX from "xlsx";
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
+import FormatCode from '../Format/FormatCode';
 
 function Schedule_business(props) {
   const [selectedTime, setSelectedTime] = useState('');
@@ -41,17 +39,18 @@ function Schedule_business(props) {
   };
 
   const clickRsv = () => {
-    // '시:분' 형식의 입력인지 확인
-    if (/^([01]?[0-9]|2[0-3]):([0-5]?[0-9])$/.test(selectedTime)) {
+    //시간 형식에 맞을 때만 실행
+    if (parseInt(selectedHour, 10) < 23 && parseInt(selectedMinute, 10) < 59) {
+    setSelectedTime(selectedHour + ":" + selectedMinute);
     const array = content.split(',').map(item => item.trim());
     console.log(businessmanArray);
     setBusinessmanArray(excelArray.concat(array).map((item) => {
       return { "arg1": item };
     }));
     }else{
-      alert("올바른 시간을 입력하세요.");
+      alert("올바른 시간을 입력하세요");
     }
-  }
+  };
 
   useEffect(() => {
     if (isMounted.current) {
@@ -67,7 +66,8 @@ function Schedule_business(props) {
               batchDetailargsDto: businessmanArray  
             }
           );
-          alert(`${selectedFrequency} ${selectedDay} ${selectedTime}에 예약이 완료되었습니다.`);
+          const freKorean = getFreKorean(selectedFrequency);
+          alert(`${freKorean} ${selectedDay}일 ${selectedTime}에 예약이 완료되었습니다.`);
           }else if (selectedFrequency === 'weekly'){
             const response = await axios.post('/spring/reservation/schedule', {
               apilistid: props.apilistid,
@@ -77,7 +77,13 @@ function Schedule_business(props) {
               batchDetailargsDto: businessmanArray
             }
           );
-          alert(`${selectedFrequency} ${selectedDay} ${selectedTime}에 예약이 완료되었습니다.`);
+          const freKorean = getFreKorean(selectedFrequency);
+          
+          const dayKorean = FormatCode({ code: "day", value: selectedDay });
+          //const dayKorean = getDayKorean(selectedDay);
+          
+          console.log(dayKorean)
+          alert(`${freKorean} ${dayKorean}요일 ${selectedTime}에 예약이 완료되었습니다.`);
         }else{
             const response = await axios.post('/spring/reservation/schedule', {
               apilistid: props.apilistid,
@@ -86,16 +92,18 @@ function Schedule_business(props) {
               batchDetailargsDto: businessmanArray
             } 
           );
-          alert(`${selectedFrequency} ${selectedTime}에 예약이 완료되었습니다.`);
-          console.log(response)
+          const freKorean = getFreKorean(selectedFrequency);
+          alert(`${freKorean} ${selectedTime}에 예약이 완료되었습니다.`);
         }
-        setBusinessmanArray([]);
         setExcelArray([]);
         setContent('');
+        setSelectedHour('');
+        setSelectedMinute('');
 
         props.onHide();
       }catch (error) {
-        alert(error.response.data.messages)
+        console.log(error);
+        //alert(error.response.data.messages)
       }
     };
       handleSchedule();
@@ -108,7 +116,7 @@ function Schedule_business(props) {
 
   const handleContent = (e) => {
     setContent(e.target.value);
-  }
+  };
 
   const handleFileInputChange = (event) => {
     //파일이 선택되었을 때
@@ -126,29 +134,49 @@ function Schedule_business(props) {
   };
   reader.readAsArrayBuffer(file);
     //setSelectedFile(file);
-  }
+  };
 
-  // const handleTimeChange = (e) => {
-  //   const rawValue = e.target.value;
+  const handleHourChange = (e) => {
+    setSelectedHour(e.target.value);
+  };
 
-  //   // 숫자만 추출
-  //   const numericValue = rawValue.replace(/\D/g, '');
+  const handleMinuteChange = (e) => {
+    setSelectedMinute(e.target.value);
+  };
 
-  //   // 4자리 숫자인 경우에만 처리
-  //   if (/^\d{0,4}$/.test(numericValue)) {
-  //     // 두 자리로 나누어서 시간 형식으로 만들기
-  //     const formattedValue = `${numericValue.slice(0, 2)}:${numericValue.slice(2)}`;
-  //     setSelectedTime(formattedValue);
-  //   }
-  // };
+  const handleHourBlur = (e) => {
+    const inputValue = e.target.value;
+    // 한 자리일 때만 0을 붙여 두 자리로 만들기
+    setSelectedHour((prevValue) => (inputValue.length === 1 ? `0${inputValue}` : inputValue));
+  };
 
-  const handleHourChange = () => {
+  const handleMinuteBlur = (e) => {
+    const inputValue = e.target.value;
+    // 한 자리일 때만 0을 붙여 두 자리로 만들기
+    setSelectedMinute((prevValue) => (inputValue.length === 1 ? `0${inputValue}` : inputValue));
+  };
 
-  }
+  const handleClose = () =>{
+    setExcelArray([]);
+    setContent('');
+    setSelectedHour('');
+    setSelectedMinute('');
+    props.onHide();
+  };
+ 
+  const getFreKorean = (frequency) => {
+    switch (frequency) {
+      case 'monthly':
+        return '매달';
+      case 'weekly':
+        return '매주';
+      case 'daily':
+        return '매일';
+      default:
+        return '';
+    }
+  };
 
-  const handleMinuteChange = () => {
-
-  }
   const getDayKorean = (day) => {
     switch (day) {
       case 'MON':
@@ -202,32 +230,50 @@ function Schedule_business(props) {
               <option value="">선택하세요</option>
               {secondOptions.map((option, index) => (
                 <option key={index} value={option}>
-                  {selectedFrequency === 'monthly' ? option + '일' : selectedFrequency === 'weekly' ? getDayKorean(option) : option}
+                  {selectedFrequency === 'monthly' ? option + '일' : selectedFrequency === 'weekly' ? <FormatCode code="day" value={option} /> : option}
                 </option>
               ))}
             </Form.Select>
           </Col>
-          <Col xs={3} className="d-flex">
+          <Col xs={3} className="d-flex align-items-center">
             <Form.Control
+              style={{margin:'0px 10px'}}
               type="text"
               placeholder="00"
               value={selectedHour}
               onChange={handleHourChange}
+              onBlur={handleHourBlur}  // onBlur 이벤트 추가
               onKeyDown={(e) => {
-                // 숫자 키 이외의 키 입력 방지
-                if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                // 숫자, Backspace 이외의 키 입력 방지 및 두 자리까지만 입력 허용
+                if (
+                  !(
+                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                    e.keyCode === 8
+                  ) ||
+                  (e.target.value.length >= 2 && e.keyCode !== 8)
+                ) {
                   e.preventDefault();
                 }
               }}
               />:
               <Form.Control
+              style={{margin:'0px 10px'}}
               type="text"
               placeholder="00"
               value={selectedMinute}
               onChange={handleMinuteChange}
+              onBlur={handleMinuteBlur}  // onBlur 이벤트 추가
               onKeyDown={(e) => {
-                // 숫자 키 이외의 키 입력 방지
-                if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                // 숫자, Backspace 이외의 키 입력 방지 및 두 자리까지만 입력 허용
+                if (
+                  !(
+                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                    e.keyCode === 8
+                  ) ||
+                  (e.target.value.length >= 2 && e.keyCode !== 8)
+                ) {
                   e.preventDefault();
                 }
               }}
@@ -235,9 +281,9 @@ function Schedule_business(props) {
           </Col>
         </Row>
         <Row className="mb-2">
-          <Col>
+          <Col className="d-flex align-items-center">
             <label htmlFor="content" style={{marginRight:'20px'}}>사업자번호: </label>
-            <input type="text" id="content" name="content" onChange={handleContent} value={content} style={{ width: '600px' }} />
+            <Form.Control type="text" id="content" name="content" onChange={handleContent} value={content} style={{ width: '600px' }} />
           </Col>
         </Row>
         <Row className="mb-3">
@@ -260,9 +306,9 @@ function Schedule_business(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={clickRsv}>예약</Button>
-        <Button onClick={props.onHide}>닫기</Button>
+        <Button onClick={handleClose}>닫기</Button>
       </Modal.Footer>
-    </Modal>
+      </Modal>
         </div>
     );
   }

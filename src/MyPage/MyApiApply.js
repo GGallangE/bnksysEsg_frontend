@@ -65,7 +65,7 @@ function MyApiApply(){
                     </td>
                     <td><FormatDate dateString={item.applydate} /></td>
                     <td>{item.rplydate&&(<FormatDate dateString={item.rplydate} />)}</td>
-                    <td><FormatCode applydvcd={item.applydvcd} /></td>
+                    <td><FormatCode code="apply" value={item.applydvcd} /></td>
                   </tr>
                 ))}
             </tbody>
