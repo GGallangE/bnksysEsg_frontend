@@ -28,7 +28,7 @@ function MyApiSchedule(){
     }
 
     const handleTitleClick = (item) => {
-      setSelectedItem(item.apiapplyid);
+      setSelectedItem(item.batchlistid);
       setModalShow(true);
     };
 
@@ -66,8 +66,8 @@ function MyApiSchedule(){
                       </div>
                       </td>
                       <td><FormatCode code="frequency" value={item.frequency} /> <FormatCode code="day" value={item.dayofweek} /> {item.dayofmonth} {item.time}</td>
-                      <td>{item.rplydate}</td>
-                      <td>{item.applydvcd}</td>
+                      <td></td>
+                      <td></td>
                     </tr>
                   ))}
               </tbody>

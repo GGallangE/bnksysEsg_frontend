@@ -103,11 +103,11 @@ function Editor({onQuillChange}){
     ];
 
     return(
-        <Container style={{height: "500px"}}>
+        <Container style={{height: '500px'}}>
 
             <ReactQuill
                 ref={quillRef}
-                style={{ height: "500px" }}
+                style={{height: '500px'}}
                 theme="snow"
                 modules={modules}
                 formats={formats}
