@@ -126,6 +126,11 @@ function Navigation() {
                 </NavDropdown>
               )}
             </Nav>
+            {isLoggedIn !== '' && (
+                <Nav.Link onClick={() => handleNavItemClick('/mypage/myalarm')} className="custom-nav">
+                  알림
+                </Nav.Link>
+              )}
             <Nav.Link onClick={handleLoginLogout} href="#">
               {isLoggedIn !== '' ? '로그아웃' : '로그인'}
             </Nav.Link>
