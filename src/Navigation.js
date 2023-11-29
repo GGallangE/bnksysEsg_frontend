@@ -13,6 +13,7 @@ function Navigation() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState('');
   const [userRoles, setUserRoles] = useState([]);
+  const [notReadAlarmCount, setNotReadAlarmCount] = useState(0);
   const navigate = useNavigate();
 
   const handleLoginLogout = () => {
@@ -82,7 +83,22 @@ function Navigation() {
     fetchUserRoles();
   }, [isLoggedIn]);
 
-  // console.log(userRoles);
+  useEffect(() => {
+    const fetchNotReadAlarmCount = async () => {
+      try {
+        const response = await axios.get('/spring/mypage/myalarm/notread_count');
+        if (response.data.success) {
+          setNotReadAlarmCount(response.data.count);
+        }
+      } catch (error) {
+        console.error('Error fetching not read alarm count:', error);
+      }
+    };
+
+    if (isLoggedIn !== '') {
+      fetchNotReadAlarmCount();
+    }
+  }, [isLoggedIn]);
 
   return (
     <div>
@@ -128,7 +144,7 @@ function Navigation() {
             </Nav>
             {isLoggedIn !== '' && (
                 <Nav.Link onClick={() => handleNavItemClick('/mypage/myalarm')} className="custom-nav">
-                  알림
+                  알림 {notReadAlarmCount > 0 && `(${notReadAlarmCount})`}
                 </Nav.Link>
               )}
             <Nav.Link onClick={handleLoginLogout} href="#">

@@ -1,16 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Container }from 'react-bootstrap';
+import { Container }from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate';
-import FormatCode from '../Format/FormatCode';
-import MyApiApplyDetail from './MyApiApplyDetail'
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
+import MyAlarmDetail from './MyAlarmDetail';
 
 
 function MyAlarm(){
-    const [searchMyApiApply, setSearchMyApiApply] = useState([]);
+    const [searchMyAlarm, setSearchMyAlarm] = useState([]);
     const [modalShow, setModalShow] = React.useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const isLoggedIn= useRecoilValue(isLoggedInAtom);
@@ -19,7 +18,7 @@ function MyAlarm(){
     const handleSearch = async () => {
         try{
             const response = await axios.get('/spring/mypage/myalarm');
-            setSearchMyApiApply(response.data.data.data);
+            setSearchMyAlarm(response.data.data.data);
         }catch(error){
             if(error.response.status == 403){
                 alert("로그인을 해주세요.");
@@ -28,7 +27,7 @@ function MyAlarm(){
     }
 
     const handleTitleClick = (item) => {
-        setSelectedItem(item.apiapplyid);
+        setSelectedItem(item.alarmid);
         setModalShow(true);
       };
 
@@ -51,16 +50,21 @@ function MyAlarm(){
                 </tr>
             </thead>
             <tbody>
-                {searchMyApiApply.map((item, index) => (
+                {searchMyAlarm.map((item, index) => (
                     <tr key={index}>
                     <td>{index + 1}</td>
                     <td>
-                    <div
-                    onClick={() => handleTitleClick(item)}
-                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                    >
+                        <div
+                            onClick={() => handleTitleClick(item)}
+                            style={{
+                                cursor: 'pointer',
+                                textDecoration: 'underline',
+                                fontWeight: item.readCheck ? 'normal' : 'bold',
+                                color: item.readCheck ? 'grey' : 'black',
+                            }}
+                        >
                     {item.title}
-                    </div>
+                        </div>
                     </td>
                     <td><FormatDate dateString={item.regdt} /></td>
                     <td>{item.sendusername} </td>
@@ -70,9 +74,11 @@ function MyAlarm(){
         </Table>
         </div>
       </Container>
-      <MyApiApplyDetail
+      <MyAlarmDetail
         show={modalShow}
-        onHide={() => setModalShow(false)}
+        onHide={() => {
+            setModalShow(false);
+        }}
         selectedItem = {selectedItem}
       />
     </div>
