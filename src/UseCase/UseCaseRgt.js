@@ -33,6 +33,7 @@ function UseCaseRgt(){
     
     const handleQuillChange = (value) => {
       setContent(value);
+      console.log(value);
     };
 
     return(

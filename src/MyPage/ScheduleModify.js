@@ -18,7 +18,8 @@ function MyApiApplyDetail(props) {
   const [selectedDayW, setSelectedDayW] = useState(null);
   const [selectedFrequency, setSelectedFrequency] = useState('');
   const [secondOptions, setSecondOptions] = useState([]);
-  const batchlistid = props.selectedItem;
+  const apilistId = props.apilistId;
+  const batchlistId = props.batchlistId;
   const hours = Array.from({ length: 24 }, (_, index) => index); // 0부터 23까지의 숫자 배열 생성
   const isLoggedIn= useRecoilValue(isLoggedInAtom);
   const isMounted = useRef(false);
@@ -49,19 +50,18 @@ function MyApiApplyDetail(props) {
   useEffect(() => {
     if (isMounted.current) {
       const handleSchedule = async () => {
-        if(batchlistid!=null){
+        if(batchlistId!=null){
         try {
           const response = await axios.post('/spring/mypage/myapischedule/updatetime', {
-              params : {
-                  batchlistid : batchlistid,
-                  frequency: selectedFrequency,
-                  time: selectedTime,
-                  dayofmonth: selectedDayM,
-                  dayofweek: selectedDayW,
-                  }
+              apilistid: apilistId,
+              batchlistid : batchlistId,
+              frequency: selectedFrequency,
+              time: selectedTime,
+              dayofmonth: selectedDayM,
+              dayofweek: selectedDayW,
           });
           const freKorean = getFreKorean(selectedFrequency);
-          //alert(`${freKorean} ${selectedDay}일 ${selectedTime}으로 수정이 완료되었습니다.`);
+          alert(`${freKorean} ${selectedDayM}일 ${selectedTime}으로 수정이 완료되었습니다.`);
 
         setSelectedHour('');
         setSelectedMinute('');

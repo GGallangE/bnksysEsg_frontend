@@ -6,14 +6,17 @@ import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
 import { isLoggedInAtom } from '../atom';
 import Container from 'react-bootstrap/Container';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Modal } from 'react-bootstrap';
 import ScheduleModify from './ScheduleModify'
 import FormatCode from '../Format/FormatCode';
 
 function MyApiSchedule(){
     const [searchResults, setSearchResults] = useState([]);
+    const [selectedItems, setSelectedItems] = useState([]);
     const [modalShow, setModalShow] = React.useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [batchlistId, setBatchlistId] = useState(null);
+    const [apilistId, setApilistId] = useState(null);
+    const [showDeleteCheck, setShowDeleteCheck] = useState(false);
     const isLoggedIn= useRecoilValue(isLoggedInAtom);
     axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
     
@@ -25,10 +28,11 @@ function MyApiSchedule(){
       }catch (error) {
           console.error("Error searching: ", error);
         }
-    }
+    };
 
     const handleTitleClick = (item) => {
-      setSelectedItem(item.batchlistid);
+      setBatchlistId(item.batchlistid);
+      setApilistId(item.apilistid);
       setModalShow(true);
     };
 
@@ -36,7 +40,36 @@ function MyApiSchedule(){
       handleSearch();
     }, []);
   
-    console.log(searchResults);
+    const handleCheckboxChange = async (event, item) => {
+      const { checked } = event.target;
+      if (checked) {
+        setSelectedItems((prevItems) => [...prevItems, item]);
+      } else {
+        setSelectedItems((prevItems) => prevItems.filter((selectedItem) => selectedItem !== item));
+      }
+    };
+
+    const handleDeleteCheck = () => {
+      setShowDeleteCheck(true);
+    };
+
+    const handleDelete = async () => {
+      try{
+        // selectedItems 배열에 있는 모든 batchlistid에 대해 삭제 요청을 보냄
+        await Promise.all(
+          selectedItems.map(async (selectedItem) => {
+            const response = await axios.post('/spring/mypage/myapischedule/delete', {
+              batchlistid: selectedItem.batchlistid,
+            });
+          })
+        );
+        // 삭제 후 초기화
+        setSelectedItems([]);
+        window.location.reload();
+      }catch (error) {
+        console.error("Error searching: ", error);
+      }
+    };
 
     return(
       <div className="App">
@@ -46,39 +79,64 @@ function MyApiSchedule(){
           <Table bordered>
               <thead>
                   <tr>
-                      <th>No</th>
-                      <th>API이름</th>
-                      <th>주기</th>
-                      <th>날짜</th>
-                      <th>상태</th>
+                    <th>선택</th>
+                    <th>No</th>
+                    <th>API이름</th>
+                    <th>주기</th>
                   </tr>
               </thead>
               <tbody>
                   {searchResults.map((item, index) => (
-                      <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>
-                      <div
-                      onClick={() => handleTitleClick(item)}
-                      style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                      >
-                      {item.apinm}
-                      </div>
-                      </td>
-                      <td><FormatCode code="frequency" value={item.frequency} /> <FormatCode code="day" value={item.dayofweek} /> {item.dayofmonth} {item.time}</td>
-                      <td></td>
-                      <td></td>
+                    <tr key={index}>
+                    <td>
+                    <input
+                      type="checkbox"
+                      onChange={(event) => handleCheckboxChange(event, item)}
+                      checked={selectedItems.includes(item)}
+                    />
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>
+                    <div
+                    onClick={() => handleTitleClick(item)}
+                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                    {item.apinm}
+                    </div>
+                    </td>
+                    <td><FormatCode code="frequency" value={item.frequency} /> <FormatCode code="day" value={item.dayofweek} /> {item.dayofmonth && <>{item.dayofmonth}일</>} {item.time}</td>
                     </tr>
                   ))}
               </tbody>
           </Table>
+          <Button variant="primary" onClick={() => handleDeleteCheck()}>
+            삭제
+          </Button>
           </div>
         </Container>
         <ScheduleModify
           show={modalShow}
-          onHide={() => setModalShow(false)}
-          selectedItem = {selectedItem}
+          onHide={() => {setModalShow(false); window.location.reload(); setSelectedItems([]);}}
+          batchlistId = {batchlistId}
+          apilistId = {apilistId}
         />
+        {/* 삭제 확인 팝업 */}
+        <Modal show={showDeleteCheck} onHide={() => setShowDeleteCheck(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>삭제 확인</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            삭제하시겠습니까?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowDeleteCheck(false)}>
+              취소
+            </Button>
+            <Button variant="primary" onClick={() => { setShowDeleteCheck(false); handleDelete(); }}>
+              확인
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
       );
 }
