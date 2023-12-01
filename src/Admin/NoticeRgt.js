@@ -131,8 +131,9 @@ function NoticeRgt() {
         show={modalShow}
         onHide={() => {
           setModalShow(false);
-          setTitle(''); // 제목 입력 상태 초기화
-          setContent(''); // 신청이유 입력 상태 초기화
+          setTitle(''); 
+          setContent(''); 
+          setFiles([]);
         }}
         message="공지사항이 등록되었습니다."
       />
