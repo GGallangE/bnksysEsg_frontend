@@ -136,7 +136,7 @@ function Navigation() {
                   <Nav className="flex-row">
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/apiapply')}>API 신청 관리</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/apilist')}>API 목록 관리</NavDropdown.Item>
-                    <NavDropdown.Item onClick={() => handleNavItemClick('/admin/notice')}>공지사항 작성</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => handleNavItemClick('/admin/noticergt')}>공지사항 작성</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/inquiry')}>문의사항 관리</NavDropdown.Item>
                   </Nav>
                 </NavDropdown>
