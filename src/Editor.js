@@ -84,7 +84,7 @@ function Editor({onQuillChange}){
         toolbar: {
           container: toolbarOptions,
           handlers: {
-            image: imageHandler //이미지 핸들러
+            // image: imageHandler //이미지 핸들러
           }
         },
       };
