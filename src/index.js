@@ -24,6 +24,8 @@ import MyApiApply from './MyPage/MyApiApply';
 import Main from './Main/Main';
 import MyApiSchedule from './MyPage/MyApiSchedule';
 import MyAlarm from './MyPage/MyAlarm';
+import AdminInquiry from './Admin/AdminInquiry';
+import NoticeRgt from './Admin/NoticeRgt';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <RecoilRoot>
@@ -48,6 +50,8 @@ root.render(
   <Route path="/mypage/myapiapply" element={<MyApiApply/>} />
   <Route path="/mypage/myapirsv" element={<MyApiSchedule/>} />
   <Route path="/mypage/myalarm" element={<MyAlarm/>} />
+  <Route path="/admin/inquiry" element={<AdminInquiry/>} />
+  <Route path="/admin/noticergt" element={<NoticeRgt/>} />
   </Routes>
   </BrowserRouter>
   </RecoilRoot>
