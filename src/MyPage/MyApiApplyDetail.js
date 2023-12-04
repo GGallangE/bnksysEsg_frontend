@@ -6,10 +6,11 @@ import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate'
 import { Modal, Button, Spinner } from 'react-bootstrap';
+import useDidMountEffect from '../hooks/useDidMountEffect'
 
 function MyApiApplyDetail(props) {
   const [searchResults, setSearchResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const apiapplyid = props.selectedItem;
 
   const handleSearch = async () => {
@@ -28,7 +29,7 @@ function MyApiApplyDetail(props) {
       }
     }
 
-  useEffect(() => {
+  useDidMountEffect(() => {
     setIsLoading(true); // 컴포넌트가 마운트될 때 로딩 상태를 true로 설정
     handleSearch();
   }, [apiapplyid]);
