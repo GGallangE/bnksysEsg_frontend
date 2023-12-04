@@ -33,6 +33,7 @@ function UseCaseRgt(){
     
     const handleQuillChange = (value) => {
       setContent(value);
+      console.log(value);
     };
 
     return(
@@ -44,15 +45,11 @@ function UseCaseRgt(){
         <Form.Label>제목</Form.Label>
         <Form.Control onChange={(e) => setTitle(e.target.value)} type="text" placeholder="제목을 입력하세요" />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-        <Form.Label>내용</Form.Label>
-        <Form.Control onChange={(e) => setContent(e.target.value)} as="textarea" rows={3} />
-      </Form.Group>
-    </Form>
     <Editor onQuillChange={handleQuillChange}/>
     <Button onClick={usecaseRegister} style = {{margin: '50px 0px'}} variant = "primary" type = "submit">
-              등록
+        등록
     </Button>
+    </Form>
     </Container>
     
     </div>

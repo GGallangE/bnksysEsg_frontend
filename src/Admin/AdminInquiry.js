@@ -72,11 +72,14 @@ function AdminInquiry(){
         </Table>
         </div>
       </Container>
+       {/* 화면 중앙에 스피너 표시 */}
+       <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
       <AdminInquiryDetail
         show={modalShow}
         onHide={() => setModalShow(false)}
         selectedItem = {selectedItem}
       />
+    </div>
     </div>
     );
 }

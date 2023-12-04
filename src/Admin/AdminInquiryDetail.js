@@ -4,17 +4,18 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import FormatDate from '../Format/FormatDate'
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import useDidMountEffect from '../hooks/useDidMountEffect'
 
 function AdminInquiryDetail(props) {
   const [searchResults, setSearchResults] = useState([]);
   const [searchAnswer, setSearchAnswer] = useState([]);
   const [replyTitle, setReplyTitle] = useState('');
   const [replyContent, setReplyContent] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const inquiryid = props.selectedItem;
 
   const handleSearch = async () => {
-    console.log(props)
     if(inquiryid!=null){
       try{
           const response = await axios.get('/spring/admin/inquiry/list', {
@@ -24,12 +25,15 @@ function AdminInquiryDetail(props) {
           setSearchResults(response.data.data.data[0]);
           setReplyTitle('');
           setReplyContent('');
+          setIsLoading(true);
           if(response.data.data.data[0].replycount == 1){
             answerSeacrh();
-            console.log(1)
+          }else{
+            setIsLoading(false);
           }
       }catch (error) {
           console.error("Error searching: ", error);
+          setIsLoading(false);
         }
       }
     }
@@ -47,6 +51,8 @@ function AdminInquiryDetail(props) {
             console.log(response.data.data.data[0]);
         }catch (error) {
             console.error("Error searching: ", error);
+          }finally{
+            setIsLoading(false);
           }
         }
       }
@@ -77,12 +83,18 @@ function AdminInquiryDetail(props) {
         setReplyContent('');
       };
       
-  useEffect(() => {
-    handleSearch();
-  }, [inquiryid]);
+    useDidMountEffect(() => {
+      setIsLoading(true); // 컴포넌트가 마운트될 때 로딩 상태를 true로 설정
+      handleSearch();
+    }, [inquiryid]);
 
   return (
     <div>
+      {isLoading? (
+          // 스피너 표시
+          <Spinner animation="border" role="status" />
+        ) : searchResults?( // Modal을 렌더링하기 전에 searchResults가 참인지 확인
+          //로딩완료시 컴포넌트 내용렌더링
       <Modal
         {...props}
         size="lg"
@@ -92,7 +104,7 @@ function AdminInquiryDetail(props) {
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">문의 내용</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ overflowY: 'auto', maxHeight: '70vh' }}>
           <Container className="border border-dashed p-3">
             <Row className="mb-3">
               <Col xs={12}>
@@ -139,6 +151,11 @@ function AdminInquiryDetail(props) {
           <Button onClick={handleClose}>Close</Button>
         </Modal.Footer>
       </Modal>
+      ): (
+        //검색결과가 없는 경우
+        <div>데이터가 없습니다.</div>
+      )
+}
     </div>
     );
   }
