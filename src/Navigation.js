@@ -113,7 +113,7 @@ function Navigation() {
                   <NavDropdown.Item onClick={() => handleNavItemClick('/OPENAPI/ApiList')}>목록</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/OPENAPI/ApiApply')}>API 신청하기</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/openapi/usecase')}>활용사례</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.4">데이터 시각화</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/openapi/visualization')}>데이터 시각화</NavDropdown.Item>
                 </Nav>
               </NavDropdown>
               <NavDropdown title="이용안내" id="basic-nav-dropdown" className='custom-nav' onClick={() => handleDropdownClose('information-dropdown')}>
