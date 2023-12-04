@@ -4,106 +4,186 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import FormatDate from '../Format/FormatDate'
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import Select from 'react-select';
+
 
 function AdminApiListDetail(props) {
-  const [searchResults, setSearchResults] = useState([]);
-  const [searchAnswer, setSearchAnswer] = useState([]);
-  const apiapplyid = props.selectedItem;
+  const [searchResult, setSearchResults] = useState([]);
+  const apilistid = props.selectedItem;
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchApiName, setSearchApiName] = useState([]);
+  const [selectedApi, setSelectedApi] = useState(null);
+
+  const [apinm, setApiNM] = useState(null);
+  const [prvorg, setPrvorg] = useState(null);
+  const [apiexpl, setApiExpl] = useState(null);
+  const [apiapplyid, setApiapplyid] = useState(null);
+  const [applynm, setApplyNm] = useState('');
 
   const handleSearch = async () => {
-    console.log(props)
-    if(apiapplyid!=null){
-      try{
-          const response = await axios.get('/spring/admin/apiapplylist', {
-              params : {
-                apiapplyid : apiapplyid}
-          });
-          setSearchResults(response.data.data.data[0]);
-      }catch (error) {
-          console.error("Error searching: ", error);
+    setApiNM('');
+    setPrvorg('');
+    setApiExpl('');
+    setIsLoading(true);
+    try {
+        if (apilistid != null) {
+            const response = await axios.get('/spring/admin/apilist', {
+                params: {
+                  apilistid: apilistid
+                }
+            });
+            setSearchResults(response.data.data.data[0]);
+            setApiNM(response.data.data.data[0].apinm || '');
+            setPrvorg(response.data.data.data[0].prvorg || '');
+            setApiExpl(response.data.data.data[0].apiexpl || '');
+            // setApiapplyid(response.data.data.data[0].apiapplyid);
+            console.log(response);
         }
-      }
+    } catch (error) {
+        console.error("Error searching: ", error);
+    } finally {
+        setIsLoading(false);
     }
+};
 
     const handleSave = async () => {
-        try {
-            const result = await axios.post('/spring/admin/apiapply/confirm', {
-                apiapplyid: apiapplyid,
-                applydvcd : searchResults.applydvcd
-              });
-              alert('API 승인 여부가 변경되었습니다.');
-        }catch(error){
-              console.log(error)   
-        }
-        props.onHide();
+      try {
+        const result = await axios.post('/spring/admin/apilist/save', {
+          apilistid: apilistid,
+          apinm: apinm,
+          prvorg: prvorg,
+          apiexpl: apiexpl,
+          apiapplyid: selectedApi.value, 
+        });
+        alert('API 목록이 저장되었습니다.');
+      } catch (error) {
+        console.log(error);
+      }
+      props.onHide();
     };  
+
+    const handleApiNameSearch = async (apiName) => {
+      try {
+        const response = await axios.get('/spring/admin/apiapplylist_byname', {
+          params: {
+            applynm: apiName,
+          },
+        });
+        console.log(response);
+        setSearchApiName(response.data.data.data.map(apply => ({
+          value: apply.apiapplyid,  
+          label: apply.applynm,
+        })));
+      } catch (error) {
+        console.error("Error searching API names: ", error);
+      }
+    };
 
     const handleClose = () => {
         props.onHide();
-      };
-
-      const handleApprovalStatusChange = (selectedValue) => {
-        setSearchResults({ ...searchResults, applydvcd: selectedValue });
+        setApiNM('');
+        setPrvorg('');
+        setApiExpl('');
       };
       
   useEffect(() => {
+    setIsLoading(true);
     handleSearch();
-  }, [apiapplyid]);
+  }, [apilistid]);
+
+  useEffect(() => {
+    handleApiNameSearch(applynm);
+  }, [applynm]);
+
 
   return (
     <div>
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">API 신청 상세 관리</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+      {isLoading ? (
+        <Spinner animation="border" role="status" />
+      ) : searchResult ? (
+        <Modal
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              API 신청 상세 관리
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <Container className="border border-dashed p-3">
-                <Row className="mb-3">
-                <Col xs={12}>
-                    <h5>신청 제목: {searchResults.applynm}</h5>
-                </Col>
-                </Row>
-                <Col xs={12} className="text-end" style={{marginTop : '30px'}}>
-                    <h5>신청자: {searchResults.username}</h5>
-                </Col>
-                <Col xs={12} className="text-end" style={{marginTop : '20px'}}>
-                    <h5>신청일: <FormatDate dateString={searchResults.applydate} /></h5>
-                </Col>
-                <Row className="mb-3" style={{ marginTop: '30px' }}>
-                <Col xs={12}>
-                    <h5>신청 내용: {searchResults.applycntn}</h5>
-                    <hr style={{marginTop : '20px'}}></hr>
-                </Col>
-                </Row>
-                <Row className="mb-3" style={{ marginTop: '20px' }}>
-                    <Col xs={12}>
-                        <h5>API 승인 여부:</h5>
-                        <Form.Control
-                        as="select"
-                        value={searchResults.applydvcd}
-                        onChange={(e) => handleApprovalStatusChange(e.target.value)}
-                        >
-                        <option value="01">신청중</option>
-                        <option value="02">반려</option>
-                        <option value="03">승인</option>
-                        </Form.Control>
-                    </Col>
-                </Row>
+              <Form>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column xs={12}>
+                    API 이름:
+                  </Form.Label>
+                  <Col xs={12}>
+                    <Form.Control
+                      type="text"
+                      value={apinm}
+                      onChange={(e) => setApiNM(e.target.value)}
+                    />
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column xs={12}>
+                    제공기관:
+                  </Form.Label>
+                  <Col xs={12}>
+                    <Form.Control
+                      type="text"
+                      value={prvorg}
+                      onChange={(e) => setPrvorg(e.target.value)}
+                    />
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column xs={12}>
+                    API 설명:
+                  </Form.Label>
+                  <Col xs={12}>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      value={apiexpl}
+                      onChange={(e) => setApiExpl(e.target.value)}
+                    />
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column xs={12}>
+                    신청 API 이름:
+                  </Form.Label>
+                  <Col xs={12}>
+                    <Select
+                      value={selectedApi}
+                      onChange={(option) => {
+                        setSelectedApi(option);
+                        handleApiNameSearch(option.value);
+                      }}
+                      options={searchApiName}
+                    />
+                  </Col>
+                </Form.Group>
+              </Form>
             </Container>
-            </Modal.Body>
-            <Modal.Footer>
+          </Modal.Body>
+          <Modal.Footer>
             <Button onClick={handleSave}>Save</Button>
             <Button onClick={handleClose}>Close</Button>
-            </Modal.Footer>
-      </Modal>
+          </Modal.Footer>
+        </Modal>
+      ) : (
+        <div>데이터가 없습니다.</div>
+      )}
     </div>
-    );
+  );
   }
 
 export default AdminApiListDetail;

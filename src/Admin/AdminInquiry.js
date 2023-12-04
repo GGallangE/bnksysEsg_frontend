@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container }from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate';
-import FormatCode from '../Format/FormatCode';
 import AdminInquiryDetail from './AdminInquiryDetail'
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';

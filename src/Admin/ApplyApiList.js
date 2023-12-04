@@ -64,7 +64,7 @@ function ApplyApiList(){
                     </div>
                     </td>
                     <td>{item.username}</td>
-                    <td><FormatDate dateString={item.applydate} /></td>
+                    <td>{item.applydate ? <FormatDate dateString={item.applydate} /> : ''}</td>
                     <td>{item.rplydate ? <FormatDate dateString={item.rplydate} /> : ''}</td>
                     <td>
                       {item.applydvcd === '01' ? '신청중' : (item.applydvcd === '02' ? '반려' : '승인완료')}
@@ -75,6 +75,7 @@ function ApplyApiList(){
         </Table>
         </div>
       </Container>
+      <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}></div>
       <ApplyApiListDetail
         show={modalShow}
         onHide={() => setModalShow(false)}

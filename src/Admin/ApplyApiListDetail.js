@@ -4,27 +4,29 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import FormatDate from '../Format/FormatDate'
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 
 function ApplyApiListDetail(props) {
   const [searchResults, setSearchResults] = useState([]);
-  const [searchAnswer, setSearchAnswer] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const apiapplyid = props.selectedItem;
 
   const handleSearch = async () => {
-    console.log(props)
-    if(apiapplyid!=null){
-      try{
-          const response = await axios.get('/spring/admin/apiapplylist', {
-              params : {
-                apiapplyid : apiapplyid}
-          });
-          setSearchResults(response.data.data.data[0]);
-      }catch (error) {
-          console.error("Error searching: ", error);
+    setSearchResults([]);
+    setIsLoading(true);
+    try {
+      const response = await axios.get('/spring/admin/apiapplylist', {
+        params: {
+          apiapplyid: apiapplyid
         }
-      }
+      });
+      setSearchResults(response.data.data.data[0]);
+    } catch (error) {
+      console.error("Error searching: ", error);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
     const handleSave = async () => {
         try {
@@ -37,10 +39,12 @@ function ApplyApiListDetail(props) {
               console.log(error)   
         }
         props.onHide();
+        setSearchResults([]);
     };  
 
     const handleClose = () => {
         props.onHide();
+        setSearchResults([]);
       };
 
       const handleApprovalStatusChange = (selectedValue) => {
@@ -53,7 +57,10 @@ function ApplyApiListDetail(props) {
 
   return (
     <div>
-      <Modal
+      {isLoading ? (
+        <Spinner animation="border" role="status" />
+      ) : searchResults ? (
+        <Modal
         {...props}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -73,7 +80,7 @@ function ApplyApiListDetail(props) {
                     <h5>신청자: {searchResults.username}</h5>
                 </Col>
                 <Col xs={12} className="text-end" style={{marginTop : '20px'}}>
-                    <h5>신청일: <FormatDate dateString={searchResults.applydate} /></h5>
+                    <h5>신청일: {searchResults.applydate ? <FormatDate dateString={searchResults.applydate} /> : ''}</h5>
                 </Col>
                 <Row className="mb-3" style={{ marginTop: '30px' }}>
                 <Col xs={12}>
@@ -102,6 +109,10 @@ function ApplyApiListDetail(props) {
             <Button onClick={handleClose}>Close</Button>
             </Modal.Footer>
       </Modal>
+        ) : (
+          <div>데이터가 없습니다.</div>
+        )
+}
     </div>
     );
   }

@@ -19,6 +19,7 @@ function AdminApiList(){
         try{
             const response = await axios.get('/spring/admin/apilist');
             setSearchApplyApiList(response.data.data.data);
+            console.log(response)
         }catch(error){
             if(error.response.status == 403){
                 alert("로그인을 해주세요.");
@@ -27,11 +28,13 @@ function AdminApiList(){
     }
 
     const handleRegister = () => {
+        setSelectedItem();
+        setModalShow(true);
         console.log('등록 버튼 클릭!');
       };
 
     const handleTitleClick = (item) => {
-        setSelectedItem(item.apiapplyid);
+        setSelectedItem(item.apilistid);
         setModalShow(true);
       };
 
@@ -82,6 +85,7 @@ function AdminApiList(){
         </Table>
         </div>
       </Container>
+      <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}></div>
       <AdminApiListDetail
         show={modalShow}
         onHide={() => setModalShow(false)}
