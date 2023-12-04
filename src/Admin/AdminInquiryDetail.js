@@ -22,6 +22,8 @@ function AdminInquiryDetail(props) {
                   inquiryid : inquiryid}
           });
           setSearchResults(response.data.data.data[0]);
+          setReplyTitle('');
+          setReplyContent('');
           if(response.data.data.data[0].replycount == 1){
             answerSeacrh();
             console.log(1)
@@ -75,20 +77,6 @@ function AdminInquiryDetail(props) {
         setReplyContent('');
       };
       
-      useEffect(() => {
-        const handleKeyDown = (event) => {
-          if (props.show && event.key === 'Escape') {
-            handleClose();
-          }
-        };
-      
-        document.addEventListener('keydown', handleKeyDown);
-      
-        return () => {
-          document.removeEventListener('keydown', handleKeyDown);
-        };
-      }, [props.show]);
-
   useEffect(() => {
     handleSearch();
   }, [inquiryid]);
