@@ -1,14 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Container }from 'react-bootstrap';
+import { Form, Container, Button, Row, Col } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate';
-import ApplyApiListDetail from './ApplyApiListDetail'
+import AdminApiListDetail from './AdminApiListDetail'
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
 
 
-function ApplyApiList(){
+function AdminApiList(){
     const [searchApplyApiList, setSearchApplyApiList] = useState([]);
     const [modalShow, setModalShow] = React.useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -17,7 +17,7 @@ function ApplyApiList(){
 
     const handleSearch = async () => {
         try{
-            const response = await axios.get('/spring/admin/apiapplylist');
+            const response = await axios.get('/spring/admin/apilist');
             setSearchApplyApiList(response.data.data.data);
         }catch(error){
             if(error.response.status == 403){
@@ -25,6 +25,10 @@ function ApplyApiList(){
               }
         }
     }
+
+    const handleRegister = () => {
+        console.log('등록 버튼 클릭!');
+      };
 
     const handleTitleClick = (item) => {
         setSelectedItem(item.apiapplyid);
@@ -39,16 +43,22 @@ function ApplyApiList(){
     <div className="App">
       <Container style={{margin:'100px auto'}}>
         <div>
-        <h5 style={{marginTop : '50px', marginBottom : '50px'}}>API 신청 관리</h5>
+        <h5 style={{marginTop : '50px', marginBottom : '50px'}}>API 목록 관리</h5>
+        <Row className="justify-content-end">
+            <Col xs="auto">
+                <Button variant="primary" onClick={handleRegister} style={{ marginBottom: '20px', marginRight : '30px' }}>
+                     등록
+                </Button>
+            </Col>
+        </Row>
         <Table bordered>
             <thead>
                 <tr>
                     <th>No</th>
+                    <th>API 이름</th>
+                    <th>제공기관</th>
+                    <th>등록일</th>
                     <th>API 신청 이름</th>
-                    <th>신청자</th>
-                    <th>신청일</th>
-                    <th>답변일</th>
-                    <th>상태</th>
                 </tr>
             </thead>
             <tbody>
@@ -60,22 +70,19 @@ function ApplyApiList(){
                     onClick={() => handleTitleClick(item)}
                     style={{ cursor: 'pointer', textDecoration: 'underline' }}
                     >
-                    {item.applynm}
+                    {item.apinm}
                     </div>
                     </td>
-                    <td>{item.username}</td>
-                    <td><FormatDate dateString={item.applydate} /></td>
-                    <td>{item.rplydate ? <FormatDate dateString={item.rplydate} /> : ''}</td>
-                    <td>
-                      {item.applydvcd === '01' ? '신청중' : (item.applydvcd === '02' ? '반려' : '승인완료')}
-                    </td>
+                    <td>{item.prvorg}</td>
+                    <td><FormatDate dateString={item.apirgdt} /></td>
+                    <td>{item.apiapplynm}</td>
                   </tr>
                 ))}
             </tbody>
         </Table>
         </div>
       </Container>
-      <ApplyApiListDetail
+      <AdminApiListDetail
         show={modalShow}
         onHide={() => setModalShow(false)}
         selectedItem = {selectedItem}
@@ -83,4 +90,4 @@ function ApplyApiList(){
     </div>
     );
 }
-export default ApplyApiList;
+export default AdminApiList;

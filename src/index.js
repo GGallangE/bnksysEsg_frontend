@@ -26,7 +26,8 @@ import MyApiSchedule from './MyPage/MyApiSchedule';
 import MyAlarm from './MyPage/MyAlarm';
 import AdminInquiry from './Admin/AdminInquiry';
 import NoticeRgt from './Admin/NoticeRgt';
-import AdminApiList from './Admin/ApplyApiList';
+import AdminApiList from './Admin/AdminApiList';
+import ApplyApiList from './Admin/ApplyApiList';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <RecoilRoot>
@@ -53,6 +54,7 @@ root.render(
   <Route path="/mypage/myalarm" element={<MyAlarm/>} />
   <Route path="/admin/inquiry" element={<AdminInquiry/>} />
   <Route path="/admin/noticergt" element={<NoticeRgt/>} />
+  <Route path="/admin/apiapply" element={<ApplyApiList/>} />
   <Route path="/admin/apilist" element={<AdminApiList/>} />
   </Routes>
   </BrowserRouter>
