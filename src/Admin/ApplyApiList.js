@@ -3,14 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container }from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate';
-import FormatCode from '../Format/FormatCode';
-import AdminInquiryDetail from './AdminInquiryDetail'
+import ApplyApiListDetail from './ApplyApiListDetail'
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
 
 
 function ApplyApiList(){
-    const [searchInquiryList, setSearchInquiryList] = useState([]);
+    const [searchApplyApiList, setSearchApplyApiList] = useState([]);
     const [modalShow, setModalShow] = React.useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const isLoggedIn= useRecoilValue(isLoggedInAtom);
@@ -19,7 +18,7 @@ function ApplyApiList(){
     const handleSearch = async () => {
         try{
             const response = await axios.get('/spring/admin/apiapplylist');
-            setSearchInquiryList(response.data.data.data);
+            setSearchApplyApiList(response.data.data.data);
         }catch(error){
             if(error.response.status == 403){
                 alert("로그인을 해주세요.");
@@ -28,7 +27,7 @@ function ApplyApiList(){
     }
 
     const handleTitleClick = (item) => {
-        setSelectedItem(item.inquiryid);
+        setSelectedItem(item.apiapplyid);
         setModalShow(true);
       };
 
@@ -53,7 +52,7 @@ function ApplyApiList(){
                 </tr>
             </thead>
             <tbody>
-                {searchInquiryList.map((item, index) => (
+                {searchApplyApiList.map((item, index) => (
                     <tr key={index}>
                     <td>{index + 1}</td>
                     <td>
@@ -65,16 +64,19 @@ function ApplyApiList(){
                     </div>
                     </td>
                     <td>{item.username}</td>
-                    <td><FormatDate dateString={item.applydate} /></td>
+                    <td>{item.applydate ? <FormatDate dateString={item.applydate} /> : ''}</td>
                     <td>{item.rplydate ? <FormatDate dateString={item.rplydate} /> : ''}</td>
-                    <td>{item.applydvcd === '01' ? '답변중' : '답변 완료'}</td>
+                    <td>
+                      {item.applydvcd === '01' ? '신청중' : (item.applydvcd === '02' ? '반려' : '승인완료')}
+                    </td>
                   </tr>
                 ))}
             </tbody>
         </Table>
         </div>
       </Container>
-      <AdminInquiryDetail
+      <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}></div>
+      <ApplyApiListDetail
         show={modalShow}
         onHide={() => setModalShow(false)}
         selectedItem = {selectedItem}
