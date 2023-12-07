@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useParams } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const VisualDetail = () => {
   const { filename } = useParams();

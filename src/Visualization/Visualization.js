@@ -4,22 +4,24 @@ import { Link } from 'react-router-dom';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 
 function Visualization(){
+    
     const Item = ({ title, imageUrl, link }) => (
         <Card style={{ width: '18rem', marginBottom: '20px' }}>
-    <Link to={link}>
-      <Card.Img variant="top" src={imageUrl} alt={title} />
-      <Card.Body>
-        <Card.Title>{title}</Card.Title>
-      </Card.Body>
-    </Link>
-  </Card>
+          <Link to={link}>
+            <Card.Img variant="top" src={imageUrl} alt={title} />
+            <Card.Body>
+              <Card.Title>{title}</Card.Title>
+            </Card.Body>
+          </Link>
+        </Card>
       );
 
+    
     const data = [
-      { title: 'Apt', imageUrl: 'https://placekitten.com/200/200', filename: 'VisualDetailApt'},
-      { title: 'Item 2', imageUrl: 'https://placekitten.com/200/201', filename: 'VisualDetailApt'},
-      { title: 'Item 3', imageUrl: 'https://placekitten.com/200/202', filename: 'VisualDetailApt'},
-      { title: 'Item 4', imageUrl: 'https://placekitten.com/200/203', filename: 'VisualDetailApt'},
+      { title: 'Apt', imageUrl: '', filename: 'VisualDetailApt'},
+      { title: 'Item 2', imageUrl: '', filename: 'VisualDetailApt'},
+      { title: 'Item 3', imageUrl: '', filename: 'VisualDetailApt'},
+      { title: 'Item 4', imageUrl: '', filename: 'VisualDetailApt'},
       // ... 추가적인 아이템들
     ];
       
