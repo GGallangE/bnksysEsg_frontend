@@ -22,6 +22,13 @@ import MyInquiry from './MyPage/MyInquiry';
 import MyRecentUseData from './MyPage/MyRecentUseData';
 import MyApiApply from './MyPage/MyApiApply';
 import Main from './Main/Main';
+import MyApiSchedule from './MyPage/MyApiSchedule';
+import MyAlarm from './MyPage/MyAlarm';
+import AdminInquiry from './Admin/AdminInquiry';
+import NoticeRgt from './Admin/NoticeRgt';
+import AdminApiList from './Admin/ApplyApiList';
+import Visualization from './Visualization/Visualization';
+import VisualDetail from './Visualization/VisualDetail';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <RecoilRoot>
@@ -31,19 +38,26 @@ root.render(
   <Route path="/" element={<Main />}/>
   <Route path="/api/detailapi/:apilistid" element={<DetailApi_Status />}/>
   <Route path="/signup" element={<Register />} />
-  <Route path="/openapi/apilist" element={<ApiList />} />
-  <Route path="/openapi/apiapply" element={<ApiApply />} />
   <Route path="/information/notice" element={<Notice />} />
   <Route path="/information/noticeDetail/:noticeid" element={<NoticeDetail />} />
   <Route path="/information/inquiryregister" element={<InquiryRgt/>} />
   <Route path="/login" element={<Login />} />
+  <Route path="/openapi/apilist" element={<ApiList />} />
+  <Route path="/openapi/apiapply" element={<ApiApply />} />
   <Route path="/openapi/usecase" element={<UseCase />} />
   <Route path="/openapi/usecasedetail/:usecaseid" element={<UseCaseDetail/>} />
   <Route path="/openapi/usecaseregister" element={<UseCaseRgt/>} />
+  <Route path="/openapi/visualization" element={<Visualization/>} />
+  <Route path="/openapi/visualdetail/:title" element={<VisualDetail/>} />
   <Route path="/mypage/myinterestdata" element={<MyInterestData/>} />
   <Route path="/mypage/myinquiry" element={<MyInquiry/>} />
   <Route path="/mypage/myrecentusedata" element={<MyRecentUseData/>} />
   <Route path="/mypage/myapiapply" element={<MyApiApply/>} />
+  <Route path="/mypage/myapirsv" element={<MyApiSchedule/>} />
+  <Route path="/mypage/myalarm" element={<MyAlarm/>} />
+  <Route path="/admin/inquiry" element={<AdminInquiry/>} />
+  <Route path="/admin/noticergt" element={<NoticeRgt/>} />
+  <Route path="/admin/apilist" element={<AdminApiList/>} />
   </Routes>
   </BrowserRouter>
   </RecoilRoot>

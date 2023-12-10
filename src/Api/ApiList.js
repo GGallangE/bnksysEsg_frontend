@@ -102,7 +102,7 @@ function ApiList() {
         className="inputField"
       />
       <SelectBox />
-      <button onClick={handleSearch}>검색</button>
+      <Button onClick={handleSearch}>검색</Button>
       <div style={{marginTop:"50px"}}>
         {Array.isArray(searchResults) && searchResults.length === 0 ? (
             <p>검색 결과 없음</p>

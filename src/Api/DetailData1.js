@@ -36,7 +36,6 @@ const BusinessmanData = async () => {
 
 };
 
-
   useEffect(() => {
     axios.get('/spring/usecase/apidetail', {
       params: {
@@ -106,7 +105,6 @@ const BusinessmanData = async () => {
   
       // 엑셀에서 데이터 추출
       const array = XLSX.utils.sheet_to_json(sheet).map(row => row['사업자 등록번호']); // '사업자 등록번호' 컬럼의 데이터만을 선택
-  console.log(array)
     try {
       const response = await axios.post("/api/nts-businessman/v1/status?serviceKey=" + API_KEY, {
         "b_no": array
@@ -254,7 +252,7 @@ const BusinessmanData = async () => {
     )}
     <div>
       <Button style = {{margin:'20px'}} onClick={() => excelDownload(data)}>엑셀 다운로드</Button>
-      <Button style = {{margin:'20px'}} onClick={() => apiSchedule()}>예약하기</Button>
+      <Button style = {{margin:'20px'}} onClick={apiSchedule}>예약하기</Button>
     </div>
     </Container>
     <Schedule_business

@@ -1,25 +1,25 @@
 import axios from 'axios';
-import React, { useEffect, useState, useRef  } from 'react';
-import { Container, Row, Col, Table } from 'react-bootstrap';
+import React, { useEffect, useState, useRef } from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate'
-import { Form, Modal, Button } from 'react-bootstrap';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import * as XLSX from "xlsx";
+import { Modal, Button, Form } from 'react-bootstrap';
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
 import FormatCode from '../Format/FormatCode';
 
-function Schedule_business(props) {
+function MyApiApplyDetail(props) {
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedHour, setSelectedHour] = useState('');
   const [selectedMinute, setSelectedMinute] = useState('');
-  const [selectedDay, setSelectedDay] = useState('');
+  const [selectedDayM, setSelectedDayM] = useState(null);
+  const [selectedDayW, setSelectedDayW] = useState(null);
   const [selectedFrequency, setSelectedFrequency] = useState('');
   const [secondOptions, setSecondOptions] = useState([]);
-  const [content, setContent] = useState('');
-  const [businessmanArray, setBusinessmanArray] = useState([]);
-  const [excelArray, setExcelArray] = useState([]);
+  const apilistId = props.apilistId;
+  const batchlistId = props.batchlistId;
   const hours = Array.from({ length: 24 }, (_, index) => index); // 0부터 23까지의 숫자 배열 생성
   const isLoggedIn= useRecoilValue(isLoggedInAtom);
   const isMounted = useRef(false);
@@ -38,15 +38,10 @@ function Schedule_business(props) {
     }
   };
 
-  const clickRsv = () => {
+  const clickModify = () => {
     //시간 형식에 맞을 때만 실행
     if (parseInt(selectedHour, 10) < 23 && parseInt(selectedMinute, 10) < 59) {
     setSelectedTime(selectedHour + ":" + selectedMinute);
-    const array = content.split(',').map(item => item.trim());
-    console.log(businessmanArray);
-    setBusinessmanArray(excelArray.concat(array).map((item) => {
-      return { "arg1": item };
-    }));
     }else{
       alert("올바른 시간을 입력하세요");
     }
@@ -55,86 +50,35 @@ function Schedule_business(props) {
   useEffect(() => {
     if (isMounted.current) {
       const handleSchedule = async () => {
-        console.log(businessmanArray);
+        if(batchlistId!=null){
         try {
-          if(selectedFrequency === 'monthly'){
-            const response = await axios.post('/spring/reservation/schedule', {
-              apilistid: props.apilistid,
+          const response = await axios.post('/spring/mypage/myapischedule/updatetime', {
+              apilistid: apilistId,
+              batchlistid : batchlistId,
               frequency: selectedFrequency,
               time: selectedTime,
-              dayofmonth: selectedDay,
-              batchDetailargsDto: businessmanArray  
-            }
-          );
+              dayofmonth: selectedDayM,
+              dayofweek: selectedDayW,
+          });
           const freKorean = getFreKorean(selectedFrequency);
-          alert(`${freKorean} ${selectedDay}일 ${selectedTime}에 예약이 완료되었습니다.`);
-          }else if (selectedFrequency === 'weekly'){
-            const response = await axios.post('/spring/reservation/schedule', {
-              apilistid: props.apilistid,
-              frequency: selectedFrequency,
-              time: selectedTime,
-              dayofweek: selectedDay,
-              batchDetailargsDto: businessmanArray
-            }
-          );
-          const freKorean = getFreKorean(selectedFrequency);
-          
-          const dayKorean = FormatCode({ code: "day", value: selectedDay });
-          //const dayKorean = getDayKorean(selectedDay);
-          
-          console.log(dayKorean)
-          alert(`${freKorean} ${dayKorean}요일 ${selectedTime}에 예약이 완료되었습니다.`);
-        }else{
-            const response = await axios.post('/spring/reservation/schedule', {
-              apilistid: props.apilistid,
-              frequency: selectedFrequency,
-              time: selectedTime,
-              batchDetailargsDto: businessmanArray
-            } 
-          );
-          const freKorean = getFreKorean(selectedFrequency);
-          alert(`${freKorean} ${selectedTime}에 예약이 완료되었습니다.`);
-        }
-        setExcelArray([]);
-        setContent('');
+          alert(`${freKorean} ${selectedDayM}일 ${selectedTime}으로 수정이 완료되었습니다.`);
+
         setSelectedHour('');
         setSelectedMinute('');
+        setSelectedDayM(null);
+        setSelectedDayW(null);
 
         props.onHide();
       }catch (error) {
-        console.log(error);
-        //alert(error.response.data.messages)
+        alert(error.response.data.messages)
       }
+    }
     };
       handleSchedule();
     } else{
       isMounted.current = true;
     }
-    
-  },[businessmanArray])
- 
-
-  const handleContent = (e) => {
-    setContent(e.target.value);
-  };
-
-  const handleFileInputChange = (event) => {
-    //파일이 선택되었을 때
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  
-      // 엑셀에서 데이터 추출
-      const array = XLSX.utils.sheet_to_json(sheet).map(row => row['사업자 등록번호']); // '사업자 등록번호' 컬럼의 데이터만을 선택
-      setExcelArray(array);
-      console.log(array);
-  };
-  reader.readAsArrayBuffer(file);
-    //setSelectedFile(file);
-  };
+  },[selectedTime])
 
   const handleHourChange = (e) => {
     setSelectedHour(e.target.value);
@@ -157,8 +101,6 @@ function Schedule_business(props) {
   };
 
   const handleClose = () =>{
-    setExcelArray([]);
-    setContent('');
     setSelectedHour('');
     setSelectedMinute('');
     props.onHide();
@@ -208,7 +150,7 @@ function Schedule_business(props) {
       >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          예약하기
+          예약 수정하기
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -226,7 +168,7 @@ function Schedule_business(props) {
             </Form.Select>
           </Col>
           <Col xs={3}>
-            <Form.Select onChange={(e) => setSelectedDay(e.target.value)} disabled={selectedFrequency === 'daily'} >
+            <Form.Select onChange={(e) => {selectedFrequency === "monthly"? setSelectedDayM(e.target.value): setSelectedDayW(e.target.value)}} disabled={selectedFrequency === 'daily'} >
               <option value="">선택하세요</option>
               {secondOptions.map((option, index) => (
                 <option key={index} value={option}>
@@ -280,32 +222,10 @@ function Schedule_business(props) {
               />
           </Col>
         </Row>
-        <Row className="mb-2">
-          <Col className="d-flex align-items-center">
-            <label htmlFor="content" style={{marginRight:'20px'}}>사업자번호: </label>
-            <Form.Control type="text" id="content" name="content" onChange={handleContent} value={content} style={{ width: '600px' }} />
-          </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col style={{ fontSize: '14px'}}>
-           ',' 로 구분해 주세요. (예시) 0000000000, 1111111111
-          </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col>
-            <Form.Label>Excel파일 업로드</Form.Label>
-            <Form.Control
-              type="file"
-              name="file"
-              onChange={handleFileInputChange}  
-              accept=".xlsx, .xls"            
-            />
-          </Col>
-        </Row>
       </Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={clickRsv}>예약</Button>
+        <Button onClick={clickModify}>수정</Button>
         <Button onClick={handleClose}>닫기</Button>
       </Modal.Footer>
       </Modal>
@@ -313,4 +233,4 @@ function Schedule_business(props) {
     );
   }
 
-export default Schedule_business;
+export default MyApiApplyDetail;

@@ -13,6 +13,7 @@ function Navigation() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState('');
   const [userRoles, setUserRoles] = useState([]);
+  const [notReadAlarmCount, setNotReadAlarmCount] = useState(0);
   const navigate = useNavigate();
 
   const handleLoginLogout = () => {
@@ -82,7 +83,22 @@ function Navigation() {
     fetchUserRoles();
   }, [isLoggedIn]);
 
-  console.log(userRoles);
+  useEffect(() => {
+    const fetchNotReadAlarmCount = async () => {
+      try {
+        const response = await axios.get('/spring/mypage/myalarm/notread_count');
+        if (response.data.success) {
+          setNotReadAlarmCount(response.data.count);
+        }
+      } catch (error) {
+        console.error('Error fetching not read alarm count:', error);
+      }
+    };
+
+    if (isLoggedIn !== '') {
+      fetchNotReadAlarmCount();
+    }
+  }, [isLoggedIn]);
 
   return (
     <div>
@@ -97,7 +113,7 @@ function Navigation() {
                   <NavDropdown.Item onClick={() => handleNavItemClick('/OPENAPI/ApiList')}>목록</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/OPENAPI/ApiApply')}>API 신청하기</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/openapi/usecase')}>활용사례</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.4">데이터 시각화</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/openapi/visualization')}>데이터 시각화</NavDropdown.Item>
                 </Nav>
               </NavDropdown>
               <NavDropdown title="이용안내" id="basic-nav-dropdown" className='custom-nav' onClick={() => handleDropdownClose('information-dropdown')}>
@@ -120,12 +136,17 @@ function Navigation() {
                   <Nav className="flex-row">
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/apiapply')}>API 신청 관리</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/apilist')}>API 목록 관리</NavDropdown.Item>
-                    <NavDropdown.Item onClick={() => handleNavItemClick('/admin/notice')}>공지사항 작성</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => handleNavItemClick('/admin/noticergt')}>공지사항 작성</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/inquiry')}>문의사항 관리</NavDropdown.Item>
                   </Nav>
                 </NavDropdown>
               )}
             </Nav>
+            {isLoggedIn !== '' && (
+                <Nav.Link onClick={() => handleNavItemClick('/mypage/myalarm')} className="custom-nav">
+                  알림 {notReadAlarmCount > 0 && `(${notReadAlarmCount})`}
+                </Nav.Link>
+              )}
             <Nav.Link onClick={handleLoginLogout} href="#">
               {isLoggedIn !== '' ? '로그아웃' : '로그인'}
             </Nav.Link>
