@@ -1,14 +1,14 @@
 .link-style {
     text-decoration: none;
     color: #686868; 
-    width: 200px;
+    /* width: 200px; */
 }
 
 /* .link-style span{
     padding: 2px 8px;
 } */
 .link-style:hover span{
-    background-color: #2469ff; /* 배경 색상 설정 */
+    background-color: #cb2b11; /* 배경 색상 설정 */
     padding: 2px 8px; /* 숫자 주변에 여백 추가 (선택사항) */
     border-radius: 3px; /* 모서리를 둥글게 만듭니다. */
     color: #ffffff; 
@@ -28,18 +28,34 @@
 div.list-group-item{
     height: 50px;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     border: none;
     background-color: transparent;
 }
 
 .list-card{
-    background-color: #f7f8fa;
+    height : 40vh;
     border: none;
     font-weight: bold;
+    border-radius: 30px;
+    box-shadow: 15px 15px 30px #bebebe,
+               -15px -15px 30px #ffffff;
 }
 
 .link-without-underline {
     text-decoration: none; 
     color: inherit; 
   }
+
+.btn:hover{
+    color:#fff;
+}
+
+.input-text:focus{
+    box-shadow: 0px 0px 0px;
+    outline: 0px;
+}
+
+.form-control {
+    border: 1px solid ;
+}
