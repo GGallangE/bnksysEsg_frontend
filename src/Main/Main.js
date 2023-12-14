@@ -87,6 +87,10 @@ function Main(){
     setShowNoticeDetail(true); 
   };
 
+  const handlePlus = () =>{
+
+  };
+
   useEffect(() => {
     notice();
     popular();
@@ -102,13 +106,13 @@ function Main(){
               onKeyDown={handleKeyDown} 
               onChange={(e) => setSearchTerm(e.target.value)} 
               value={searchTerm} 
-              style = {{ margin: '150px 0px', width: '500px' }}
+              style = {{ margin: '150px 0px', width: '80vh' , height : '5vh' }}
               placeholder = "검색어를 입력하세요" />
             </Form.Group>
           </Col>
           <Col md = "auto">
-            <Button onClick={handleSearch} style = {{margin: '150px 0px'}} variant = "primary" type = "submit">
-              검색
+            <Button onClick={handleSearch} style = {{margin: '150px 0px', height : '5vh', backgroundColor:'#cb2b11'}} variant = "danger" type = "submit">
+              Search
             </Button>
           </Col>
         </Row>
@@ -116,8 +120,12 @@ function Main(){
           <Col md = "auto">
             <Card className = "list-card">
             <Card.Body>
-            <Card.Title>공지사항</Card.Title>
+            <Card.Title style={{color:'#cb2b11'}}>NOTICE</Card.Title>
+            <Button onClick={handlePlus} style={{ backgroundColor: 'transparent', border: 'none', color:'#666666'}}>
+              더보기 >
+            </Button>
             {/* 15자 이상이면 ... 으로 나타내기*/}
+            <hr style = {{color: '#cb2b11'}}/>
             <ListGroup className="list-style">
               {searchNotice.map((item, index) => (
                 <ListGroup.Item key={index}>
@@ -140,7 +148,8 @@ function Main(){
           <Col md = "auto">
           <Card className = "list-card">
           <Card.Body>
-          <Card.Title>인기데이터</Card.Title>
+          <Card.Title style={{color:'#cb2b11'}}>인기데이터</Card.Title>
+          <hr style = {{color: '#cb2b11'}}/>
           <ListGroup className="list-style">
               {searchPopular.map((item, index) => (
                 <Link to={`/api/detailapi/${item.apilistid}`} className="link-without-underline">
@@ -161,7 +170,8 @@ function Main(){
           <Col md = "auto">
           <Card className = "list-card">
           <Card.Body>
-          <Card.Title>최신데이터</Card.Title>
+          <Card.Title style={{color:'#cb2b11'}}>최신데이터</Card.Title>
+          <hr style = {{color: '#cb2b11'}}/>
           <ListGroup className="list-style">
               {searchRecent.map((item, index) => (
                 <Link to={`/api/detailapi/${item.apilistid}`} className="link-without-underline">

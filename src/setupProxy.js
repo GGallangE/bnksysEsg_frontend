@@ -27,5 +27,11 @@ module.exports = function(app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    createProxyMiddleware('/OpenAPI_ToolInstallPackage',{
+      target: 'http://openapi.molit.go.kr/',
+      changeOrigin: true,
+    })
+  );
 };
 

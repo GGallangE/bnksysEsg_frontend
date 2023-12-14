@@ -33,6 +33,7 @@ function Register() {
     setPasswordCheck(e.target.value);
   };
 
+  //회원가입 버튼 클릭시
   const handleRegister = async () => {
   try{
     const response = await axios.post('/spring/user/signup',{
@@ -41,32 +42,17 @@ function Register() {
     "email": email,
     "password": password,
     "passwordCheck": passwordCheck
-  }).then(
-    response => {
-      console.log(1)
-    }
-  )
+  })
   if (response.data.success) {
-    // 회원가입 성공
-    console.log('회원가입 성공');
+    // 회원가입 성공 시
+    alert(response.data.messages);
     navigate('/login');
-  } else {
-    // 회원가입 실패
-    console.log('회원가입 실패');
-    // console.log(response);
-    // // 에러 메시지 표시
-    // response.data.messages.forEach((message) => {
-    //   console.log(message);
-    // });
   }
-  
   } catch (error){
       // 오류 처리
       if (error.response) {
         // 서버에서 오류 응답을 받았을 때
-        console.log(error.response)
-        //console.error('서버 오류:', error.response);
-        // 사용자에게 오류 메시지를 보여줄 수 있습니다.
+        alert(error.response.data.messages);
       } else if (error.request) {
         // 요청을 보내지 못한 경우
         console.error('요청 오류:', error.request);

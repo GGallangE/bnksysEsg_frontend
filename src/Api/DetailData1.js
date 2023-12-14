@@ -21,20 +21,38 @@ function DetailData1(props) {
   const [usecaseError, setUsecaseError] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
+  const [tableData, setTableData] = useState([]); //각 셀의 입력 값을 관리할 상태 변수
   
-const BusinessmanData = async () => {
-  const array = content.split(',').map(item => item.trim());
-  setArray(array);
-  try {
-    const response = await axios.post("/api/nts-businessman/v1/status?serviceKey=" + API_KEY, {
-      "b_no": array
+  const handleInputChange = (rowIndex, columnKey, value) => {
+    setTableData((prevTableData) => {
+      const updatedTableData = [...prevTableData];
+      updatedTableData[rowIndex] = {
+        ...updatedTableData[rowIndex],
+        [columnKey]: value,
+      };
+      return updatedTableData;
     });
-    setData(prevData => [...prevData, ...response.data.data]);
-  } catch(e) {
-    setError(e);
-  }
+  };
 
-};
+  useEffect(() => {
+    // 초기 상태 설정 예시
+    const initialTableData = usecaseData.map(() => ({}));
+    setTableData(initialTableData);
+  }, [usecaseData]);
+
+  const BusinessmanData = async () => {
+    const array = content.split(',').map(item => item.trim());
+    setArray(array);
+    try {
+      const response = await axios.post("/api/nts-businessman/v1/status?serviceKey=" + API_KEY, {
+        "b_no": array
+      });
+      setData(prevData => [...prevData, ...response.data.data]);
+    } catch(e) {
+      setError(e);
+    }
+  
+  };
 
   useEffect(() => {
     axios.get('/spring/usecase/apidetail', {
@@ -166,37 +184,32 @@ const BusinessmanData = async () => {
     </div>
     </Container>
 
-    <Container className = "boxstyle">
-    <div>
-      <h5>출력예제</h5>
     <Table bordered>
-    <thead>
-        <tr>
-          <th>사업자 등록번호</th>
-          <th>납세자 상태</th>
-          <th>과세유형메세지</th>
-          <th>폐업일</th>
-          <th>단위과세전환폐업여부</th>
-          <th>최근과세유형전환일자</th>
-          <th>세금계산서적용일자</th>
-          <th>직전과세유형메세지</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>6028154897</td>
-          <td>계속사업자</td>
-          <td>부가가치세 일반과세자</td>
-          <td></td>
-          <td>N</td>
-          <td></td>
-          <td></td>
-          <td>해당없음</td>
-        </tr>
-      </tbody>
-    </Table >
-    </div>
-    </Container>
+  <thead>
+    <tr>
+      {usecaseData.map((column, index) => (
+        <th key={index}>{column.columnName}</th>
+      ))}
+    </tr>
+  </thead>
+  <tbody>
+    {tableData.map((rowData, rowIndex) => (
+      <tr key={rowIndex}>
+        {usecaseData.map((column, columnIndex) => (
+          <td key={columnIndex}>
+            <input
+              type="text"
+              value={rowData[column.columnKey] || ""}
+              onChange={(e) => handleInputChange(rowIndex, column.columnKey, e.target.value)}
+            />
+          </td>
+        ))}
+      </tr>
+    ))}
+  </tbody>
+</Table>
+
+
     <Container>
     <div>
         사업자번호: <input type="text" name="content" onChange={handleContent} value={content} />
