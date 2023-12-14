@@ -6,6 +6,9 @@ import Button from 'react-bootstrap/Button';
 import { Col, Form, Row, Container, ListGroup, Card, Modal } from 'react-bootstrap';
 import './Main.css';
 import NoticeDetail from '../Information/NoticeDetail'
+import SvgIcon from '@mui/material/SvgIcon';
+import { SvgIconComponent } from'@mui/icons-material';
+import SearchIcon from '@mui/icons-material/Search';
 
 function Main(){
   const [searchNotice, setSearchNotice] = useState([]);
@@ -102,13 +105,14 @@ function Main(){
         <Row className = "justify-content-md-center">
           <Col md = "auto">
             <Form.Group className = "mb-3" controlId = "formGridAddress1">
-              <Form.Control 
+              <Form.Control
               onKeyDown={handleKeyDown} 
               onChange={(e) => setSearchTerm(e.target.value)} 
               value={searchTerm} 
-              style = {{ margin: '150px 0px', width: '80vh' , height : '5vh' }}
+              style = {{ margin: '150px 0px', width: '80vh' , height : '5vh', color:'#666666', borderRadius:'16px'}}
               placeholder = "검색어를 입력하세요" />
             </Form.Group>
+            <SvgIcon component={SearchIcon} inheritViewBox />
           </Col>
           <Col md = "auto">
             <Button onClick={handleSearch} style = {{margin: '150px 0px', height : '5vh', backgroundColor:'#cb2b11'}} variant = "danger" type = "submit">
@@ -122,7 +126,7 @@ function Main(){
             <Card.Body>
             <Card.Title style={{color:'#cb2b11'}}>NOTICE</Card.Title>
             <Button onClick={handlePlus} style={{ backgroundColor: 'transparent', border: 'none', color:'#666666'}}>
-              더보기 >
+              더보기 &gt;
             </Button>
             {/* 15자 이상이면 ... 으로 나타내기*/}
             <hr style = {{color: '#cb2b11'}}/>
