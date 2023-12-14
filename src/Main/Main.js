@@ -7,7 +7,7 @@ import { Col, Form, Row, Container, ListGroup, Card, Modal } from 'react-bootstr
 import './Main.css';
 import NoticeDetail from '../Information/NoticeDetail'
 import SvgIcon from '@mui/material/SvgIcon';
-import { SvgIconComponent } from'@mui/icons-material';
+// import { SvgIconComponent } from'@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
 
 function Main(){
