@@ -7,6 +7,7 @@ import { tokenState } from '../TokenState';
 import './ApiList.css';
 import { isLoggedInAtom } from '../atom'
 import { Button, Container } from 'react-bootstrap';
+import { Pagination } from '@mui/material';
 
 
 function ApiList() {
@@ -16,23 +17,41 @@ function ApiList() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
-  const isLoggedIn= useRecoilValue(isLoggedInAtom);
+  const isLoggedIn = useRecoilValue(isLoggedInAtom);
+  const [totalpage, setTotalpage] = useState(1);
+  const LAST_PAGE = totalpage % 30 === 0 ? parseInt(totalpage / 30) : parseInt(totalpage / 30);
+  const [currentPage, setCurrentPage] = useState(1);
+ 
   axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
   
   const handleSearch = async () => {
     try{
         await updateSearchState();
+        console.log(currentPage + "====");
         const response = await axios.get('/spring/main/search', {
             params : {
               name : searchTerm
-            , sortBy : sortBy}
+            , sortBy : sortBy
+            , page: currentPage
+            }
         });
         setSearchResults(response.data.data);
         console.log(response.data.data);
+        console.log(response.data.data[0].total);
+        setTotalpage(response.data.data[0].total);
     }catch (error) {
         console.error("Error searching: ", error);
       }
   }
+  useEffect(()=>{
+    handleSearch();
+  }, [currentPage]);
+  const handlePageChange = (event, page) => {
+    // debugger
+    // const currentPageIndex = Number(event.target.outerText);
+    console.log(page);
+    setCurrentPage(page);
+  };
 
   const updateSearchState = async () =>{
     if (location.state) {
@@ -138,6 +157,10 @@ function ApiList() {
                 </Link>
                 </li>
             ))}
+              
+                
+                <Pagination page={currentPage} count={LAST_PAGE} defaultPage={1} onChange={handlePageChange}/>
+              
               </Container>
             </ul>
         )}

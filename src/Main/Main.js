@@ -6,9 +6,10 @@ import Button from 'react-bootstrap/Button';
 import { Col, Form, Row, Container, ListGroup, Card, Modal } from 'react-bootstrap';
 import './Main.css';
 import NoticeDetail from '../Information/NoticeDetail'
-import SvgIcon from '@mui/material/SvgIcon';
-// import { SvgIconComponent } from'@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 
 function Main(){
   const [searchNotice, setSearchNotice] = useState([]);
@@ -111,13 +112,13 @@ function Main(){
               value={searchTerm} 
               style = {{ margin: '150px 0px', width: '80vh' , height : '5vh', color:'#666666', borderRadius:'16px'}}
               placeholder = "검색어를 입력하세요" />
-            </Form.Group>
-            <SvgIcon component={SearchIcon} inheritViewBox />
+            </Form.Group> 
           </Col>
           <Col md = "auto">
             <Button onClick={handleSearch} style = {{margin: '150px 0px', height : '5vh', backgroundColor:'#cb2b11'}} variant = "danger" type = "submit">
-              Search
+              Search <SearchIcon sx={{ fontSize: '20px' }} color="" />
             </Button>
+           
           </Col>
         </Row>
         <Row className = "justify-content-md-center">
@@ -194,7 +195,7 @@ function Main(){
             </Card>
           </Col>
         </Row>
-
+        <Pagination count={9} />
         <NoticeDetail
           show={showNoticeDetail}
           onHide={() => setShowNoticeDetail(false)}
