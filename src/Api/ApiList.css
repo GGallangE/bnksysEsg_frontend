@@ -39,10 +39,13 @@
   
   .item {
     border: 1px solid #ccc; /* 테두리 스타일 지정 */
-    padding: 8px; /* 안쪽 여백 지정 */
-    margin: 4px; /* 항목 간 여백 지정 */
-    text-align: left;
-    border-color: #282c34;
+    padding: 25px; /* 안쪽 여백 지정 */
+    border-color: #A2D7D4;
+    box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
+    width: 80%;
+    background-color: #fff;
+    margin: 0 auto;
+    border-radius: 10px;
   }
   
   .item-name {
@@ -108,4 +111,100 @@
 .Link {
   text-decoration: none; /* 밑줄 제거 */
   color: black;
+}
+
+.sch_total_w{
+  text-shadow: none;
+  color: #191919;
+  letter-spacing: -0.5px;
+  word-break: keep-all;
+  -webkit-text-size-adjust: none;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+  text-decoration: none;
+  box-sizing: border-box;
+  margin: 50px auto;
+  padding: 0;
+  width: 1000px;
+}
+.sch_total{
+  text-shadow: none;
+  color: #191919;
+  letter-spacing: -0.5px;
+  word-break: keep-all;
+  -webkit-text-size-adjust: none;
+  font: inherit;
+  vertical-align: baseline;
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  border: 3px solid #A2D7D4;
+  border-radius: 30px;
+  box-sizing: border-box;
+}
+.input_wrap{
+  text-shadow: none;
+  color: #191919;
+  letter-spacing: -0.5px;
+  word-break: keep-all;
+  -webkit-text-size-adjust: none;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+  text-decoration: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: flex;
+}
+.sch_ip{
+  word-break: keep-all;
+  -webkit-text-size-adjust: none;
+  text-shadow: none;
+  margin: 0;
+  vertical-align: middle;
+  font-family: 'S-Core', '에스코어 드림', 'Noto Sans Korean', 'Nanum Gothic', Nanum Gothic, '나눔고딕', '맑은 고딕', 'Malgun Gothic', Dotum, '돋움', Gulim, '굴림',sans-serif;
+  color: #191919;
+  line-height: 1;
+  border-radius: 4px;
+  appearance: none;
+  padding: 0;
+  padding-left: 25px;
+  padding-right: 3.125rem;
+  height: 3.375rem;
+  width: 100%;
+  font-size: 1.25rem;
+  font-weight: 500;
+  border: none;
+  box-sizing: border-box;
+  background: transparent;
+}
+.btn_sch{
+  letter-spacing: -0.5px;
+  word-break: keep-all;
+  -webkit-text-size-adjust: none;
+  font: inherit;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  border: none;
+  text-shadow: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+  font-family: 'S-Core', '에스코어 드림', 'Noto Sans Korean', 'Nanum Gothic', Nanum Gothic, '나눔고딕', '맑은 고딕', 'Malgun Gothic', Dotum, '돋움', Gulim, '굴림',sans-serif;
+  cursor: pointer;
+  position: absolute;
+  right: 0.375rem;
+  top: 50%;
+  margin-top: -1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #A2D7D4;
+  
 }

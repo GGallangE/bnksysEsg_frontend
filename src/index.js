@@ -26,8 +26,6 @@ import MyApiSchedule from './MyPage/MyApiSchedule';
 import MyAlarm from './MyPage/MyAlarm';
 import AdminInquiry from './Admin/AdminInquiry';
 import NoticeRgt from './Admin/NoticeRgt';
-import Visualization from './Visualization/Visualization';
-import VisualDetail from './Visualization/VisualDetail';
 import AdminApiList from './Admin/AdminApiList';
 import ApplyApiList from './Admin/ApplyApiList';
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -48,8 +46,6 @@ root.render(
   <Route path="/openapi/usecase" element={<UseCase />} />
   <Route path="/openapi/usecasedetail/:usecaseid" element={<UseCaseDetail/>} />
   <Route path="/openapi/usecaseregister" element={<UseCaseRgt/>} />
-  <Route path="/openapi/visualization" element={<Visualization/>} />
-  <Route path="/openapi/visualdetail/:filename" element={<VisualDetail/>} />
   <Route path="/mypage/myinterestdata" element={<MyInterestData/>} />
   <Route path="/mypage/myinquiry" element={<MyInquiry/>} />
   <Route path="/mypage/myrecentusedata" element={<MyRecentUseData/>} />

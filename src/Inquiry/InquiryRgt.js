@@ -1,21 +1,22 @@
 import React, { useState , useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import Table from 'react-bootstrap/Table';
-import FormatDate from '../Format/FormatDate'
+import { useNavigate } from 'react-router-dom';
 import { Form, Container, Button, Row, Col } from 'react-bootstrap';
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
-import ModalRgt from '../ModalRgt'
+import ModalRgt from '../ModalRgt';
+import '../css/InquiryRgt.css';
+import xioImage from '../images/character_Xio.gif';
 
 function InquiryRgt(){
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [modalShow, setModalShow] = React.useState(false);
+    const navigate = useNavigate();
     const isLoggedIn= useRecoilValue(isLoggedInAtom);
     axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
     
-    const usecaseRegister = async () => {
+    const inquiryRegister = async () => {
         try {
           const response = await axios.post('/spring/request/inquiry', {
             inquirynm: title,
@@ -31,23 +32,33 @@ function InquiryRgt(){
         }
       };
 
+      const inquiryCancel = () => {
+        navigate('/');
+      };
+
     return(
     <div>
     <Container>
-    <h5 style={{marginTop : '100px'}}>문의하기</h5>
+    
+    <h1>Q&A   <img src={xioImage} alt="캐릭터 지오" style={{ width: '80px'}}></img></h1>
     <Form>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-        <Form.Label>제목</Form.Label>
-        <Form.Control onChange={(e) => setTitle(e.target.value)} value={title} type="text" placeholder="제목을 입력하세요" style={{ height: '50px', fontSize: '18px' }}/>
+    
+      <Form.Group>
+      
+        <Form.Label className='form-label'>제목</Form.Label>
+        
+        <Form.Control onChange={(e) => setTitle(e.target.value)} value={title} type="text" placeholder="제목을 입력하세요" style={{ height: '50px', fontSize: '15px', borderColor:'#bcbcbc' }}/>
       </Form.Group>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-        <Form.Label>내용</Form.Label>
-        <Form.Control onChange={(e) => setContent(e.target.value)} value={content} placeholder="내용을 입력하세요" as="textarea" rows={3} style={{ height: '200px', fontSize: '15px' }}/>
+      <Form.Group>
+        <Form.Label className='form-label'>내용</Form.Label>
+        <Form.Control onChange={(e) => setContent(e.target.value)} value={content} placeholder="내용을 입력하세요" as="textarea" rows={3} style={{ height: '350px', fontSize: '15px', borderColor:'#bcbcbc' }}/>
       </Form.Group>
     </Form>
-    <Button onClick={usecaseRegister} style = {{margin: '50px 0px'}} variant = "primary" type = "submit">
-              등록
-    </Button>
+    <div className="btm_area">
+				<input type="submit" value="등록" className="btn_rgt" onClick={inquiryRegister}/>
+				<input type="reset" value="취소" className="btn_cancel" onClick={inquiryCancel}/>
+    </div>
+    
     </Container>
     <ModalRgt
         show={modalShow}
