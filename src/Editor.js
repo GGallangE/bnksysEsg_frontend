@@ -11,7 +11,7 @@ function Editor({onQuillChange}){
     const handleQuillChange = (content, delta, source, editor) => {
         setQuillValue(editor.getContents());
         onQuillChange(content);
-        console.log(content);
+        //console.log(content);
     };
 
     // 이미지 처리를 하는 핸들러

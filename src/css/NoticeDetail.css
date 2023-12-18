@@ -1,0 +1,30 @@
+
+span{
+    font-size:18px;
+    display: block;
+}
+
+h4{
+    margin-bottom: 2px;
+}
+
+.noti-content{
+    background-color: #efefef;
+    border-radius: 6px;
+    margin: 10px;
+    padding: 20px;
+    height: 500px;
+    overflow: auto;
+}
+
+p{
+    font-size: 14px;
+}
+
+.row{
+    margin-top: 20px;
+}
+
+.file{
+    margin-left: 10px;
+}

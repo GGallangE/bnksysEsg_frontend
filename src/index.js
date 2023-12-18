@@ -37,12 +37,12 @@ root.render(
   <Route path="/" element={<Main />}/>
   <Route path="/api/detailapi/:apilistid" element={<DetailApi_Status />}/>
   <Route path="/signup" element={<Register />} />
-  <Route path="/openapi/apilist" element={<ApiList />} />
-  <Route path="/openapi/apiapply" element={<ApiApply />} />
   <Route path="/information/notice" element={<Notice />} />
   <Route path="/information/noticeDetail/:noticeid" element={<NoticeDetail />} />
   <Route path="/information/inquiryregister" element={<InquiryRgt/>} />
   <Route path="/login" element={<Login />} />
+  <Route path="/openapi/apilist" element={<ApiList />} />
+  <Route path="/openapi/apiapply" element={<ApiApply />} />
   <Route path="/openapi/usecase" element={<UseCase />} />
   <Route path="/openapi/usecasedetail/:usecaseid" element={<UseCaseDetail/>} />
   <Route path="/openapi/usecaseregister" element={<UseCaseRgt/>} />

@@ -1,0 +1,84 @@
+h1{
+    margin:50px 0px 10px 0px;
+    text-align: center;
+    font-weight: bold;
+}
+.btm_area{
+    text-shadow: none;
+    color: #191919;
+    letter-spacing: -0.5px;
+    word-break: keep-all;
+    -webkit-text-size-adjust: none;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+    text-decoration: none;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.btn_rgt{
+    word-break: keep-all;
+    -webkit-text-size-adjust: none;
+    text-shadow: none;
+    -webkit-appearance: none;
+    margin: 0;
+    font-family: 'S-Core', '에스코어 드림', 'Noto Sans Korean', 'Nanum Gothic', Nanum Gothic, '나눔고딕', '맑은 고딕', 'Malgun Gothic', Dotum, '돋움', Gulim, '굴림',sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    display: inline-block;
+    padding: 0 0.25rem;
+    font-size: 1rem;
+    text-align: center;
+    border: 1px solid #bcbcbc;
+    box-sizing: border-box;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    vertical-align: middle;
+    white-space: nowrap;
+    color: #fff;
+    background: #A2D7D4;
+    border-color: #A2D7D4;
+    height: 45px;
+    line-height: 43px;
+    min-width: 8.125rem;
+    margin-right: 0;
+}
+
+.btn_cancel{
+    word-break: keep-all;
+    -webkit-text-size-adjust: none;
+    text-shadow: none;
+    -webkit-appearance: none;
+    margin-left: 5px;
+    font-family: 'S-Core', '에스코어 드림', 'Noto Sans Korean', 'Nanum Gothic', Nanum Gothic, '나눔고딕', '맑은 고딕', 'Malgun Gothic', Dotum, '돋움', Gulim, '굴림',sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    display: inline-block;
+    padding: 0 0.25rem;
+    font-size: 1rem;
+    color: #191919;
+    text-align: center;
+    border: 1px solid #bcbcbc;
+    background: #fff;
+    box-sizing: border-box;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    vertical-align: middle;
+    white-space: nowrap;
+    height: 45px;
+    line-height: 43px;
+    min-width: 8.125rem;
+}
+
+.form-label{
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 8px;
+    margin-top: 18px;
+}
