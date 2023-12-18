@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Button from 'react-bootstrap/Button';
-import { Col, Form, Row, Container, ListGroup, Card, Modal } from 'react-bootstrap';
-import './Main.css';
+import '../css/Main.css';
 import NoticeDetail from '../Information/NoticeDetail'
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';

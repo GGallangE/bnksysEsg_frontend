@@ -4,11 +4,13 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
 import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
-import './ApiList.css';
+import '../css/ApiList.css';
 import { isLoggedInAtom } from '../atom'
 import { Button, Container } from 'react-bootstrap';
 import { Pagination } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 function ApiList() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -78,7 +80,15 @@ function ApiList() {
 
   const SelectBox = () => {
     return (
-      <select style={{ marginLeft: '90%', width: '100px' }} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+      <select style={{ marginLeft: '80%',
+      marginBottom:'10px',
+      width: '100px',
+      padding: '8px', 
+      borderRadius: '10px', 
+      border: '2px solid #a2d7d4', 
+      background: '#fff', 
+      color: '#333', 
+      cursor: 'pointer' }} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
         <option key="register" value="register">
           등록순
         </option>
@@ -113,10 +123,10 @@ function ApiList() {
   return (
     <div>
       <Container>
-        <div class="sch_total_w">
-          <div class="sch_total">
-            <form id="formList" action="/bigdata/user/data_market/list.do" method="post">
-              <div class="input_wrap">
+        <div className="sch_total_w">
+          <div className="sch_total">
+            
+              <div className="input_wrap">
                 <input
                   type="text"
                   placeholder="검색어를 입력하세요"
@@ -125,11 +135,11 @@ function ApiList() {
                   onKeyDown={handleKeyDown}
                   className="sch_ip"
                 />
-                <a onClick={handleSearch} class="btn_sch" id="submit">
-                  <SearchIcon sx={{ fontSize: '23px' }} />
+                <a onClick={handleSearch} className="btn_sch" id="submit">
+                  <SearchIcon sx={{ fontSize: '28px', color:'#fff', margin:'5px 0px 0px 6px' }} />
                 </a>
               </div>
-            </form>
+            
           </div>
         </div>
       </Container>
@@ -141,8 +151,6 @@ function ApiList() {
             <p>검색 결과 없음</p>
           ) : (
             <ul>
-
-
               {searchResults.map((result) => (
                 <li className="item" key={result.apilistid} style={{ marginTop: "20px" }}>
                   <Link
@@ -157,6 +165,7 @@ function ApiList() {
                         <span style={{ display: "none" }}>{result.apilistid}</span>
 
                         <Button
+                        style={{border:'none'}}
                           variant={result.favorite ? 'primary' : 'outline-secondary'}
                           onClick={(e) => {
                             e.preventDefault();
@@ -164,7 +173,17 @@ function ApiList() {
                           }}
                           className="favorite-button"
                         >
-                          {result.favorite ? '찜 해제하기' : '찜하기'}
+                          {result.favorite ? <BookmarkIcon/> : <BookmarkBorderIcon/>}
+                        </Button>
+                        <Button
+                          variant={result.favorite ? 'primary' : 'outline-secondary'}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleFavoriteToggle(result.apilistid, result.favorite);
+                          }}
+                          className="favorite-button"
+                        >
+                          {result.favorite ? '사용하러가기' : '사용신청하기'}
                         </Button>
                       </div>
                     </div>
