@@ -27,7 +27,6 @@ function ApiList() {
   const handleSearch = async () => {
     try{
         await updateSearchState();
-        console.log(currentPage + "====");
         const response = await axios.get('/spring/main/search', {
             params : {
               name : searchTerm
