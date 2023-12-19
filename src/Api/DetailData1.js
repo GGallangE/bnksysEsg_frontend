@@ -22,17 +22,66 @@ function DetailData1(props) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
   const [tableData, setTableData] = useState([]); //각 셀의 입력 값을 관리할 상태 변수
-  
-  const handleInputChange = (rowIndex, columnKey, value) => {
-    setTableData((prevTableData) => {
-      const updatedTableData = [...prevTableData];
-      updatedTableData[rowIndex] = {
-        ...updatedTableData[rowIndex],
-        [columnKey]: value,
-      };
-      return updatedTableData;
-    });
+  const [columns, setColumns] = useState([]);
+  const [formData, setFormData] = useState([]);
+  const [serverData, setServerData] = useState([]);
+
+  useEffect(() => {
+    requiredItem();
+    // 서버에서 받은 데이터를 기반으로 테이블을 동적으로 생성
+    if (serverData.length > 0) {
+      // 서버에서 받은 데이터의 colnm 값만 추출하여 테이블 헤더 생성
+      const columnKeys = serverData.map(item => item.colnm);
+
+      // 서버에서 받은 데이터를 테이블 데이터로 설정
+      setTableData([...serverData]);
+
+      // 서버에서 받은 데이터의 키를 기반으로 테이블 헤더 생성
+      setColumns([...columnKeys]);
+    }
+  }, []);
+
+  const handleAddRow = () => {
+    // 빈 행 추가
+    const newRow = {};
+    setTableData([...tableData, newRow]);
   };
+
+  const handleInputChange = (rowIndex, columnKey, value) => {
+    // 입력된 값을 formData에 업데이트
+    const updatedFormData = [...formData];
+    const rowData = updatedFormData[rowIndex] || {};
+    rowData[columnKey] = value;
+    updatedFormData[rowIndex] = rowData;
+
+    setFormData(updatedFormData);
+  };
+
+  const handleSendDataToServer = async () => {
+    // try {
+    //   const response = await axios.post("/api/nts-businessman/v1/status?serviceKey=" + API_KEY, {
+    //     "b_no": array
+    //   });
+    // } catch(e) {
+    //   setError(e);
+    // }
+  
+  };
+
+
+  const requiredItem = async () => {
+    try{
+        const response = await axios.get('/spring/getrequired_items', {
+            params : {
+              apilistid: props.apilistid
+            }
+        });
+        setServerData(response.data.data);
+        console.log(response.data.data);
+    }catch (error) {
+        console.error("Error searching: ", error);
+      }
+  } 
 
   useEffect(() => {
     // 초기 상태 설정 예시
@@ -184,30 +233,36 @@ function DetailData1(props) {
     </div>
     </Container>
 
-    <Table bordered>
-  <thead>
-    <tr>
-      {usecaseData.map((column, index) => (
-        <th key={index}>{column.columnName}</th>
-      ))}
-    </tr>
-  </thead>
-  <tbody>
-    {tableData.map((rowData, rowIndex) => (
-      <tr key={rowIndex}>
-        {usecaseData.map((column, columnIndex) => (
-          <td key={columnIndex}>
-            <input
-              type="text"
-              value={rowData[column.columnKey] || ""}
-              onChange={(e) => handleInputChange(rowIndex, column.columnKey, e.target.value)}
-            />
-          </td>
-        ))}
-      </tr>
-    ))}
-  </tbody>
-</Table>
+
+
+    <div>
+       <table border="1">
+        <thead>
+          <tr>
+            {columns.map((columnKey, columnIndex) => (
+              <th key={columnIndex}>{columnKey}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {tableData.map((rowData, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns.map((columnKey, columnIndex) => (
+                <td key={columnIndex}>
+                  <input
+                    type="text"
+                    value={rowData[columnKey] || ''}
+                    onChange={(e) => handleInputChange(rowIndex, columnKey, e.target.value)}
+                  />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <button onClick={handleSendDataToServer}>Send Data to Server</button>
+      <button onClick={handleAddRow}>+</button>
+    </div>
 
 
     <Container>
