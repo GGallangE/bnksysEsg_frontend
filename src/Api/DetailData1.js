@@ -21,6 +21,7 @@ function DetailData1(props) {
   const [usecaseError, setUsecaseError] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
+  const [usecaseTableData, setUsecaseTableData] = useState([]); //각 셀의 입력 값을 관리할 상태 변수
   const [tableData, setTableData] = useState([]); //각 셀의 입력 값을 관리할 상태 변수
   const [columns, setColumns] = useState([]);
   const [formData, setFormData] = useState([]);
@@ -28,18 +29,20 @@ function DetailData1(props) {
 
   useEffect(() => {
     requiredItem();
+  }, []);
+
+  useEffect(() => {
     // 서버에서 받은 데이터를 기반으로 테이블을 동적으로 생성
     if (serverData.length > 0) {
+      debugger
       // 서버에서 받은 데이터의 colnm 값만 추출하여 테이블 헤더 생성
-      const columnKeys = serverData.map(item => item.colnm);
-
-      // 서버에서 받은 데이터를 테이블 데이터로 설정
-      setTableData([...serverData]);
+      const columnKeys = serverData.map(item => item.rqrditemnm);
 
       // 서버에서 받은 데이터의 키를 기반으로 테이블 헤더 생성
       setColumns([...columnKeys]);
+      handleAddRow();
     }
-  }, []);
+  }, [serverData]);
 
   const handleAddRow = () => {
     // 빈 행 추가
@@ -47,46 +50,52 @@ function DetailData1(props) {
     setTableData([...tableData, newRow]);
   };
 
+ 
+
   const handleInputChange = (rowIndex, columnKey, value) => {
     // 입력된 값을 formData에 업데이트
     const updatedFormData = [...formData];
     const rowData = updatedFormData[rowIndex] || {};
     rowData[columnKey] = value;
     updatedFormData[rowIndex] = rowData;
-
+    
+    console.log('rowData', rowData[columnKey]);
+    console.log('Updated FormData:', updatedFormData);
     setFormData(updatedFormData);
   };
 
-  const handleSendDataToServer = async () => {
-    // try {
-    //   const response = await axios.post("/api/nts-businessman/v1/status?serviceKey=" + API_KEY, {
-    //     "b_no": array
-    //   });
-    // } catch(e) {
-    //   setError(e);
-    // }
-  
-  };
-
-
   const requiredItem = async () => {
     try{
-        const response = await axios.get('/spring/getrequired_items', {
+        const response = await axios.get('/spring/api/getrequired_items', {
             params : {
               apilistid: props.apilistid
             }
         });
-        setServerData(response.data.data);
-        console.log(response.data.data);
+        setServerData(response.data);
+        console.log(response.data);
     }catch (error) {
         console.error("Error searching: ", error);
       }
   } 
 
+  const handleSendDataToServer = async() => {
+    try{
+      const response = await axios.get('/spring/api/getrequired_items', {
+          params : {
+            apilistid: props.apilistid
+          }
+      });
+      setServerData(response.data);
+      console.log(response.data);
+  }catch (error) {
+      console.error("Error searching: ", error);
+    }
+  }
+
   useEffect(() => {
     // 초기 상태 설정 예시
     const initialTableData = usecaseData.map(() => ({}));
-    setTableData(initialTableData);
+    setUsecaseTableData(initialTableData);
   }, [usecaseData]);
 
   const BusinessmanData = async () => {
@@ -251,7 +260,7 @@ function DetailData1(props) {
                 <td key={columnIndex}>
                   <input
                     type="text"
-                    value={rowData[columnKey] || ''}
+                    value={rowData[columnKey]}
                     onChange={(e) => handleInputChange(rowIndex, columnKey, e.target.value)}
                   />
                 </td>
@@ -260,7 +269,7 @@ function DetailData1(props) {
           ))}
         </tbody>
       </table>
-      <button onClick={handleSendDataToServer}>Send Data to Server</button>
+      <button onClick={handleSendDataToServer}>Send</button>
       <button onClick={handleAddRow}>+</button>
     </div>
 

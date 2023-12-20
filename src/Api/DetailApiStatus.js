@@ -38,7 +38,7 @@ function DetailApiStatus() {
   }, [apilistid]);
 
   const DynamicComponent = React.lazy(() =>
-    import(`./DetailData${apilistid}`).then((module) => ({
+    import(`./DetailData1`).then((module) => ({
       default: () => <module.default apilistid={apilistid} />,
     }))
   );
