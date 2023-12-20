@@ -1,7 +1,7 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Form, Container, Button, Row, Col } from 'react-bootstrap';
+import { Form, Container } from 'react-bootstrap';
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
 import ModalRgt from '../ModalRgt';
