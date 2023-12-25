@@ -275,10 +275,10 @@ function DetailData1(props) {
 
 
     <Container>
-    <div>
+    {/* <div>
         사업자번호: <input type="text" name="content" onChange={handleContent} value={content} />
         <Button onClick={handleButtonClick} style = {{margin:'30px 20px'}}>입력</Button>
-    </div> 
+    </div>  */}
     <div className="d-flex justify-content-center">
     <Row className="mb-3 align-items-center">
       <Col xs={3} >

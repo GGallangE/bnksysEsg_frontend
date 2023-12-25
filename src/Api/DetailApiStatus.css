@@ -1,0 +1,164 @@
+.wrap-a{
+    font-family: 'Noto Sans KR', 'Malgun Gothic', AppleGothicNeoSD, 'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: -.035em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    color: #535353;
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    background-color: transparent;
+}
+
+.wrap-cont{
+    font-family: 'Noto Sans KR', 'Malgun Gothic', AppleGothicNeoSD, 'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: -.035em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    color: #535353;
+    font-size: 15px;
+    box-sizing: border-box;
+    width: 1000px;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+.main-content-renewal-wide{
+    font-family: 'Noto Sans KR', 'Malgun Gothic', AppleGothicNeoSD, 'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: -.035em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    color: #535353;
+    font-size: 15px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    float: none;
+    width: 100%;
+}
+
+.box-base{
+    font-family: 'Noto Sans KR', 'Malgun Gothic', AppleGothicNeoSD, 'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: -.035em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    color: #535353;
+    font-size: 15px;
+    margin: 0;
+    box-sizing: border-box;
+    width: 100%;
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #cad0dd;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    padding: 20px 35px 10px 35px;
+}
+.main-content-renewal01{
+    font-family: 'Noto Sans KR', 'Malgun Gothic', AppleGothicNeoSD, 'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: -.035em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    color: #535353;
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 230px;
+}
+.side-detail-head{
+    font-family: 'Noto Sans KR', 'Malgun Gothic', AppleGothicNeoSD, 'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: -.035em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-weight: normal;
+    display: block;
+    width: 100%;
+    height: 200px;
+    font-size: 28px;
+    text-align: center;
+    color: #000;
+    padding-top: 135px;
+    position: relative;
+}
+.main-content-ctg{
+    font-family: 'Noto Sans KR', 'Malgun Gothic', AppleGothicNeoSD, 'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: -.035em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    color: #ffffff;
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-weight: 600;
+    position: absolute;
+    top: -35px;
+    left: -61px;
+    display: inline-block;
+    background: #4a77c8;
+    transform: rotate(-45deg);
+    width: 145px;
+    height: 95px;
+    text-align: center;
+    padding-top: 70px;
+}
+.main-content-renewal02{
+    font-family: 'Noto Sans KR', 'Malgun Gothic', AppleGothicNeoSD, 'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: -.035em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    color: #535353;
+    font-size: 15px;
+    margin: 0;
+    box-sizing: border-box;
+    width: calc(100% - 230px);
+    padding: 10px 0 0 0;
+}
+.main-content-tit{
+    font-family: 'Noto Sans KR', 'Malgun Gothic', AppleGothicNeoSD, 'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: -.035em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+    font-size: 22px;
+    color: #000;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: left;
+}
+.main-content-txt{
+    font-family: 'Noto Sans KR', 'Malgun Gothic', AppleGothicNeoSD, 'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: -.035em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    color: #535353;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+    font-size: 12px;
+}
