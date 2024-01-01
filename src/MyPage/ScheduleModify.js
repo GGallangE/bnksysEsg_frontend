@@ -21,7 +21,7 @@ function MyApiApplyDetail(props) {
   const apilistId = props.apilistId;
   const batchlistId = props.batchlistId;
   const hours = Array.from({ length: 24 }, (_, index) => index); // 0부터 23까지의 숫자 배열 생성
-  const isLoggedIn= useRecoilValue(isLoggedInAtom);
+  const isLoggedIn = useRecoilValue(isLoggedInAtom);
   const isMounted = useRef(false);
   axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
 
@@ -29,11 +29,11 @@ function MyApiApplyDetail(props) {
     const selectedFrequency = e.target.value;
     setSelectedFrequency(selectedFrequency);
 
-    if(selectedFrequency === 'monthly'){
-      setSecondOptions(Array.from({ length:31 }, (_, index) => `${index + 1}`));
-    }else if (selectedFrequency === 'weekly'){
+    if (selectedFrequency === 'monthly') {
+      setSecondOptions(Array.from({ length: 31 }, (_, index) => `${index + 1}`));
+    } else if (selectedFrequency === 'weekly') {
       setSecondOptions(['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']);
-    }else {
+    } else {
       setSecondOptions([]);
     }
   };
@@ -41,8 +41,8 @@ function MyApiApplyDetail(props) {
   const clickModify = () => {
     //시간 형식에 맞을 때만 실행
     if (parseInt(selectedHour, 10) < 23 && parseInt(selectedMinute, 10) < 59) {
-    setSelectedTime(selectedHour + ":" + selectedMinute);
-    }else{
+      setSelectedTime(selectedHour + ":" + selectedMinute);
+    } else {
       alert("올바른 시간을 입력하세요");
     }
   };
@@ -50,35 +50,35 @@ function MyApiApplyDetail(props) {
   useEffect(() => {
     if (isMounted.current) {
       const handleSchedule = async () => {
-        if(batchlistId!=null){
-        try {
-          const response = await axios.post('/spring/mypage/myapischedule/updatetime', {
+        if (batchlistId != null) {
+          try {
+            const response = await axios.post('/spring/mypage/myapischedule/updatetime', {
               apilistid: apilistId,
-              batchlistid : batchlistId,
+              batchlistid: batchlistId,
               frequency: selectedFrequency,
               time: selectedTime,
               dayofmonth: selectedDayM,
               dayofweek: selectedDayW,
-          });
-          const freKorean = getFreKorean(selectedFrequency);
-          alert(`${freKorean} ${selectedDayM}일 ${selectedTime}으로 수정이 완료되었습니다.`);
+            });
+            const freKorean = getFreKorean(selectedFrequency);
+            alert(`${freKorean} ${selectedDayM}일 ${selectedTime}으로 수정이 완료되었습니다.`);
 
-        setSelectedHour('');
-        setSelectedMinute('');
-        setSelectedDayM(null);
-        setSelectedDayW(null);
+            setSelectedHour('');
+            setSelectedMinute('');
+            setSelectedDayM(null);
+            setSelectedDayW(null);
 
-        props.onHide();
-      }catch (error) {
-        alert(error.response.data.messages)
-      }
-    }
-    };
+            props.onHide();
+          } catch (error) {
+            alert(error.response.data.messages)
+          }
+        }
+      };
       handleSchedule();
-    } else{
+    } else {
       isMounted.current = true;
     }
-  },[selectedTime])
+  }, [selectedTime])
 
   const handleHourChange = (e) => {
     setSelectedHour(e.target.value);
@@ -100,12 +100,12 @@ function MyApiApplyDetail(props) {
     setSelectedMinute((prevValue) => (inputValue.length === 1 ? `0${inputValue}` : inputValue));
   };
 
-  const handleClose = () =>{
+  const handleClose = () => {
     setSelectedHour('');
     setSelectedMinute('');
     props.onHide();
   };
- 
+
   const getFreKorean = (frequency) => {
     switch (frequency) {
       case 'monthly':
@@ -140,97 +140,97 @@ function MyApiApplyDetail(props) {
     }
   };
 
-    return (
-      <div>
+  return (
+    <div>
       <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
       >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          예약 수정하기
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-      <Container>
-        <Row className="mb-3">
-          <Col xs={2} className="d-flex align-items-center"  style={{width:'104px'}}>
-          예약일시:
-          </Col>
-          <Col xs={3}>
-            <Form.Select onChange={handleOptionChange}>
-              <option value="">선택하세요</option>
-              <option value="monthly">매달</option>
-              <option value="weekly">매주</option>
-              <option value="daily">매일</option>
-            </Form.Select>
-          </Col>
-          <Col xs={3}>
-            <Form.Select onChange={(e) => {selectedFrequency === "monthly"? setSelectedDayM(e.target.value): setSelectedDayW(e.target.value)}} disabled={selectedFrequency === 'daily'} >
-              <option value="">선택하세요</option>
-              {secondOptions.map((option, index) => (
-                <option key={index} value={option}>
-                  {selectedFrequency === 'monthly' ? option + '일' : selectedFrequency === 'weekly' ? <FormatCode code="day" value={option} /> : option}
-                </option>
-              ))}
-            </Form.Select>
-          </Col>
-          <Col xs={3} className="d-flex align-items-center">
-            <Form.Control
-              style={{margin:'0px 10px'}}
-              type="text"
-              placeholder="00"
-              value={selectedHour}
-              onChange={handleHourChange}
-              onBlur={handleHourBlur}  // onBlur 이벤트 추가
-              onKeyDown={(e) => {
-                // 숫자, Backspace 이외의 키 입력 방지 및 두 자리까지만 입력 허용
-                if (
-                  !(
-                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                    (e.keyCode >= 96 && e.keyCode <= 105) ||
-                    e.keyCode === 8
-                  ) ||
-                  (e.target.value.length >= 2 && e.keyCode !== 8)
-                ) {
-                  e.preventDefault();
-                }
-              }}
-              />:
-              <Form.Control
-              style={{margin:'0px 10px'}}
-              type="text"
-              placeholder="00"
-              value={selectedMinute}
-              onChange={handleMinuteChange}
-              onBlur={handleMinuteBlur}  // onBlur 이벤트 추가
-              onKeyDown={(e) => {
-                // 숫자, Backspace 이외의 키 입력 방지 및 두 자리까지만 입력 허용
-                if (
-                  !(
-                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                    (e.keyCode >= 96 && e.keyCode <= 105) ||
-                    e.keyCode === 8
-                  ) ||
-                  (e.target.value.length >= 2 && e.keyCode !== 8)
-                ) {
-                  e.preventDefault();
-                }
-              }}
-              />
-          </Col>
-        </Row>
-      </Container>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={clickModify}>수정</Button>
-        <Button onClick={handleClose}>닫기</Button>
-      </Modal.Footer>
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            예약 수정하기
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Container>
+            <Row className="mb-3">
+              <Col xs={2} className="d-flex align-items-center" style={{ width: '104px' }}>
+                예약일시:
+              </Col>
+              <Col xs={3}>
+                <Form.Select onChange={handleOptionChange}>
+                  <option value="">선택하세요</option>
+                  <option value="monthly">매달</option>
+                  <option value="weekly">매주</option>
+                  <option value="daily">매일</option>
+                </Form.Select>
+              </Col>
+              <Col xs={3}>
+                <Form.Select onChange={(e) => { selectedFrequency === "monthly" ? setSelectedDayM(e.target.value) : setSelectedDayW(e.target.value) }} disabled={selectedFrequency === 'daily'} >
+                  <option value="">선택하세요</option>
+                  {secondOptions.map((option, index) => (
+                    <option key={index} value={option}>
+                      {selectedFrequency === 'monthly' ? option + '일' : selectedFrequency === 'weekly' ? <FormatCode code="day" value={option} /> : option}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+              <Col xs={3} className="d-flex align-items-center">
+                <Form.Control
+                  style={{ margin: '0px 10px' }}
+                  type="text"
+                  placeholder="00"
+                  value={selectedHour}
+                  onChange={handleHourChange}
+                  onBlur={handleHourBlur}  // onBlur 이벤트 추가
+                  onKeyDown={(e) => {
+                    // 숫자, Backspace 이외의 키 입력 방지 및 두 자리까지만 입력 허용
+                    if (
+                      !(
+                        (e.keyCode >= 48 && e.keyCode <= 57) ||
+                        (e.keyCode >= 96 && e.keyCode <= 105) ||
+                        e.keyCode === 8
+                      ) ||
+                      (e.target.value.length >= 2 && e.keyCode !== 8)
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
+                />:
+                <Form.Control
+                  style={{ margin: '0px 10px' }}
+                  type="text"
+                  placeholder="00"
+                  value={selectedMinute}
+                  onChange={handleMinuteChange}
+                  onBlur={handleMinuteBlur}  // onBlur 이벤트 추가
+                  onKeyDown={(e) => {
+                    // 숫자, Backspace 이외의 키 입력 방지 및 두 자리까지만 입력 허용
+                    if (
+                      !(
+                        (e.keyCode >= 48 && e.keyCode <= 57) ||
+                        (e.keyCode >= 96 && e.keyCode <= 105) ||
+                        e.keyCode === 8
+                      ) ||
+                      (e.target.value.length >= 2 && e.keyCode !== 8)
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
+                />
+              </Col>
+            </Row>
+          </Container>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={clickModify}>수정</Button>
+          <Button onClick={handleClose}>닫기</Button>
+        </Modal.Footer>
       </Modal>
-        </div>
-    );
-  }
+    </div>
+  );
+}
 
 export default MyApiApplyDetail;

@@ -38,11 +38,11 @@ function UseCase() {
   return (
     <div className="App">
       <Container>
-      
+
         <div>
           <h1>활용사례</h1>
           <div className="use_sch_total_w">
-          <div className="use_sch_total">
+            <div className="use_sch_total">
               <div className="use_input_wrap">
                 <input
                   type="text"
@@ -53,11 +53,11 @@ function UseCase() {
                   className="use_sch_ip"
                 />
                 <a onClick={handleSearch} className="use_btn_sch" id="submit">
-                  <SearchIcon sx={{ fontSize: '30px', color:'#fff', margin:'5px 0px 0px 0px' }} />
+                  <SearchIcon sx={{ fontSize: '30px', color: '#fff', margin: '5px 0px 0px 0px' }} />
                 </a>
               </div>
+            </div>
           </div>
-        </div>
           <Row className="justify-content-end">
             <Col md="auto">
               <Button onClick={() => { navigate('/openapi/usecaseregister'); }} style={{ margin: '10px', background: '#fff', borderColor: '#bbd4ef', borderWidth: '2px', fontWeight: 'bold', color: '#000' }} variant="primary" type="submit">

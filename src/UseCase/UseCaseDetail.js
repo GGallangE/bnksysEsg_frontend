@@ -29,49 +29,49 @@ function UseCaseDetail() {
   };
 
   const apiliistSearch = async () => {
-    if (usecaseid != null){
-        try{
-          const response = await axios.get('/spring/usecase/usecasedetail_apilist', {
-            params : {
-              usecaseid : usecaseid
-            }
-          });
-          setSearchApiResults(response.data.data.data)
-          renderApiTable();
-        }catch (error){
-          console.error("Error apilist searching ", error);
-        }
+    if (usecaseid != null) {
+      try {
+        const response = await axios.get('/spring/usecase/usecasedetail_apilist', {
+          params: {
+            usecaseid: usecaseid
+          }
+        });
+        setSearchApiResults(response.data.data.data)
+        renderApiTable();
+      } catch (error) {
+        console.error("Error apilist searching ", error);
       }
     }
+  }
 
-    const renderApiTable = () => {
-      return (
-        <Table striped bordered hover>
-          <thead>
+  const renderApiTable = () => {
+    return (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>API 이름</th>
+            <th>제공 기관</th>
+          </tr>
+        </thead>
+        <tbody>
+          {searchApiResults.length === 0 ? (
             <tr>
-              <th>API 이름</th>
-              <th>제공 기관</th>
+              <td colSpan="2">사용 API가 없습니다</td>
             </tr>
-          </thead>
-          <tbody>
-            {searchApiResults.length === 0 ? (
-              <tr>
-                <td colSpan="2">사용 API가 없습니다</td>
+          ) : (
+            searchApiResults.map(api => (
+              <tr key={api.apilistid} onClick={() => handleApiClick(api.apilistid)} style={{ cursor: 'pointer' }}>
+                <td>{api.apinm}</td>
+                <td>{api.prvorg}</td>
               </tr>
-            ) : (
-              searchApiResults.map(api => (
-                <tr key={api.apilistid} onClick={() => handleApiClick(api.apilistid)} style={{ cursor: 'pointer' }}>
-                    <td>{api.apinm}</td>
-                    <td>{api.prvorg}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
-      );
-    };
+            ))
+          )}
+        </tbody>
+      </Table>
+    );
+  };
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleApiClick = (apilistid) => {
     navigate(`/api/detailapi/${apilistid}`);
@@ -115,14 +115,14 @@ function UseCaseDetail() {
           </Col>
         </Row>
         <hr style={{ marginTop: '20px' }} />
-        <Row className="mb-3" style={{marginTop:'40px'}}>
+        <Row className="mb-3" style={{ marginTop: '40px' }}>
           <Col xs={12}>
             <h5 style={{ marginBottom: '10px' }}><span style={boldText}>활용사례 설명:</span></h5>
             <div style={getContentStyle()}>{searchResults.content}</div>
           </Col>
         </Row>
         <hr style={{ marginTop: '20px' }} />
-        <Row className="mb-3" style={{marginTop:'40px'}}>
+        <Row className="mb-3" style={{ marginTop: '40px' }}>
           <Col xs={12}>
             <h5 style={{ marginBottom: '10px' }}><span style={boldText}>사용 API:</span></h5>
             {renderApiTable()}

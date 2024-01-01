@@ -35,20 +35,20 @@ function Register() {
 
   //회원가입 버튼 클릭시
   const handleRegister = async () => {
-  try{
-    const response = await axios.post('/spring/user/signup',{
-    "username": username,
-    "nickname": nickname,
-    "email": email,
-    "password": password,
-    "passwordCheck": passwordCheck
-  })
-  if (response.data.success) {
-    // 회원가입 성공 시
-    alert(response.data.messages);
-    navigate('/login');
-  }
-  } catch (error){
+    try {
+      const response = await axios.post('/spring/user/signup', {
+        "username": username,
+        "nickname": nickname,
+        "email": email,
+        "password": password,
+        "passwordCheck": passwordCheck
+      })
+      if (response.data.success) {
+        // 회원가입 성공 시
+        alert(response.data.messages);
+        navigate('/login');
+      }
+    } catch (error) {
       // 오류 처리
       if (error.response) {
         // 서버에서 오류 응답을 받았을 때

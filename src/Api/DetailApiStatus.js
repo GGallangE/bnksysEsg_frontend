@@ -2,9 +2,6 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './DetailApiStatus.css';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import FormatDate from '../Format/FormatDate';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
@@ -50,63 +47,43 @@ function DetailApiStatus() {
     borderRadius: '10px',
   };
   return (
-    <div>
-
-
-
-      
-
-
-
-
-      
-        <h3>{searchResults.apiname}</h3>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          
-          <div>
-            <div class="wrap-a">
-        <div class="wrap-cont">
-          <section class="main-content-renewal-wide">
-            <div class="box-base">
-
-              <div class="main-content-renewal01">
-                <textarea id="clip_target" style={{ position: 'absolute', top: '-9999em' }} title="URL복사" tabindex="-1"></textarea>
-                {/* <h1>img</h1> */}
-                {/* <h1 class="side-detail-head"><b>보건</b></h1> */}
-                <strong class="main-content-ctg">
-                  <p>{searchResults.prvorg}</p>
-                </strong>
-              </div>
-
-              <div class="main-content-renewal02">
-                <h1 class="main-content-tit">{searchResults.apinm}
-                </h1>
-                <div class="main-content-txt">
-                  <p>{searchResults.apiexpl}</p>
-                  <p style={{fontSize:'13px'}}>등록날짜: <FormatDate dateString={searchResults.apirgdt} /></p>
-                  <div style={{display:'flex', gap:'10px'}}>
-                  <p><VisibilityOutlinedIcon/> {searchResults.apiview}</p>
-                  <p><FileDownloadOutlinedIcon/> {searchResults.countapiuses}</p>
+    <div style={{ padding: '10px', background: '#d7e7af7a' }}>
+      <h3>{searchResults.apiname}</h3>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <div class="wrap-a">
+            <div class="wrap-cont">
+              <section class="main-content-renewal-wide">
+                <div class="box-base">
+                  <div class="main-content-renewal01">
+                    <textarea id="clip_target" style={{ position: 'absolute', top: '-9999em' }} title="URL복사" tabindex="-1"></textarea>
+                    {/* <h1>img</h1> */}
+                    {/* <h1 class="side-detail-head"><b>보건</b></h1> */}
+                    <strong class="main-content-ctg">
+                      <p>{searchResults.prvorg}</p>
+                    </strong>
                   </div>
-                  
+                  <div class="main-content-renewal02">
+                    <h1 class="main-content-tit">{searchResults.apinm}
+                    </h1>
+                    <div class="main-content-txt">
+                      <p>{searchResults.apiexpl}</p>
+                      <p style={{ fontSize: '13px' }}>등록날짜: <FormatDate dateString={searchResults.apirgdt} /></p>
+                      <div style={{ display: 'flex', gap: '10px' }}>
+                        <p><VisibilityOutlinedIcon /> {searchResults.apiview}</p>
+                        <p><FileDownloadOutlinedIcon /> {searchResults.countapiuses}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-
+              </section>
             </div>
-          </section>
-
-        </div>
-      </div>
-            
-            <p>사용 횟수: </p>
-            
-            
           </div>
-        )}
-    
+        </div>
+      )}
+
       <Suspense fallback={<div>Loading...</div>}>
         <DynamicComponent />
       </Suspense>

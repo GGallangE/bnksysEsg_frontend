@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 function LoginPopup({ show, handleClose, handleLoginSuccess, redirectUrl }) {
   const handleConfirm = () => {
-    handleClose(); 
-    handleLoginSuccess(); 
+    handleClose();
+    handleLoginSuccess();
   };
 
   return (

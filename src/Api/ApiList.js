@@ -27,22 +27,22 @@ function ApiList() {
   axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
 
   const handleSearch = async () => {
-    try{
-        await updateSearchState();
-        const response = await axios.get('/spring/main/search', {
-            params : {
-              name : searchTerm
-            , sortBy : sortBy
-            , page: currentPage
-            }
-        });
-        setSearchResults(response.data.data);
-        console.log(response.data.data);
-        console.log(response.data.data[0].total);
-        setTotalpage(response.data.data[0].total);
-    }catch (error) {
-        console.error("Error searching: ", error);
-      }
+    try {
+      await updateSearchState();
+      const response = await axios.get('/spring/main/search', {
+        params: {
+          name: searchTerm
+          , sortBy: sortBy
+          , page: currentPage
+        }
+      });
+      setSearchResults(response.data.data);
+      console.log(response.data.data);
+      console.log(response.data.data[0].total);
+      setTotalpage(response.data.data[0].total);
+    } catch (error) {
+      console.error("Error searching: ", error);
+    }
   }
   useEffect(() => {
     handleSearch();
@@ -79,15 +79,17 @@ function ApiList() {
 
   const SelectBox = () => {
     return (
-      <select style={{ marginLeft: '80%',
-      marginBottom:'10px',
-      width: '100px',
-      padding: '8px', 
-      borderRadius: '10px', 
-      border: '2px solid #a2d7d4', 
-      background: '#fff', 
-      color: '#333', 
-      cursor: 'pointer' }} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+      <select style={{
+        marginLeft: '80%',
+        marginBottom: '10px',
+        width: '100px',
+        padding: '8px',
+        borderRadius: '10px',
+        border: '2px solid #a2d7d4',
+        background: '#fff',
+        color: '#333',
+        cursor: 'pointer'
+      }} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
         <option key="register" value="register">
           등록순
         </option>
@@ -124,21 +126,21 @@ function ApiList() {
       <Container>
         <div className="sch_total_w">
           <div className="sch_total">
-            
-              <div className="input_wrap">
-                <input
-                  type="text"
-                  placeholder="검색어를 입력하세요"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="sch_ip"
-                />
-                <a onClick={handleSearch} className="btn_sch" id="submit">
-                  <SearchIcon sx={{ fontSize: '28px', color:'#fff', margin:'5px 0px 0px 6px' }} />
-                </a>
-              </div>
-            
+
+            <div className="input_wrap">
+              <input
+                type="text"
+                placeholder="검색어를 입력하세요"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="sch_ip"
+              />
+              <a onClick={handleSearch} className="btn_sch" id="submit">
+                <SearchIcon sx={{ fontSize: '28px', color: '#fff', margin: '5px 0px 0px 6px' }} />
+              </a>
+            </div>
+
           </div>
         </div>
       </Container>
@@ -164,7 +166,7 @@ function ApiList() {
                         <span style={{ display: "none" }}>{result.apilistid}</span>
 
                         <Button
-                        style={{border:'none'}}
+                          style={{ border: 'none' }}
                           variant={result.favorite ? 'primary' : 'outline-secondary'}
                           onClick={(e) => {
                             e.preventDefault();
@@ -172,7 +174,7 @@ function ApiList() {
                           }}
                           className="favorite-button"
                         >
-                          {result.favorite ? <BookmarkIcon/> : <BookmarkBorderIcon/>}
+                          {result.favorite ? <BookmarkIcon /> : <BookmarkBorderIcon />}
                         </Button>
                         <Button
                           variant={result.favorite ? 'primary' : 'outline-secondary'}

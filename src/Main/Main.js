@@ -158,7 +158,7 @@ function Main() {
             <li className="li_faq">
               <div className="box" style={{ background: '#bbd4ef6b', boxShadow: '15px 15px 30px #e6e6e6' }}>
                 <div className="h4_w">
-                  <h4>인기데이터</h4>
+                  <h4>POPULAR</h4>
                   <a href="/openapi/apilist" className="ico"><AddIcon className="AddIcon" /></a>
                 </div>
                 <div className="box_cnt">
@@ -182,7 +182,7 @@ function Main() {
             <li className="li_counseling">
               <div className="box" style={{ background: '#fae9c06b', boxShadow: '15px 15px 30px #e6e6e6' }}>
                 <div className="h4_w">
-                  <h4>최신데이터</h4>
+                  <h4>RECENT</h4>
                   <a href="/openapi/apilist" className="ico"><AddIcon className="AddIcon" /></a>
                 </div>
                 <div className="box_cnt">
