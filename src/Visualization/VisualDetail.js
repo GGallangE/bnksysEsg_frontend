@@ -6,7 +6,7 @@ import Visualization from './Visualization';
 
 const VisualDetail = () => {
   debugger
-  const {filename} = useParams();
+  const {filename} = useParams();z
   const [ content, setContent ] = useState(null);
 
   useEffect(() => {
