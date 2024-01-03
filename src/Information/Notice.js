@@ -13,7 +13,11 @@ function Notice(){
 
     const handleSearch = async () => {
         try{
-            const response = await axios.get('/spring/main/notice');
+            const response = await axios.get('/spring/main/notice', {
+              params: {
+                mainsort: "no"
+              }
+            });
             setSearchNotice(response.data.data.data);
         }catch(error){
             console.error("Error searching : ", error)

@@ -7,6 +7,8 @@ import { tokenState } from '../TokenState';
 import Container from 'react-bootstrap/Container';
 import { isLoggedInAtom } from '../atom'
 import { Button } from 'react-bootstrap';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 function MyInterestData() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -68,17 +70,17 @@ function MyInterestData() {
                       <span className='item-info'>조회수: {result.apiview}</span>
                       <span className='item-info'>사용수: {result.nbruses}</span>
                       <span style={{ display: "none" }}>{result.apilistid}</span>
-
                       <Button
-                        variant={result.favorite ? 'primary' : 'outline-secondary'}
-                        onClick={(e) => {
-                          e.preventDefault(); // 링크의 기본 동작 막기
-                          handleFavoriteToggle(result.apilistid, result.favorite);
-                        }}
-                        className="favorite-button"
-                      >
-                        {result.favorite ? '찜 해제하기' : '찜하기'}
-                      </Button>
+                          style={{ border: 'none'}}
+                          variant='outline-secondary'
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleFavoriteToggle(result.apilistid, result.favorite);
+                          }}
+                          className="favorite-button"
+                        >
+                          {result.favorite ? <BookmarkIcon style={{ color: '#a2d7d4'}}/> : <BookmarkBorderIcon style={{ color: '#a2d7d4'}}/>}
+                        </Button>
                     </div>
                   </div>
                 </Link>

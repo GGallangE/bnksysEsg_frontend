@@ -15,6 +15,7 @@ function DetailApiStatus() {
     const ApiInfo = async () => {
       try {
         const response = await axios.get(`/spring/connection/result/${apilistid}`)
+        console.log(response);
         setSearchResults(response.data.data[0]);
         setLoading(false);
       } catch (error) {
@@ -38,7 +39,7 @@ function DetailApiStatus() {
 
   const DynamicComponent = React.lazy(() =>
     import(`./DetailData1`).then((module) => ({
-      default: () => <module.default apilistid={apilistid} />,
+      default: () => <module.default apilistid={apilistid} methodtype={searchResults.methodtype}/>,
     }))
   );
   const boxStyle = {

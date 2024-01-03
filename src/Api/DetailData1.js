@@ -19,8 +19,11 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { GridRowModes, GridToolbarContainer } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
 import KeyboardArrowDownIcon from "@mui/icons-material/ArrowDownward";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import FileDownload from "../Modal/FileDownload";
+//import Parser from "react-xml-parser";
 
-const API_KEY = process.env.REACT_APP_API_KEY;
+//const API_KEY = process.env.REACT_APP_API_KEY;
 
 function DetailData1(props) {
   const [rows, setRows] = useState([]);
@@ -32,7 +35,8 @@ function DetailData1(props) {
   const [error, setError] = useState(null);
   const [usecaseError, setUsecaseError] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [modalShow, setModalShow] = React.useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [fileModalShow, setFileModalShow] = useState(false);
   const [usecaseTableData, setUsecaseTableData] = useState([]); //각 셀의 입력 값을 관리할 상태 변수
   const [tableData, setTableData] = useState([]); //각 셀의 입력 값을 관리할 상태 변수
   const [columns, setColumns] = useState([]);
@@ -42,71 +46,35 @@ function DetailData1(props) {
   const [rowsOutput, setRowsOutput] = useState([]);
   const [rowModesModelOutput, setRowModesModelOutput] = useState({});
   const [serverDataOutput, setServerDataOutput] = useState([]);
-
-  const handleAddData = (data) => {
-    const newRows = data.map((item, index) => {
-      const id = index + 1; // Assuming you have an identifier in your data
-      const newEmptyRow = { id, isNew: true };
-
-      columns.forEach((column) => {
-        newEmptyRow[column.field] = item[column.field] || ""; // Adjust property name based on your actual data
-      });
-
-      setRowModesModel((oldModel) => ({
-        ...oldModel,
-        [id]: {
-          mode: GridRowModes.Edit,
-          fieldToFocus: columnsOutput[0]?.field || "",
-        },
-      }));
-
-      return newEmptyRow;
-    });
-
-    setRows((oldRows) => [...oldRows, ...newRows]);
-    debugger;
-  };
-
-  const handleAddCol = (serverDataOutput) => {
-    if (serverDataOutput.length > 0) {
-      const dynamicColumns = serverDataOutput.map((item) => ({
-        field: item.rqrditemnm,
-        headerName: item.rqrditemnm,
-        width: 150,
-        editable: true,
-      }));
-      setColumnsOutput(dynamicColumns);
-      handleAddData(serverData);
-    }
-  };
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  // Parser의 인스턴스 생성
+  //const parser = new Parser();
+  
 
   const handleProcessRowUpdateError = (error) => {
     console.log(error);
   };
 
   const processRowUpdate = (newRow) => {
-    console.log("rows", rows);
-    console.log("newRow", newRow);
     const updatedRow = { ...newRow, isNew: false };
 
     const newRows = rows.map((row) =>
-      row.id === newRow.id ? { ...newRow } : row
+      row.id === newRow.id ? { ...updatedRow } : row
     );
     setRows(newRows);
-    debugger;
-    console.log("updateRow", updatedRow);
-    console.log("rows", rows);
+    //console.log("updateRow", updatedRow);
+    //console.log("rows", rows);
   };
-
-  useEffect(() => {
-    console.log("rows");
-    console.log(rows);
-  }, [rows]);
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
 
+  const handleRowModesModelChangeOutput = (newRowModesModel) => {
+    setRowModesModelOutput(newRowModesModel);
+  };
+
+  //새로운 행 추가 버튼
   const EditToolbar = (props) => {
     const { setRows, setRowModesModel } = props;
 
@@ -130,10 +98,22 @@ function DetailData1(props) {
       }));
     };
 
+    const handleDeleteClick = (ids) => () => {
+      setRows(rows.filter((row) => !ids.includes(row.id)));
+      // setRows(rows.filter((row) => row.id !== id));
+    };
+
     return (
       <GridToolbarContainer>
         <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
           Add record
+        </Button>
+        <Button
+          color="primary"
+          startIcon={<DeleteIcon />}
+          onClick={handleDeleteClick(rowSelectionModel)}
+        >
+          삭제
         </Button>
       </GridToolbarContainer>
     );
@@ -143,6 +123,7 @@ function DetailData1(props) {
     requiredItem();
   }, []);
 
+  //입력값 grid에 필수 값 컬럼 설정
   useEffect(() => {
     if (serverData.length > 0) {
       const columnKeys = serverData.map((item) => ({
@@ -156,8 +137,9 @@ function DetailData1(props) {
     }
   }, [serverData]);
 
+  //입력값 grid 새로운 행 추가
   const handleAddRow = () => {
-    const newRowId = randomId();; // 함수 내에서 유일한 ID를 생성하는 함수 사용
+    const newRowId = randomId(); // 함수 내에서 유일한 ID를 생성하는 함수 사용
     const newEmptyRow = { id: newRowId, isNew: true }; // 예시: id와 isNew 속성을 가진 빈 행
 
     // 기존 행들과 새로운 행을 합쳐서 업데이트
@@ -167,13 +149,13 @@ function DetailData1(props) {
     setRowModesModel((prevModel) => ({
       ...prevModel,
       [newRowId]: {
-        mode: 'edit', // 수정 모드로 설정
-        fieldToFocus: columns[0]?.field || '', // 포커스할 필드 설정 (예시: 첫 번째 컬럼)
+        mode: "edit", // 수정 모드로 설정
+        fieldToFocus: columns[0]?.field || "", // 포커스할 필드 설정 (예시: 첫 번째 컬럼)
       },
     }));
   };
 
-  //필수요청값
+  //입력필수값 요청
   const requiredItem = async () => {
     try {
       const response = await axios.get("/spring/api/getrequired_items", {
@@ -188,7 +170,7 @@ function DetailData1(props) {
     }
   };
 
-  //api요청
+  //api 출력값 요청
   const handleSendDataToServer = async () => {
     try {
       const dataToSend = rows.map(({ id, isNew, ...rest }) => rest);
@@ -198,39 +180,107 @@ function DetailData1(props) {
         apilistid: props.apilistid,
         params: dataToSend,
       });
+
       console.log(response);
-      // 받은 데이터를 가공하여 DataGrid에 맞게 설정
-      const id = randomId();
-      const formattedRows = response.data.map((item, index) => ({ id: index, ...item }));
-      const formattedColumns = Object.keys(response.data[0]).map((key) => ({
-        field: key,
-        headerName: key,
-        width: 150,
-        editable: true,
-      }));
+      //if (props.methodtype === "POST") {
+        // 받은 데이터를 가공하여 DataGrid에 맞게 설정
+        const id = randomId();
+        //const formattedRows = response.data.map((item, index) => ({ id: index, ...item }));
 
-      // DataGrid에 적용
-      setRowsOutput(formattedRows);
-      setColumnsOutput(formattedColumns);
+        const flattenObject = (obj, parentKey = "") => {
+          return Object.keys(obj).reduce((acc, key) => {
+            const newKey = parentKey ? `${parentKey}.${key}` : key;
 
-      // 각 행의 수정 모드를 설정
-      const newRowModesModel = {};
-      formattedRows.forEach((row) => {
-        newRowModesModel[row.id] = { mode: 'edit', fieldToFocus: formattedColumns[0]?.field || '' };
-      });
-      setRowModesModel(newRowModesModel);
-      //handleAddCol(response);
+            if (typeof obj[key] === "object" && obj[key] !== null) {
+              Object.assign(acc, flattenObject(obj[key], newKey));
+            } else {
+              acc[newKey] = obj[key];
+            }
+
+            return acc;
+          }, {});
+        };
+
+        //출력 DataGrid row설정
+        const formattedRows = response.data.map((outerItem, outerIndex) => {
+          const innerData = flattenObject(outerItem.data[0]);
+
+          return {
+            id: outerIndex,
+            ...innerData,
+          };
+        });
+
+        //출력 DataGrid colum설정
+        const formattedColumns = Object.keys(response.data[0].data[0]).map(
+          (key) => ({
+            field: key,
+            headerName: key,
+            width: 150,
+            editable: false,
+          })
+        );
+
+        // DataGrid에 적용
+        setRowsOutput(formattedRows);
+        setColumnsOutput(formattedColumns);
+
+        // 각 행의 수정 모드를 설정
+        const newRowModesModel = {};
+        formattedRows.forEach((row) => {
+          newRowModesModel[row.id] = {
+            mode: "edit",
+            fieldToFocus: formattedColumns[0]?.field || "",
+          };
+        });
+
+        setRowModesModelOutput(newRowModesModel);
+    //   } else {
+        
+    //     const xmlData = response.data;
+    //     // var XMLParser = require("react-xml-parser");
+    //     // console.log(xmlData);
+    //     // debugger
+    //     // var jsonData = new XMLParser().parseFromString(xmlData);
+        
+    //     // console.log(jsonData);
+    //     // debugger
+    //     // XML을 JavaScript 객체로 파싱
+    //     // Parser 클래스의 인스턴스 생성
+    // const parser = new Parser();
+
+    // // XML을 JavaScript 객체로 파싱
+    // const jsonData = parser.parseFromString(xmlData);
+
+    // // DataGrid에 맞게 데이터 변환
+    // const transformedRows = jsonData.getElementsByTagName('item').map((item, index) => ({
+    //   id: index,
+    //   ...item.attributes, // item의 속성을 행 속성으로 사용
+    // }));
+
+    //     const transformedColumns = Object.keys(
+    //       jsonData.response.body.items.item[0]
+    //     ).map((key) => ({
+    //       field: key,
+    //       headerName: key,
+    //       width: 150,
+    //     }));
+
+    //     setRowsOutput(transformedRows);
+    //     setColumnsOutput(transformedColumns);
+    //   }
     } catch (error) {
       console.error("Error searching: ", error);
     }
   };
 
+  //활용사례 설정
   useEffect(() => {
-    // 초기 상태 설정 예시
     const initialTableData = usecaseData.map(() => ({}));
     setUsecaseTableData(initialTableData);
   }, [usecaseData]);
 
+  //활용사례 요청
   useEffect(() => {
     axios
       .get("/spring/usecase/apidetail", {
@@ -250,45 +300,6 @@ function DetailData1(props) {
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const excelFileExtension = ".xlsx";
   const excelFileName = "사업자 휴폐업";
-
-  // const excelDownload = (excelData) => {
-  //   const ws = XLSX.utils.aoa_to_sheet([
-  //     [
-  //       "사업자 등록번호",
-  //       "납세자 상태",
-  //       "과세유형메세지",
-  //       "폐업일",
-  //       "단위과세전환폐업여부",
-  //       "최근과세유형전환일자",
-  //       "세금계산서적용일자",
-  //       "직전과세유형메세지",
-  //     ],
-  //   ]);
-  //   excelData.map((data) => {
-  //     XLSX.utils.sheet_add_aoa(
-  //       ws,
-  //       [
-  //         [
-  //           data.b_no,
-  //           data.b_stt,
-  //           data.tax_type,
-  //           data.end_dt,
-  //           data.utcc_yn,
-  //           data.tax_type_change_dt,
-  //           data.invoice_apply_dt,
-  //           data.rbf_tax_type,
-  //         ],
-  //       ],
-  //       { origin: -1 }
-  //     );
-  //     ws["!cols"] = [{ wpx: 200 }, { wpx: 200 }];
-  //     return false;
-  //   });
-  //   const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-  //   const excelButter = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  //   const excelFile = new Blob([excelButter], { type: excelFileType });
-  //   FileSaver.saveAs(excelFile, excelFileName + excelFileExtension);
-  // };
 
   // const BusinessmanDataExcel = async (selectedFile) => {
   //   const reader = new FileReader();
@@ -413,6 +424,10 @@ function DetailData1(props) {
                   columns={columns}
                   pageSizeOptions={[5]}
                   checkboxSelection
+                  onRowSelectionModelChange={(newRowSelectionModel) => {
+                    setRowSelectionModel(newRowSelectionModel);
+                  }}
+                  rowSelectionModel={rowSelectionModel}
                   disableRowSelectionOnClick
                   onPageSizeChange={(newPageSize) =>
                     console.log(`New page size: ${newPageSize}`)
@@ -445,27 +460,27 @@ function DetailData1(props) {
               </Button>
 
               {/* <div>
-사업자번호: <input type="text" name="content" onChange={handleContent} value={content} />
-<Button onClick={handleButtonClick} style = {{margin:'30px 20px'}}>입력</Button>
-</div>  */}
+                사업자번호: <input type="text" name="content" onChange={handleContent} value={content} />
+                <Button onClick={handleButtonClick} style = {{margin:'30px 20px'}}>입력</Button>
+                </div>  */}
               {/* <div className="d-flex justify-content-center">
-  <Row className="mb-3 align-items-center">
-    <Col xs={3} >
-      <Form.Label className="mb-0">Excel파일 업로드</Form.Label>
-    </Col>
-    <Col xs={6}>
-      <Form.Control
-        type="file"
-        name="file"
-        onChange={handleFileInputChange}
-        accept=".xlsx, .xls"
-      />
-    </Col>
-    <Col xs={3}>
-      <Button onClick={handleFileUpload}>Upload Excel</Button>
-    </Col>
-  </Row>
-</div> */}
+                  <Row className="mb-3 align-items-center">
+                    <Col xs={3} >
+                      <Form.Label className="mb-0">Excel파일 업로드</Form.Label>
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Control
+                        type="file"
+                        name="file"
+                        onChange={handleFileInputChange}
+                        accept=".xlsx, .xls"
+                      />
+                    </Col>
+                    <Col xs={3}>
+                      <Button onClick={handleFileUpload}>Upload Excel</Button>
+                    </Col>
+                  </Row>
+                </div> */}
               <h5 style={{ textAlign: "left" }}>출력값</h5>
               <Box sx={{ height: 400, width: "100%" }}>
                 <DataGrid
@@ -484,53 +499,22 @@ function DetailData1(props) {
                   onPageSizeChange={(newPageSize) =>
                     console.log(`New page size: ${newPageSize}`)
                   }
-                  rowModesModel={rowModesModel}
-                  onRowModesModelChange={handleRowModesModelChange}
+                  rowModesModel={rowModesModelOutput}
+                  onRowModesModelChange={handleRowModesModelChangeOutput}
                 />
               </Box>
-
-              {/* {data && (
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>사업자 등록번호</th>
-                      <th>납세자 상태</th>
-                      <th>과세유형메세지</th>
-                      <th>폐업일</th>
-                      <th>단위과세전환폐업여부</th>
-                      <th>최근과세유형전환일자</th>
-                      <th>세금계산서적용일자</th>
-                      <th>직전과세유형메세지</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.b_no}</td>
-                        <td>{item.b_stt}</td>
-                        <td>{item.tax_type}</td>
-                        <td>{item.end_dt}</td>
-                        <td>{item.utcc_yn}</td>
-                        <td>{item.tax_type_change_dt}</td>
-                        <td>{item.invoice_apply_dt}</td>
-                        <td>{item.rbf_tax_type}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              )} */}
               <div>
-                {/* <Button
+                <Button
                   style={{
                     background: "#7BBF57",
                     color: "#ffffff",
                     margin: "30px",
                   }}
-                  onClick={() => excelDownload(data)}
+                  onClick={() => setFileModalShow(true)}
                 >
                   <FileDownloadOutlinedIcon />
                   파일 다운로드
-                </Button> */}
+                </Button>
                 <Button style={{ margin: "30px" }} onClick={apiSchedule}>
                   <AccessTimeIcon />
                   예약하기
@@ -541,11 +525,12 @@ function DetailData1(props) {
         </Container>
       </div>
 
-      <Schedule_business
+      {/* <Schedule_business
         show={modalShow}
         onHide={() => setModalShow(false)}
         apilistid={props.apilistid}
-      />
+      /> */}
+      <FileDownload dataformat={props.dataformat} show={fileModalShow} onHide={() => setFileModalShow(false)} />
     </div>
   );
 }
