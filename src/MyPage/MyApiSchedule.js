@@ -7,7 +7,8 @@ import { tokenState } from '../TokenState';
 import { isLoggedInAtom } from '../atom';
 import Container from 'react-bootstrap/Container';
 import { Button, Table, Modal } from 'react-bootstrap';
-import ScheduleModify from './ScheduleModify'
+import ScheduleModify from '../Modal/ScheduleModify'
+import MyScheduleBusiness from '../Modal/MyScheduleBusiness'
 import FormatCode from '../Format/FormatCode';
 
 function MyApiSchedule() {
@@ -16,6 +17,11 @@ function MyApiSchedule() {
   const [modalShow, setModalShow] = React.useState(false);
   const [batchlistId, setBatchlistId] = useState(null);
   const [apilistId, setApilistId] = useState(null);
+  const [apiFormat, setApiFormat] = useState(null);
+  const [frequency, setFrequency] = useState(null);
+  const [time, setTime] = useState(null);
+  const [dayofmonth, setDayofmonth] = useState(null);
+  const [dayofweek, setDayofweek] = useState(null);
   const [showDeleteCheck, setShowDeleteCheck] = useState(false);
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
@@ -31,8 +37,14 @@ function MyApiSchedule() {
   };
 
   const handleTitleClick = (item) => {
+    console.log(item)
     setBatchlistId(item.batchlistid);
     setApilistId(item.apilistid);
+    setApiFormat(item.apiformat);
+    setFrequency(item.frequency);
+    setTime(item.time);
+    setDayofmonth(item.dayofmonth);
+    setDayofweek(item.dayofweek);
     setModalShow(true);
   };
 
@@ -114,11 +126,16 @@ function MyApiSchedule() {
           </Button>
         </div>
       </Container>
-      <ScheduleModify
+      <MyScheduleBusiness
         show={modalShow}
         onHide={() => { setModalShow(false); window.location.reload(); setSelectedItems([]); }}
         batchlistId={batchlistId}
         apilistId={apilistId}
+        apiFormat={apiFormat}
+        frequency={frequency}
+        time={time}
+        dayofmonth={dayofmonth}
+        dayofweek={dayofweek}
       />
       {/* 삭제 확인 팝업 */}
       <Modal show={showDeleteCheck} onHide={() => setShowDeleteCheck(false)}>

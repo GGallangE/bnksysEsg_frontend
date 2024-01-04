@@ -8,7 +8,7 @@ import * as FileSaver from "file-saver";
 import Container from "react-bootstrap/Container";
 import FormatDate from "../Format/FormatDate";
 import { Link } from "react-router-dom";
-import Schedule_business from "../Schedule/Schedule_business";
+import ScheduleBusiness from "../Modal/ScheduleBusiness";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 // import EditToolbar from '../Component/EditToolbar';
@@ -27,6 +27,7 @@ import FileDownload from "../Modal/FileDownload";
 
 function DetailData1(props) {
   const [rows, setRows] = useState([]);
+  const [columns, setColumns] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [data, setData] = useState([]);
   const [usecaseData, setUsecaseData] = useState([]);
@@ -39,7 +40,6 @@ function DetailData1(props) {
   const [fileModalShow, setFileModalShow] = useState(false);
   const [usecaseTableData, setUsecaseTableData] = useState([]); //각 셀의 입력 값을 관리할 상태 변수
   const [tableData, setTableData] = useState([]); //각 셀의 입력 값을 관리할 상태 변수
-  const [columns, setColumns] = useState([]);
   const [formData, setFormData] = useState([]);
   const [serverData, setServerData] = useState([]);
   const [columnsOutput, setColumnsOutput] = useState([]);
@@ -47,9 +47,11 @@ function DetailData1(props) {
   const [rowModesModelOutput, setRowModesModelOutput] = useState({});
   const [serverDataOutput, setServerDataOutput] = useState([]);
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  // Parser의 인스턴스 생성
-  //const parser = new Parser();
   
+  const handleModalShow = () => {
+    // 모달이 열릴 때 실행할 작업들
+    handleAddRow();
+  };
 
   const handleProcessRowUpdateError = (error) => {
     console.log(error);
@@ -118,7 +120,7 @@ function DetailData1(props) {
       </GridToolbarContainer>
     );
   };
-
+  
   useEffect(() => {
     requiredItem();
   }, []);
@@ -174,15 +176,11 @@ function DetailData1(props) {
   const handleSendDataToServer = async () => {
     try {
       const dataToSend = rows.map(({ id, isNew, ...rest }) => rest);
-      console.log(rows);
-      console.log(dataToSend);
       const response = await axios.post("/spring/api/request", {
         apilistid: props.apilistid,
         params: dataToSend,
       });
-
       console.log(response);
-      //if (props.methodtype === "POST") {
         // 받은 데이터를 가공하여 DataGrid에 맞게 설정
         const id = randomId();
         //const formattedRows = response.data.map((item, index) => ({ id: index, ...item }));
@@ -235,40 +233,6 @@ function DetailData1(props) {
         });
 
         setRowModesModelOutput(newRowModesModel);
-    //   } else {
-        
-    //     const xmlData = response.data;
-    //     // var XMLParser = require("react-xml-parser");
-    //     // console.log(xmlData);
-    //     // debugger
-    //     // var jsonData = new XMLParser().parseFromString(xmlData);
-        
-    //     // console.log(jsonData);
-    //     // debugger
-    //     // XML을 JavaScript 객체로 파싱
-    //     // Parser 클래스의 인스턴스 생성
-    // const parser = new Parser();
-
-    // // XML을 JavaScript 객체로 파싱
-    // const jsonData = parser.parseFromString(xmlData);
-
-    // // DataGrid에 맞게 데이터 변환
-    // const transformedRows = jsonData.getElementsByTagName('item').map((item, index) => ({
-    //   id: index,
-    //   ...item.attributes, // item의 속성을 행 속성으로 사용
-    // }));
-
-    //     const transformedColumns = Object.keys(
-    //       jsonData.response.body.items.item[0]
-    //     ).map((key) => ({
-    //       field: key,
-    //       headerName: key,
-    //       width: 150,
-    //     }));
-
-    //     setRowsOutput(transformedRows);
-    //     setColumnsOutput(transformedColumns);
-    //   }
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -458,11 +422,6 @@ function DetailData1(props) {
                 <KeyboardArrowDownIcon />
                 조회하기
               </Button>
-
-              {/* <div>
-                사업자번호: <input type="text" name="content" onChange={handleContent} value={content} />
-                <Button onClick={handleButtonClick} style = {{margin:'30px 20px'}}>입력</Button>
-                </div>  */}
               {/* <div className="d-flex justify-content-center">
                   <Row className="mb-3 align-items-center">
                     <Col xs={3} >
@@ -525,12 +484,19 @@ function DetailData1(props) {
         </Container>
       </div>
 
-      {/* <Schedule_business
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        apilistid={props.apilistid}
-      /> */}
-      <FileDownload dataformat={props.dataformat} show={fileModalShow} onHide={() => setFileModalShow(false)} />
+      {/* ScheduleBusiness 모달 */}
+      {modalShow && (
+        <ScheduleBusiness
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          onShow={handleModalShow}
+          apilistid={props.apilistid}
+          columns={columns}
+          EditToolbar={EditToolbar}
+          handleAddRow={handleAddRow}
+        />
+      )}
+      <FileDownload apilistid = {props.apilistid} rows = {rows} dataformat={props.dataformat} show={fileModalShow} onHide={() => setFileModalShow(false)} />
     </div>
   );
 }

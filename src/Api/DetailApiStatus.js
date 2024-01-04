@@ -39,7 +39,7 @@ function DetailApiStatus() {
 
   const DynamicComponent = React.lazy(() =>
     import(`./DetailData1`).then((module) => ({
-      default: () => <module.default apilistid={apilistid} methodtype={searchResults.methodtype}/>,
+      default: () => <module.default apilistid={apilistid} dataformat={searchResults.dataformat}/>,
     }))
   );
   const boxStyle = {
