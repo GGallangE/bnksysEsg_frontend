@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { useRecoilValue, useRecoilState } from 'recoil';
@@ -52,11 +52,11 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('/spring/user/login',{
+      const response = await axios.post('/spring/user/login', {
         "email": email,
         "password": password
       }); // 서버로 JWT 토큰 요청
-      if(response.data.success){
+      if (response.data.success) {
         const jwtToken = response.data.data.accessToken; // 서버에서 받은 토큰
         setToken(jwtToken); // Recoil 상태에 토큰 저장
         axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
@@ -66,21 +66,21 @@ function Login() {
 
         navigate("/");
         // setRedirectUrl('');
-      }else{
+      } else {
         setError(response.data.errors[0]);
       }
-		} catch (error) {
+    } catch (error) {
       // 오류 처리
-    if (error.response) {
-      // 서버에서 오류 응답을 받았을 때
-      console.error('서버 오류:', error.response.data);
-    } else if (error.request) {
-      // 요청을 보내지 못한 경우
-      console.error('요청 오류:', error.request);
-    } else {
-      // 다른 오류
-      console.error('오류:', error.message);
-    }
+      if (error.response) {
+        // 서버에서 오류 응답을 받았을 때
+        console.error('서버 오류:', error.response.data);
+      } else if (error.request) {
+        // 요청을 보내지 못한 경우
+        console.error('요청 오류:', error.request);
+      } else {
+        // 다른 오류
+        console.error('오류:', error.message);
+      }
     };
   };
 

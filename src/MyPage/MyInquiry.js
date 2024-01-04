@@ -1,4 +1,4 @@
-import React, { useState, useEffect}  from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Container, Spinner } from 'react-bootstrap';
 import axios from 'axios'
 import FormatDate from '../Format/FormatDate'
@@ -6,13 +6,13 @@ import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
 import LoginPopup from '../User/LoginPopup';
 
-function MyInquiry(){
+function MyInquiry() {
     const [searchMyInquiry, setSearchMyInquiry] = useState([]);
     const [selectedRow, setSelectedRow] = useState(null);
     const [inquiryAnswer, setInquiryAnswer] = useState(null);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const isLoggedIn= useRecoilValue(isLoggedInAtom);
+    const isLoggedIn = useRecoilValue(isLoggedInAtom);
     axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
 
     const handleSearch = async () => {
@@ -28,27 +28,27 @@ function MyInquiry(){
 
     const handleInquiryAnswer = (item) => {
         if (item.replycount === 1) {
-          setIsLoading(true);
-          axios
-            .get('/spring/mypage/myinquiry_answer', {
-              params: {
-                inquiryid: item.inquiryid,
-              },
-            })
-            .then((response) => {
-              setInquiryAnswer(response.data.data.data[0]);
-            })
-            .catch((error) => {
-              setInquiryAnswer("등록된 답변이 없습니다.");
-            })
-            .finally(() => {
-              setIsLoading(false);
-            });
+            setIsLoading(true);
+            axios
+                .get('/spring/mypage/myinquiry_answer', {
+                    params: {
+                        inquiryid: item.inquiryid,
+                    },
+                })
+                .then((response) => {
+                    setInquiryAnswer(response.data.data.data[0]);
+                })
+                .catch((error) => {
+                    setInquiryAnswer("등록된 답변이 없습니다.");
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
         } else {
-          setInquiryAnswer("등록된 답변이 없습니다.");
+            setInquiryAnswer("등록된 답변이 없습니다.");
         }
-      };
-      
+    };
+
 
     const handleRowClick = (item) => {
         if (!isLoggedIn) {
@@ -99,49 +99,49 @@ function MyInquiry(){
                                         <td><FormatDate dateString={item.regdt} /></td>
                                         <td>{item.replycount === 0 ? "답변중" : "답변완료"}</td>
                                     </tr>
-                                    
-                                        {selectedRow === item.inquiryid && (
-                                            <tr>
-                                                {isLoading? (
+
+                                    {selectedRow === item.inquiryid && (
+                                        <tr>
+                                            {isLoading ? (
                                                 // 스피너 표시
                                                 <td colSpan="4" style={{ textAlign: 'center' }}>
-                                                <Spinner animation="border" role="status" />
+                                                    <Spinner animation="border" role="status" />
                                                 </td>)
                                                 : (
-                                                <td colSpan="4" style={{ textAlign: 'left' }}>
+                                                    <td colSpan="4" style={{ textAlign: 'left' }}>
 
-                                                    <div>
-                                                        <strong>질문 내용:</strong>
-                                                        <div style={{ marginTop: '20px' }}>{item.inquirycntn}</div>
-                                                    </div>
-                                                    <hr style={{ borderTop: '1px solid #ccc', marginBottom: '10px' }} />
-                                                    {inquiryAnswer && item.replycount === 1 && (
-                                                        <>
                                                         <div>
-                                                            <strong>답변 제목:</strong> {inquiryAnswer.inquirynm}
+                                                            <strong>질문 내용:</strong>
+                                                            <div style={{ marginTop: '20px' }}>{item.inquirycntn}</div>
                                                         </div>
-                                                        <div style={{ float: 'right' }}>
-                                                            <strong>작성일:</strong> {inquiryAnswer.regdt && <FormatDate dateString={inquiryAnswer.regdt} />}
-                                                        </div>
-                                                        <br />
-                                                        <div>
-                                                            <strong>답변 내용:</strong>
-                                                            <div style={{ marginTop: '20px' }}>{inquiryAnswer.inquirycntn}</div>
-                                                        </div>
-                                                        </>
-                                                    )}
-                                                    {inquiryAnswer && item.replycount === 0 && (
-                                                        <div>
-                                                        아직 답변 중입니다.
-                                                        </div>
-                                                    )}
-                                                {!inquiryAnswer && <p>Loading...</p>}
-                                            </td>
+                                                        <hr style={{ borderTop: '1px solid #ccc', marginBottom: '10px' }} />
+                                                        {inquiryAnswer && item.replycount === 1 && (
+                                                            <>
+                                                                <div>
+                                                                    <strong>답변 제목:</strong> {inquiryAnswer.inquirynm}
+                                                                </div>
+                                                                <div style={{ float: 'right' }}>
+                                                                    <strong>작성일:</strong> {inquiryAnswer.regdt && <FormatDate dateString={inquiryAnswer.regdt} />}
+                                                                </div>
+                                                                <br />
+                                                                <div>
+                                                                    <strong>답변 내용:</strong>
+                                                                    <div style={{ marginTop: '20px' }}>{inquiryAnswer.inquirycntn}</div>
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                        {inquiryAnswer && item.replycount === 0 && (
+                                                            <div>
+                                                                아직 답변 중입니다.
+                                                            </div>
+                                                        )}
+                                                        {!inquiryAnswer && <p>Loading...</p>}
+                                                    </td>
+                                                )}
+                                        </tr>
                                     )}
-                                            </tr>
-                                        )}
-                                    
-                                    
+
+
 
                                 </React.Fragment>
                             ))}
