@@ -47,7 +47,7 @@ function DetailData1(props) {
   const [rowModesModelOutput, setRowModesModelOutput] = useState({});
   const [serverDataOutput, setServerDataOutput] = useState([]);
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  
+
   const handleModalShow = () => {
     // 모달이 열릴 때 실행할 작업들
     handleAddRow();
@@ -120,7 +120,7 @@ function DetailData1(props) {
       </GridToolbarContainer>
     );
   };
-  
+
   useEffect(() => {
     requiredItem();
   }, []);
@@ -181,58 +181,68 @@ function DetailData1(props) {
         params: dataToSend,
       });
       console.log(response);
-        // 받은 데이터를 가공하여 DataGrid에 맞게 설정
-        const id = randomId();
-        //const formattedRows = response.data.map((item, index) => ({ id: index, ...item }));
+      // 받은 데이터를 가공하여 DataGrid에 맞게 설정
+      const id = randomId();
+      //const formattedRows = response.data.map((item, index) => ({ id: index, ...item }));
+      debugger;
+      const flattenObject = (obj, parentKey = "") => {
+        return Object.keys(obj).reduce((acc, key) => {
+          const newKey = parentKey ? `${parentKey}.${key}` : key;
 
-        const flattenObject = (obj, parentKey = "") => {
-          return Object.keys(obj).reduce((acc, key) => {
-            const newKey = parentKey ? `${parentKey}.${key}` : key;
+          if (typeof obj[key] === "object" && obj[key] !== null) {
+            Object.assign(acc, flattenObject(obj[key], newKey));
+          } else {
+            acc[newKey] = obj[key];
+          }
 
-            if (typeof obj[key] === "object" && obj[key] !== null) {
-              Object.assign(acc, flattenObject(obj[key], newKey));
-            } else {
-              acc[newKey] = obj[key];
-            }
+          return acc;
+        }, {});
+      };
+      debugger;
+      //출력 DataGrid row설정
+      // const formattedRows = response.data.map((outerItem, outerIndex) => {
+      //   debugger;
+      //   const innerData = flattenObject(outerItem.data[0]);
+      //   debugger;
+      //   return {
+      //     id: outerIndex,
+      //     ...innerData,
+      //   };
+      // });
 
-            return acc;
-          }, {});
+      const responseData = response.data.data;
+      debugger
+      const formattedRows = responseData.map((item, index) => ({
+        id: index,
+        ...item,
+      }));
+
+      debugger
+      //출력 DataGrid colum설정
+      const formattedColumns = Object.keys(response.data.data[0]).map(
+        (key) => ({
+          field: key,
+          headerName: key,
+          width: 150,
+          editable: false,
+        })
+      );
+
+      // DataGrid에 적용
+      debugger;
+      setRowsOutput(formattedRows);
+      setColumnsOutput(formattedColumns);
+
+      // 각 행의 수정 모드를 설정
+      const newRowModesModel = {};
+      formattedRows.forEach((row) => {
+        newRowModesModel[row.id] = {
+          mode: "edit",
+          fieldToFocus: formattedColumns[0]?.field || "",
         };
+      });
 
-        //출력 DataGrid row설정
-        const formattedRows = response.data.map((outerItem, outerIndex) => {
-          const innerData = flattenObject(outerItem.data[0]);
-
-          return {
-            id: outerIndex,
-            ...innerData,
-          };
-        });
-
-        //출력 DataGrid colum설정
-        const formattedColumns = Object.keys(response.data[0].data[0]).map(
-          (key) => ({
-            field: key,
-            headerName: key,
-            width: 150,
-            editable: false,
-          })
-        );
-
-        // DataGrid에 적용
-        setRowsOutput(formattedRows);
-        setColumnsOutput(formattedColumns);
-
-        // 각 행의 수정 모드를 설정
-        const newRowModesModel = {};
-        formattedRows.forEach((row) => {
-          newRowModesModel[row.id] = {
-            mode: "edit",
-            fieldToFocus: formattedColumns[0]?.field || "",
-          };
-        });
-
-        setRowModesModelOutput(newRowModesModel);
+      setRowModesModelOutput(newRowModesModel);
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -496,7 +506,13 @@ function DetailData1(props) {
           handleAddRow={handleAddRow}
         />
       )}
-      <FileDownload apilistid = {props.apilistid} rows = {rows} dataformat={props.dataformat} show={fileModalShow} onHide={() => setFileModalShow(false)} />
+      <FileDownload
+        apilistid={props.apilistid}
+        rows={rows}
+        dataformat={props.dataformat}
+        show={fileModalShow}
+        onHide={() => setFileModalShow(false)}
+      />
     </div>
   );
 }

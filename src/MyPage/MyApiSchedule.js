@@ -16,7 +16,7 @@ function MyApiSchedule() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [modalShow, setModalShow] = React.useState(false);
   const [batchlistId, setBatchlistId] = useState(null);
-  const [apilistId, setApilistId] = useState(null);
+  const [apilistid, setApilistid] = useState(null);
   const [apiFormat, setApiFormat] = useState(null);
   const [frequency, setFrequency] = useState(null);
   const [time, setTime] = useState(null);
@@ -39,7 +39,7 @@ function MyApiSchedule() {
   const handleTitleClick = (item) => {
     console.log(item)
     setBatchlistId(item.batchlistid);
-    setApilistId(item.apilistid);
+    setApilistid(item.apilistid);
     setApiFormat(item.apiformat);
     setFrequency(item.frequency);
     setTime(item.time);
@@ -130,7 +130,7 @@ function MyApiSchedule() {
         show={modalShow}
         onHide={() => { setModalShow(false); window.location.reload(); setSelectedItems([]); }}
         batchlistId={batchlistId}
-        apilistId={apilistId}
+        apilistid={apilistid}
         apiFormat={apiFormat}
         frequency={frequency}
         time={time}

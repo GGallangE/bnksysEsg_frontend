@@ -1,14 +1,14 @@
-import axios from 'axios';
-import React, { useEffect, useState, useRef } from 'react';
-import { Container, Row, Col, Table } from 'react-bootstrap';
-import FormatDate from '../Format/FormatDate'
-import { Form, Modal, Button } from 'react-bootstrap';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import axios from "axios";
+import React, { useEffect, useState, useRef } from "react";
+import { Container, Row, Col, Table } from "react-bootstrap";
+import FormatDate from "../Format/FormatDate";
+import { Form, Modal, Button } from "react-bootstrap";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
 import * as XLSX from "xlsx";
-import { isLoggedInAtom } from '../atom'
-import { useRecoilValue } from 'recoil';
-import FormatCode from '../Format/FormatCode';
+import { isLoggedInAtom } from "../atom";
+import { useRecoilValue } from "recoil";
+import FormatCode from "../Format/FormatCode";
 import { GridRowModes, GridToolbarContainer } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
 import AddIcon from "@mui/icons-material/Add";
@@ -17,60 +17,100 @@ import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 
 function MyScheduleBusiness(props) {
+  const [rsvData, setRsvData] = useState([]);
   const [serverData, setServerData] = useState([]);
   const [dataToSend, setDataToSend] = useState([]);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [selectedTime, setSelectedTime] = useState('');
-  const [selectedHour, setSelectedHour] = useState('');
-  const [selectedMinute, setSelectedMinute] = useState('');
-  const [selectedDay, setSelectedDay] = useState('');
-  const [selectedFrequency, setSelectedFrequency] = useState('');
+  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedHour, setSelectedHour] = useState("");
+  const [selectedMinute, setSelectedMinute] = useState("");
+  const [selectedDay, setSelectedDay] = useState("");
+  const [selectedFrequency, setSelectedFrequency] = useState("");
   const [secondOptions, setSecondOptions] = useState([]);
-  const [content, setContent] = useState('');
-  const [fileOption, setFileOption] = useState('');
+  const [content, setContent] = useState("");
+  const [fileOption, setFileOption] = useState("");
   const [excelArray, setExcelArray] = useState([]);
   const hours = Array.from({ length: 24 }, (_, index) => index); // 0부터 23까지의 숫자 배열 생성
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   const isMounted = useRef(false);
-  axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${isLoggedIn}`;
+
+  const handleRsvData = async () => {
+    try {
+      debugger;
+      const response = await axios.get("/spring/mypage/myapischedule", {
+        params: {
+          batchlistid: props.batchlistId,
+        },
+      });
+      setRsvData(response.data.data.data[0].batchDetailargsDto);
+
+      debugger;
+      console.log("rsv", response.data.data.data[0].batchDetailargsDto);
+    } catch (error) {
+      console.error("Error searching: ", error);
+    }
+  };
+
+  //   useEffect(() => {
+  //     console.log('selectedFrequency:', selectedFrequency);
+  //     console.log('selectedDay:', selectedDay);
+  //   }, [selectedFrequency, selectedDay]);
+
+  //   useEffect(() => {
+  //     requiredItem();
+  //     debugger
+  //   }, []);
 
   useEffect(() => {
-    console.log('selectedFrequency:', selectedFrequency);
-    console.log('selectedDay:', selectedDay);
-  }, [selectedFrequency, selectedDay]);
-
-  useEffect(() => {
-    requiredItem();
-  }, []);
-
-  useEffect(() => {
-    debugger
+    debugger;
+    handleRsvData();
     setSelectedFrequency(props.frequency);
-    setSelectedDay(props.frequency === 'monthly' ? props.dayofmonth : props.frequency === 'weekly' ? props.dayofweek : '');
+    setSelectedDay(
+      props.frequency === "monthly"
+        ? props.dayofmonth
+        : props.frequency === "weekly"
+        ? props.dayofweek
+        : ""
+    );
     setFileOption(props.apiFormat);
     if (props.time) {
-        setSelectedHour(props.time.substring(0, 2));
-        setSelectedMinute(props.time.substring(props.time.length - 2));
-      }
+      setSelectedHour(props.time.substring(0, 2));
+      setSelectedMinute(props.time.substring(props.time.length - 2));
+    }
     requiredItem();
   }, [props.show]);
 
   //입력값 grid에 필수 값 컬럼 설정
   useEffect(() => {
-    if (serverData.length > 0) {
+    if (serverData && serverData.length > 0 && rsvData && rsvData.length > 0) {
       const columnKeys = serverData.map((item) => ({
         field: item.rqrdrqstnm,
         headerName: item.rqrditemnm,
         width: 150,
         editable: true,
       }));
+
+      // rsv 데이터에서 row만 추출하여 가공
+      const gridRows = rsvData.map((rowData, index) => {
+        const gridRow = { id: index }; // 각 row의 고유한 id 설정
+        Object.keys(rowData).forEach((key) => {
+          gridRow[key] = rowData[key]; // 기존의 key와 value 그대로 복사
+        });
+        return gridRow;
+      });
+
+      // 기존 컬럼 정보와 rsv 데이터로 가공한 row 정보를 합쳐서 최종적인 rows 설정
+      const finalRows = [...gridRows];
+debugger
+      setRows(finalRows);
       setColumns(columnKeys);
       handleAddRow();
     }
-  }, [serverData]);
+  }, [serverData, rsvData]);
 
   //입력값 grid 새로운 행 추가
   const handleAddRow = () => {
@@ -99,7 +139,7 @@ function MyScheduleBusiness(props) {
         },
       });
       setServerData(response.data);
-      console.log(response.data);
+      console.log("serverdata", response.data);
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -172,10 +212,12 @@ function MyScheduleBusiness(props) {
     const selectedFrequency = e.target.value;
     setSelectedFrequency(selectedFrequency);
 
-    if (selectedFrequency === 'monthly') {
-      setSecondOptions(Array.from({ length: 31 }, (_, index) => `${index + 1}`));
-    } else if (selectedFrequency === 'weekly') {
-      setSecondOptions(['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']);
+    if (selectedFrequency === "monthly") {
+      setSecondOptions(
+        Array.from({ length: 31 }, (_, index) => `${index + 1}`)
+      );
+    } else if (selectedFrequency === "weekly") {
+      setSecondOptions(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]);
     } else {
       setSecondOptions([]);
     }
@@ -190,16 +232,18 @@ function MyScheduleBusiness(props) {
     //시간 형식에 맞을 때만 실행
     if (parseInt(selectedHour, 10) < 23 && parseInt(selectedMinute, 10) < 59) {
       setSelectedTime(selectedHour + ":" + selectedMinute);
-      setDataToSend(rows.map(({ id, isNew, ...rest }) => {
-        const mappedObject = {};
-      
-        // rest 객체의 값들을 순서대로 'arg1', 'arg2', ...로 매핑
-        Object.values(rest).forEach((value, index) => {
-          mappedObject[`arg${index + 1}`] = value;
-        });
-      
-        return mappedObject;
-      }));
+      setDataToSend(
+        rows.map(({ id, isNew, ...rest }) => {
+          const mappedObject = {};
+
+          // rest 객체의 값들을 순서대로 'arg1', 'arg2', ...로 매핑
+          Object.values(rest).forEach((value, index) => {
+            mappedObject[`arg${index + 1}`] = value;
+          });
+
+          return mappedObject;
+        })
+      );
     } else {
       alert("올바른 시간을 입력하세요");
     }
@@ -210,49 +254,48 @@ function MyScheduleBusiness(props) {
       //console.log(dataToSend);
       const handleSchedule = async () => {
         try {
-          if (selectedFrequency === 'monthly') {
-            const response = await axios.post('/spring/reservation/schedule', {
+          if (selectedFrequency === "monthly") {
+            const response = await axios.post("/spring/reservation/schedule", {
               apilistid: props.apilistid,
               frequency: selectedFrequency,
               time: selectedTime,
               dayofmonth: selectedDay,
-              apiformat : fileOption,
-              batchDetailargsDto: dataToSend
-            }
-            );
+              apiformat: fileOption,
+              batchDetailargsDto: dataToSend,
+            });
             const freKorean = getFreKorean(selectedFrequency);
-            alert(`${freKorean} ${selectedDay}일 ${selectedTime}에 예약이 완료되었습니다.`);
-          } else if (selectedFrequency === 'weekly') {
-            const response = await axios.post('/spring/reservation/schedule', {
+            alert(
+              `${freKorean} ${selectedDay}일 ${selectedTime}에 예약이 완료되었습니다.`
+            );
+          } else if (selectedFrequency === "weekly") {
+            const response = await axios.post("/spring/reservation/schedule", {
               apilistid: props.apilistid,
               frequency: selectedFrequency,
               time: selectedTime,
               dayofweek: selectedDay,
-              apiformat : fileOption,
-              batchDetailargsDto: dataToSend
-            }
-            );
+              apiformat: fileOption,
+              batchDetailargsDto: dataToSend,
+            });
             const freKorean = getFreKorean(selectedFrequency);
             //const dayKorean = FormatCode({ code: "day", value: selectedDay });
             //const dayKorean = getDayKorean(selectedDay);
 
             alert(`${freKorean} 요일 ${selectedTime}에 예약이 완료되었습니다.`);
           } else {
-            const response = await axios.post('/spring/reservation/schedule', {
+            const response = await axios.post("/spring/reservation/schedule", {
               apilistid: props.apilistid,
               frequency: selectedFrequency,
               time: selectedTime,
-              apiformat : fileOption,
-              batchDetailargsDto: dataToSend
-            }
-            );
+              apiformat: fileOption,
+              batchDetailargsDto: dataToSend,
+            });
             const freKorean = getFreKorean(selectedFrequency);
             alert(`${freKorean} ${selectedTime}에 예약이 완료되었습니다.`);
           }
           setExcelArray([]);
-          setContent('');
-          setSelectedHour('');
-          setSelectedMinute('');
+          setContent("");
+          setSelectedHour("");
+          setSelectedMinute("");
 
           props.onHide();
         } catch (error) {
@@ -264,7 +307,7 @@ function MyScheduleBusiness(props) {
     } else {
       isMounted.current = true;
     }
-  }, [dataToSend])
+  }, [dataToSend]);
 
   const handleContent = (e) => {
     setContent(e.target.value);
@@ -276,11 +319,13 @@ function MyScheduleBusiness(props) {
     const reader = new FileReader();
     reader.onload = async (e) => {
       const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
+      const workbook = XLSX.read(data, { type: "array" });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
       // 엑셀에서 데이터 추출
-      const array = XLSX.utils.sheet_to_json(sheet).map(row => row['사업자 등록번호']); // '사업자 등록번호' 컬럼의 데이터만을 선택
+      const array = XLSX.utils
+        .sheet_to_json(sheet)
+        .map((row) => row["사업자 등록번호"]); // '사업자 등록번호' 컬럼의 데이터만을 선택
       setExcelArray(array);
       console.log(array);
     };
@@ -299,54 +344,58 @@ function MyScheduleBusiness(props) {
   const handleHourBlur = (e) => {
     const inputValue = e.target.value;
     // 한 자리일 때만 0을 붙여 두 자리로 만들기
-    setSelectedHour((prevValue) => (inputValue.length === 1 ? `0${inputValue}` : inputValue));
+    setSelectedHour((prevValue) =>
+      inputValue.length === 1 ? `0${inputValue}` : inputValue
+    );
   };
 
   const handleMinuteBlur = (e) => {
     const inputValue = e.target.value;
     // 한 자리일 때만 0을 붙여 두 자리로 만들기
-    setSelectedMinute((prevValue) => (inputValue.length === 1 ? `0${inputValue}` : inputValue));
+    setSelectedMinute((prevValue) =>
+      inputValue.length === 1 ? `0${inputValue}` : inputValue
+    );
   };
 
   const handleClose = () => {
     setExcelArray([]);
-    setContent('');
-    setSelectedHour('');
-    setSelectedMinute('');
+    setContent("");
+    setSelectedHour("");
+    setSelectedMinute("");
     props.onHide();
   };
 
   const getFreKorean = (frequency) => {
     switch (frequency) {
-      case 'monthly':
-        return '매달';
-      case 'weekly':
-        return '매주';
-      case 'daily':
-        return '매일';
+      case "monthly":
+        return "매달";
+      case "weekly":
+        return "매주";
+      case "daily":
+        return "매일";
       default:
-        return '';
+        return "";
     }
   };
 
   const getDayKorean = (day) => {
     switch (day) {
-      case 'MON':
-        return '월';
-      case 'TUE':
-        return '화';
-      case 'WED':
-        return '수';
-      case 'THU':
-        return '목';
-      case 'FRI':
-        return '금';
-      case 'SAT':
-        return '토';
-      case 'SUN':
-        return '일';
+      case "MON":
+        return "월";
+      case "TUE":
+        return "화";
+      case "WED":
+        return "수";
+      case "THU":
+        return "목";
+      case "FRI":
+        return "금";
+      case "SAT":
+        return "토";
+      case "SUN":
+        return "일";
       default:
-        return '';
+        return "";
     }
   };
 
@@ -359,18 +408,23 @@ function MyScheduleBusiness(props) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            예약하기
-          </Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">예약하기</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
             <Row className="mb-3">
-              <Col xs={2} className="d-flex align-items-center" style={{ width: '104px' }}>
+              <Col
+                xs={2}
+                className="d-flex align-items-center"
+                style={{ width: "104px" }}
+              >
                 예약일시:
               </Col>
               <Col xs={3}>
-                <Form.Select value={selectedFrequency} onChange={handleOptionChange}>
+                <Form.Select
+                  value={selectedFrequency}
+                  onChange={handleOptionChange}
+                >
                   <option value="">선택하세요</option>
                   <option value="monthly">매달</option>
                   <option value="weekly">매주</option>
@@ -378,23 +432,33 @@ function MyScheduleBusiness(props) {
                 </Form.Select>
               </Col>
               <Col xs={3}>
-                <Form.Select value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)} disabled={selectedFrequency === 'daily'} >
+                <Form.Select
+                  value={selectedDay}
+                  onChange={(e) => setSelectedDay(e.target.value)}
+                  disabled={selectedFrequency === "daily"}
+                >
                   <option value="">선택하세요</option>
                   {secondOptions.map((option, index) => (
                     <option key={index} value={option}>
-                      {selectedFrequency === 'monthly' ? option + '일' : selectedFrequency === 'weekly' ? <FormatCode code="day" value={option} /> : option}
+                      {selectedFrequency === "monthly" ? (
+                        option + "일"
+                      ) : selectedFrequency === "weekly" ? (
+                        <FormatCode code="day" value={option} />
+                      ) : (
+                        option
+                      )}
                     </option>
                   ))}
                 </Form.Select>
               </Col>
               <Col xs={3} className="d-flex align-items-center">
                 <Form.Control
-                  style={{ margin: '0px 10px' }}
+                  style={{ margin: "0px 10px" }}
                   type="text"
                   placeholder="00"
                   value={selectedHour}
                   onChange={handleHourChange}
-                  onBlur={handleHourBlur}  // onBlur 이벤트 추가
+                  onBlur={handleHourBlur} // onBlur 이벤트 추가
                   onKeyDown={(e) => {
                     // 숫자, Backspace 이외의 키 입력 방지 및 두 자리까지만 입력 허용
                     if (
@@ -408,14 +472,15 @@ function MyScheduleBusiness(props) {
                       e.preventDefault();
                     }
                   }}
-                />:
+                />
+                :
                 <Form.Control
-                  style={{ margin: '0px 10px' }}
+                  style={{ margin: "0px 10px" }}
                   type="text"
                   placeholder="00"
                   value={selectedMinute}
                   onChange={handleMinuteChange}
-                  onBlur={handleMinuteBlur}  // onBlur 이벤트 추가
+                  onBlur={handleMinuteBlur} // onBlur 이벤트 추가
                   onKeyDown={(e) => {
                     // 숫자, Backspace 이외의 키 입력 방지 및 두 자리까지만 입력 허용
                     if (
@@ -433,11 +498,18 @@ function MyScheduleBusiness(props) {
               </Col>
             </Row>
             <Row className="mb-3">
-              <Col xs={2} className="d-flex align-items-center" style={{ width: '104px' }}>
+              <Col
+                xs={2}
+                className="d-flex align-items-center"
+                style={{ width: "104px" }}
+              >
                 파일형식:
               </Col>
               <Col xs={3}>
-                <Form.Select value={fileOption} onChange={handlefileOptionChange}>
+                <Form.Select
+                  value={fileOption}
+                  onChange={handlefileOptionChange}
+                >
                   <option value="">선택하세요</option>
                   <option value="excel">EXCEL</option>
                   <option value="txt">TXT</option>
@@ -447,43 +519,40 @@ function MyScheduleBusiness(props) {
               </Col>
             </Row>
             <h5 style={{ textAlign: "left" }}>입력값</h5>
-              <Box sx={{ height: 400, width: "100%" }}>
-                <DataGrid
-                  initialState={{
-                    pagination: {
-                      paginationModel: {
-                        pageSize: 5,
-                      },
+            <Box sx={{ height: 400, width: "100%" }}>
+              <DataGrid
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 5,
                     },
-                  }}
-                  rows={rows}
-                  columns={columns}
-                  pageSizeOptions={[5]}
-                  checkboxSelection
-                  onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
-                  }}
-                  rowSelectionModel={rowSelectionModel}
-                  disableRowSelectionOnClick
-                  onPageSizeChange={(newPageSize) =>
-                    console.log(`New page size: ${newPageSize}`)
-                  }
-                  editMode="row"
-                  rowModesModel={rowModesModel}
-                  onRowModesModelChange={handleRowModesModelChange}
-                  processRowUpdate={(updatedRow) =>
-                    processRowUpdate(updatedRow)
-                  }
-                  onProcessRowUpdateError={handleProcessRowUpdateError}
-                  slots={{
-                    toolbar: EditToolbar,
-                  }}
-                  slotProps={{
-                    toolbar: { setRows, setRowModesModel },
-                  }}
-                />
-              </Box>
-            
+                  },
+                }}
+                rows={rows}
+                columns={columns}
+                pageSizeOptions={[5]}
+                checkboxSelection
+                onRowSelectionModelChange={(newRowSelectionModel) => {
+                  setRowSelectionModel(newRowSelectionModel);
+                }}
+                rowSelectionModel={rowSelectionModel}
+                disableRowSelectionOnClick
+                onPageSizeChange={(newPageSize) =>
+                  console.log(`New page size: ${newPageSize}`)
+                }
+                editMode="row"
+                rowModesModel={rowModesModel}
+                onRowModesModelChange={handleRowModesModelChange}
+                processRowUpdate={(updatedRow) => processRowUpdate(updatedRow)}
+                onProcessRowUpdateError={handleProcessRowUpdateError}
+                slots={{
+                  toolbar: EditToolbar,
+                }}
+                slotProps={{
+                  toolbar: { setRows, setRowModesModel },
+                }}
+              />
+            </Box>
           </Container>
         </Modal.Body>
         <Modal.Footer>
