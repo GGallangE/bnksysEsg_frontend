@@ -5,6 +5,7 @@ import './DetailApiStatus.css';
 import FormatDate from '../Format/FormatDate';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import datagokrImg from '../images/datagokr.png';
 
 function DetailApiStatus() {
   const { apilistid } = useParams();
@@ -41,6 +42,7 @@ function DetailApiStatus() {
     import(`./DetailData1`).then((module) => ({
       default: () => <module.default apilistid={apilistid} dataformat={searchResults.dataformat}/>,
     }))
+    
   );
   const boxStyle = {
     border: '2px solid #000',
@@ -60,6 +62,7 @@ function DetailApiStatus() {
                 <div class="box-base">
                   <div class="main-content-renewal01">
                     <textarea id="clip_target" style={{ position: 'absolute', top: '-9999em' }} title="URL복사" tabindex="-1"></textarea>
+                    <img style={{marginTop:'70px'}} src={datagokrImg} alt="공공데이터포털"/>
                     {/* <h1>img</h1> */}
                     {/* <h1 class="side-detail-head"><b>보건</b></h1> */}
                     <strong class="main-content-ctg">
@@ -71,6 +74,7 @@ function DetailApiStatus() {
                     </h1>
                     <div class="main-content-txt">
                       <p>{searchResults.apiexpl}</p>
+                      <p>키워드: {searchResults.apikeyword}</p>
                       <p style={{ fontSize: '13px' }}>등록날짜: <FormatDate dateString={searchResults.apirgdt} /></p>
                       <div style={{ display: 'flex', gap: '10px' }}>
                         <p><VisibilityOutlinedIcon /> {searchResults.apiview}</p>

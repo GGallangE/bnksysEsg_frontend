@@ -48,6 +48,14 @@ function DetailData1(props) {
   const [serverDataOutput, setServerDataOutput] = useState([]);
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
+
+  // const handleEditCellChange = (params) => {
+  //   debugger
+  //   const { id, field, props, value } = params;
+  //   // processRowUpdate 함수가 행 id, 필드 및 새 값이 필요한 경우를 가정합니다.
+  //   processRowUpdate({ id, field, value });
+  // };
+
   const handleModalShow = () => {
     // 모달이 열릴 때 실행할 작업들
     handleAddRow();
@@ -176,6 +184,7 @@ function DetailData1(props) {
   const handleSendDataToServer = async () => {
     try {
       const dataToSend = rows.map(({ id, isNew, ...rest }) => rest);
+      console.log(dataToSend);
       const response = await axios.post("/spring/api/request", {
         apilistid: props.apilistid,
         params: dataToSend,
@@ -183,41 +192,13 @@ function DetailData1(props) {
       console.log(response);
       // 받은 데이터를 가공하여 DataGrid에 맞게 설정
       const id = randomId();
-      //const formattedRows = response.data.map((item, index) => ({ id: index, ...item }));
-      debugger;
-      const flattenObject = (obj, parentKey = "") => {
-        return Object.keys(obj).reduce((acc, key) => {
-          const newKey = parentKey ? `${parentKey}.${key}` : key;
-
-          if (typeof obj[key] === "object" && obj[key] !== null) {
-            Object.assign(acc, flattenObject(obj[key], newKey));
-          } else {
-            acc[newKey] = obj[key];
-          }
-
-          return acc;
-        }, {});
-      };
-      debugger;
-      //출력 DataGrid row설정
-      // const formattedRows = response.data.map((outerItem, outerIndex) => {
-      //   debugger;
-      //   const innerData = flattenObject(outerItem.data[0]);
-      //   debugger;
-      //   return {
-      //     id: outerIndex,
-      //     ...innerData,
-      //   };
-      // });
 
       const responseData = response.data.data;
-      debugger
       const formattedRows = responseData.map((item, index) => ({
         id: index,
         ...item,
       }));
 
-      debugger
       //출력 DataGrid colum설정
       const formattedColumns = Object.keys(response.data.data[0]).map(
         (key) => ({
@@ -229,7 +210,6 @@ function DetailData1(props) {
       );
 
       // DataGrid에 적용
-      debugger;
       setRowsOutput(formattedRows);
       setColumnsOutput(formattedColumns);
 
@@ -243,6 +223,15 @@ function DetailData1(props) {
       });
 
       setRowModesModelOutput(newRowModesModel);
+    } catch (error) {
+      console.error("Error searching: ", error);
+    }
+
+    try {
+      const response = await axios.post("/spring/userapi/useapi", {
+        apilistid: props.apilistid,
+      });
+      console.log('사용',response);
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -412,6 +401,7 @@ function DetailData1(props) {
                   processRowUpdate={(updatedRow) =>
                     processRowUpdate(updatedRow)
                   }
+                  
                   onProcessRowUpdateError={handleProcessRowUpdateError}
                   slots={{
                     toolbar: EditToolbar,
@@ -494,7 +484,7 @@ function DetailData1(props) {
         </Container>
       </div>
 
-      {/* ScheduleBusiness 모달 */}
+      {/* 예약 모달 */}
       {modalShow && (
         <ScheduleBusiness
           show={modalShow}
@@ -504,8 +494,10 @@ function DetailData1(props) {
           columns={columns}
           EditToolbar={EditToolbar}
           handleAddRow={handleAddRow}
+          dataformat={props.dataformat}
         />
       )}
+      {/* 파일 다운로드 모달 */}
       <FileDownload
         apilistid={props.apilistid}
         rows={rows}

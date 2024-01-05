@@ -17,6 +17,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 
 function MyScheduleBusiness(props) {
+  const [finalDeleteRows, setFinalDeleteRows] = useState([]);
+  const [batchlistId, setBatchlistId] = useState("");
   const [rsvData, setRsvData] = useState([]);
   const [serverData, setServerData] = useState([]);
   const [dataToSend, setDataToSend] = useState([]);
@@ -40,33 +42,20 @@ function MyScheduleBusiness(props) {
 
   const handleRsvData = async () => {
     try {
-      debugger;
       const response = await axios.get("/spring/mypage/myapischedule", {
         params: {
           batchlistid: props.batchlistId,
         },
       });
       setRsvData(response.data.data.data[0].batchDetailargsDto);
-
-      debugger;
       console.log("rsv", response.data.data.data[0].batchDetailargsDto);
     } catch (error) {
       console.error("Error searching: ", error);
     }
   };
 
-  //   useEffect(() => {
-  //     console.log('selectedFrequency:', selectedFrequency);
-  //     console.log('selectedDay:', selectedDay);
-  //   }, [selectedFrequency, selectedDay]);
-
-  //   useEffect(() => {
-  //     requiredItem();
-  //     debugger
-  //   }, []);
-
   useEffect(() => {
-    debugger;
+    //setBatchlistId(props.batchlistId);
     handleRsvData();
     setSelectedFrequency(props.frequency);
     setSelectedDay(
@@ -82,13 +71,18 @@ function MyScheduleBusiness(props) {
       setSelectedMinute(props.time.substring(props.time.length - 2));
     }
     requiredItem();
+    handleOptionChange(props.frequency);
   }, [props.show]);
+
+  // useEffect(()=>{
+  //   debugger
+  // },[selectedDay])
 
   //입력값 grid에 필수 값 컬럼 설정
   useEffect(() => {
     if (serverData && serverData.length > 0 && rsvData && rsvData.length > 0) {
-      const columnKeys = serverData.map((item) => ({
-        field: item.rqrdrqstnm,
+      const columnKeys = serverData.map((item, index) => ({
+        field: `arg${index + 1}`,
         headerName: item.rqrditemnm,
         width: 150,
         editable: true,
@@ -105,10 +99,10 @@ function MyScheduleBusiness(props) {
 
       // 기존 컬럼 정보와 rsv 데이터로 가공한 row 정보를 합쳐서 최종적인 rows 설정
       const finalRows = [...gridRows];
-debugger
       setRows(finalRows);
+      //setFinalDeleteRowsDelete(finalRows);
       setColumns(columnKeys);
-      handleAddRow();
+      //handleAddRow();
     }
   }, [serverData, rsvData]);
 
@@ -160,12 +154,17 @@ debugger
 
     const handleClick = () => {
       const id = randomId();
-      const newEmptyRow = { id, isNew: true };
+      const newEmptyRow = {
+        id,
+        isNew: true,
+        batchDetailListId: null,
+        batchListId: rows[0].batchListId,
+        stcd: "01",
+      };
 
-      // Set default values for each column
-      columns.forEach((column) => {
-        newEmptyRow[column.field] = "";
-      });
+      for (let i = 1; i <= 10; i++) {
+        newEmptyRow[`arg${i}`] = null;
+      }
 
       setRows((oldRows) => [...oldRows, newEmptyRow]);
 
@@ -179,8 +178,21 @@ debugger
     };
 
     const handleDeleteClick = (ids) => () => {
-      setRows(rows.filter((row) => !ids.includes(row.id)));
-      // setRows(rows.filter((row) => row.id !== id));
+
+      // 새로운 rows 배열 생성
+      const newRows = rows.map((row) => {
+        // 만약 ids 배열에 현재 row의 id가 포함되어 있다면
+        if (ids.includes(row.id)) {
+          // 현재 row의 stcd를 99로 변경하여 반환
+          return { ...row, stcd: 99 };
+        } else {
+          // ids 배열에 포함되지 않은 경우 그대로 반환
+          return row;
+        }
+      });
+
+      // 변경된 rows 배열을 설정
+      setRows(newRows);
     };
 
     return (
@@ -208,15 +220,13 @@ debugger
   };
 
   //주기 선택
-  const handleOptionChange = (e) => {
-    const selectedFrequency = e.target.value;
-    setSelectedFrequency(selectedFrequency);
-
-    if (selectedFrequency === "monthly") {
+  const handleOptionChange = (value) => {
+    setSelectedFrequency(value);
+    if (value === "monthly") {
       setSecondOptions(
         Array.from({ length: 31 }, (_, index) => `${index + 1}`)
       );
-    } else if (selectedFrequency === "weekly") {
+    } else if (value === "weekly") {
       setSecondOptions(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]);
     } else {
       setSecondOptions([]);
@@ -228,22 +238,11 @@ debugger
     setFileOption(e.target.value);
   };
 
-  const clickRsv = () => {
+  const clickModify = () => {
     //시간 형식에 맞을 때만 실행
     if (parseInt(selectedHour, 10) < 23 && parseInt(selectedMinute, 10) < 59) {
       setSelectedTime(selectedHour + ":" + selectedMinute);
-      setDataToSend(
-        rows.map(({ id, isNew, ...rest }) => {
-          const mappedObject = {};
-
-          // rest 객체의 값들을 순서대로 'arg1', 'arg2', ...로 매핑
-          Object.values(rest).forEach((value, index) => {
-            mappedObject[`arg${index + 1}`] = value;
-          });
-
-          return mappedObject;
-        })
-      );
+      setDataToSend(rows.map(({ id, isNew, ...rest }) => rest));
     } else {
       alert("올바른 시간을 입력하세요");
     }
@@ -255,42 +254,56 @@ debugger
       const handleSchedule = async () => {
         try {
           if (selectedFrequency === "monthly") {
-            const response = await axios.post("/spring/reservation/schedule", {
-              apilistid: props.apilistid,
-              frequency: selectedFrequency,
-              time: selectedTime,
-              dayofmonth: selectedDay,
-              apiformat: fileOption,
-              batchDetailargsDto: dataToSend,
-            });
+            const response = await axios.post(
+              "/spring/mypage/myapischedule/update",
+              {
+                apilistid: props.apilistid,
+                batchlistid: props.batchlistId,
+                frequency: selectedFrequency,
+                time: selectedTime,
+                dayofmonth: selectedDay,
+                apiformat: fileOption,
+                batchDetailargsDto: dataToSend,
+              }
+            );
             const freKorean = getFreKorean(selectedFrequency);
             alert(
-              `${freKorean} ${selectedDay}일 ${selectedTime}에 예약이 완료되었습니다.`
+              `${freKorean} ${selectedDay}일 ${selectedTime}으로 수정이 완료되었습니다.`
             );
           } else if (selectedFrequency === "weekly") {
-            const response = await axios.post("/spring/reservation/schedule", {
-              apilistid: props.apilistid,
-              frequency: selectedFrequency,
-              time: selectedTime,
-              dayofweek: selectedDay,
-              apiformat: fileOption,
-              batchDetailargsDto: dataToSend,
-            });
+            const response = await axios.post(
+              "/spring/mypage/myapischedule/update",
+              {
+                apilistid: props.apilistid,
+                batchlistid: props.batchlistId,
+                frequency: selectedFrequency,
+                time: selectedTime,
+                dayofweek: selectedDay,
+                apiformat: fileOption,
+                batchDetailargsDto: dataToSend,
+              }
+            );
             const freKorean = getFreKorean(selectedFrequency);
             //const dayKorean = FormatCode({ code: "day", value: selectedDay });
             //const dayKorean = getDayKorean(selectedDay);
 
-            alert(`${freKorean} 요일 ${selectedTime}에 예약이 완료되었습니다.`);
+            alert(
+              `${freKorean} 요일 ${selectedTime}으로 수정이 완료되었습니다.`
+            );
           } else {
-            const response = await axios.post("/spring/reservation/schedule", {
-              apilistid: props.apilistid,
-              frequency: selectedFrequency,
-              time: selectedTime,
-              apiformat: fileOption,
-              batchDetailargsDto: dataToSend,
-            });
+            const response = await axios.post(
+              "/spring/mypage/myapischedule/update",
+              {
+                apilistid: props.apilistid,
+                batchlistid: props.batchlistId,
+                frequency: selectedFrequency,
+                time: selectedTime,
+                apiformat: fileOption,
+                batchDetailargsDto: dataToSend,
+              }
+            );
             const freKorean = getFreKorean(selectedFrequency);
-            alert(`${freKorean} ${selectedTime}에 예약이 완료되었습니다.`);
+            alert(`${freKorean} ${selectedTime}으로 수정이 완료되었습니다.`);
           }
           setExcelArray([]);
           setContent("");
@@ -423,7 +436,7 @@ debugger
               <Col xs={3}>
                 <Form.Select
                   value={selectedFrequency}
-                  onChange={handleOptionChange}
+                  onChange={(e) => handleOptionChange(e.target.value)}
                 >
                   <option value="">선택하세요</option>
                   <option value="monthly">매달</option>
@@ -528,7 +541,7 @@ debugger
                     },
                   },
                 }}
-                rows={rows}
+                rows={rows.filter(row => row.stcd !== 99)}
                 columns={columns}
                 pageSizeOptions={[5]}
                 checkboxSelection
@@ -556,7 +569,7 @@ debugger
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={clickRsv}>예약</Button>
+          <Button onClick={clickModify}>수정</Button>
           <Button onClick={handleClose}>닫기</Button>
         </Modal.Footer>
       </Modal>

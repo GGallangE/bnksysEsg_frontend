@@ -20,6 +20,14 @@ function FileDownload(props) {
     } catch (error) {
       console.error("Error searching: ", error);
     }
+    try {
+      const response = await axios.post("/spring/userapi/useapi", {
+        apilistid: props.apilistid,
+      });
+      console.log('사용',response);
+    } catch (error) {
+      console.error("Error searching: ", error);
+    }
   };
 
   const handleTxtDown = async () => {
@@ -32,6 +40,14 @@ function FileDownload(props) {
       });
 
       console.log(response);
+    } catch (error) {
+      console.error("Error searching: ", error);
+    }
+    try {
+      const response = await axios.post("/spring/userapi/useapi", {
+        apilistid: props.apilistid,
+      });
+      console.log('사용',response);
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -50,6 +66,14 @@ function FileDownload(props) {
     } catch (error) {
       console.error("Error searching: ", error);
     }
+    try {
+      const response = await axios.post("/spring/userapi/useapi", {
+        apilistid: props.apilistid,
+      });
+      console.log('사용',response);
+    } catch (error) {
+      console.error("Error searching: ", error);
+    }
   };
 
   const handleXmlDown = async () => {
@@ -62,6 +86,14 @@ function FileDownload(props) {
       });
 
       console.log(response);
+    } catch (error) {
+      console.error("Error searching: ", error);
+    }
+    try {
+      const response = await axios.post("/spring/userapi/useapi", {
+        apilistid: props.apilistid,
+      });
+      console.log('사용',response);
     } catch (error) {
       console.error("Error searching: ", error);
     }
