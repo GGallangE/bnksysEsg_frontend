@@ -134,6 +134,10 @@ function Navigation() {
                 <NavDropdown title="관리자" id="basic-nav-dropdown" className='custom-nav' onClick={() => handleDropdownClose('admin-dropdown')}>
                   <Nav className="flex-row">
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/apilist')}>API 목록 관리</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => handleNavItemClick('/admin/comcode')}>공통 코드 관리</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => handleNavItemClick('/admin/apikey')}>Api Key 관리</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => handleNavItemClick('/admin/adminapirequest')}>Api Request 관리</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => handleNavItemClick('/admin/adminapiResponse')}>Api Response 관리</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/apiapply')}>API 신청 관리</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/noticergt')}>공지사항 작성</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/inquiry')}>문의사항 관리</NavDropdown.Item>

@@ -28,6 +28,10 @@ import AdminInquiry from './Admin/AdminInquiry';
 import NoticeRgt from './Admin/NoticeRgt';
 import AdminApiList from './Admin/AdminApiList';
 import ApplyApiList from './Admin/ApplyApiList';
+import Apikey from './Admin/ApiKey';
+import ComCode from './Admin/ComCode';
+import AdminApiRequest from './Admin/AdminApiRequest';
+import AdminApiResponse from './Admin/AdminApiResponse';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <RecoilRoot>
@@ -56,6 +60,10 @@ root.render(
   <Route path="/admin/noticergt" element={<NoticeRgt/>} />
   <Route path="/admin/apiapply" element={<ApplyApiList/>} />
   <Route path="/admin/apilist" element={<AdminApiList/>} />
+  <Route path="/admin/apikey" element={<Apikey/>} />
+  <Route path="/admin/comcode" element={<ComCode/>} />
+  <Route path="/admin/adminapirequest" element={<AdminApiRequest/>} />
+  <Route path="/admin/adminapiresponse" element={<AdminApiResponse/>} />
   </Routes>
   </BrowserRouter>
   </RecoilRoot>
