@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Modal, Button } from 'react-bootstrap';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
 function MyAlarmDetail(props) {
   const [searchResults, setSearchResults] = useState([]);
@@ -52,30 +53,33 @@ function MyAlarmDetail(props) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            알림 내용title
-          </Modal.Title>
+        <Modal.Header style={{ background: '#bbd4ef' }} closeButton>
+        <NotificationsNoneIcon sx={{ fontSize: '25px', margin: '0px 5px'}}/><h4>알림</h4>
         </Modal.Header>
-        <Modal.Body>
           <Container
             className="border border-dashed p-3"
           >
-            <Row className="mb-3">
+            <Row className="row">
               <Col xs={12}>
-                <h5>제목: {searchResults.title}</h5>
+              <h4 style={{ textAlign: 'center' }}>{searchResults.title}</h4>
               </Col>
             </Row>
-            <Row className="mb-3" style={{ marginTop: '100px' }}>
+            <Row className="row">
               <Col xs={12}>
-                <h5>내용: {searchResults.content}</h5>
+              <div className='noti-content' >
+                <span style={{fontSize:'20px'}}>{searchResults.content}</span>
+              </div>
               </Col>
             </Row>
+            <Button style={{
+            padding: '10px 30px',
+            margin: '0 auto', 
+            display: 'block', 
+            background: '#bbd4ef',
+            border: 'none', 
+            color: 'black', 
+          }} onClick={props.onHide}>Close</Button>
           </Container>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

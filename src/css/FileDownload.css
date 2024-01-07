@@ -1,0 +1,15 @@
+.green-button{
+    background: #7BBF57;
+    color: #ffffff;
+    margin: 8px;
+    border:none;
+    width:70px;
+}
+
+.green-button:hover{
+    background: #5eba2c;
+    color: #ffffff;
+    margin: 8px;
+    border:none;
+    width:70px;
+}

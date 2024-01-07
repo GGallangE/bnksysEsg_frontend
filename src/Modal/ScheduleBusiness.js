@@ -350,7 +350,7 @@ function ScheduleBusiness(props) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton>
+        <Modal.Header style={{ background: '#D7E7AF' }} closeButton>
           <Modal.Title id="contained-modal-title-vcenter">예약하기</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -392,7 +392,7 @@ function ScheduleBusiness(props) {
               </Col>
               <Col xs={3} className="d-flex align-items-center">
                 <Form.Control
-                  style={{ margin: "0px 10px" }}
+                  style={{ margin: "0px 10px", border:'solid 1px #cccccc', height:'45px'}}
                   type="text"
                   placeholder="00"
                   value={selectedHour}
@@ -414,7 +414,7 @@ function ScheduleBusiness(props) {
                 />
                 :
                 <Form.Control
-                  style={{ margin: "0px 10px" }}
+                  style={{ margin: "0px 10px", border:'solid 1px #cccccc', height:'45px'}}
                   type="text"
                   placeholder="00"
                   value={selectedMinute}
@@ -517,8 +517,8 @@ function ScheduleBusiness(props) {
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={clickRsv}>예약</Button>
-          <Button onClick={handleClose}>닫기</Button>
+          <Button style={{background:"#7BBF57", border:'none'}} onClick={clickRsv}>예약</Button>
+          <Button style={{background:"#ffffff", borderColor:'#7BBF57', color:'#7BBF57'}} onClick={handleClose}>닫기</Button>
         </Modal.Footer>
       </Modal>
     </div>

@@ -7,6 +7,7 @@ import LoginPopup from './User/LoginPopup';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Navigation.css';
+import logo from './images/API system logo.png'
 
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
@@ -68,7 +69,7 @@ function Navigation() {
       try {
         axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
 
-        const response = await axios.get('/spring/user/auth_check'); 
+        const response = await axios.get('/spring/user/auth_check');
         if (response.data.success) {
           setUserRoles(response.data.roles);
         }
@@ -102,29 +103,29 @@ function Navigation() {
 
   return (
     <div>
-      <Navbar expand="lg" className="bg-body-tertiary custom-navbar">
-        <Container>
-          <Navbar.Brand href="/">API_BNK</Navbar.Brand>
+      <Navbar expand="lg" className="custom-navbar">
+        <Container >
+          <Navbar.Brand href="/"><img src={logo} style={{width:'115px'}}/></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto custom-nav">
               <NavDropdown title="OPEN API" id="basic-nav-dropdown" className='custom-nav' onClick={() => handleDropdownClose('open-api-dropdown')}>
-                <Nav className="flex-row">
+                <Nav className="flex-column">
                   <NavDropdown.Item onClick={() => handleNavItemClick('/OPENAPI/ApiList')}>목록</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/OPENAPI/ApiApply')}>API 신청하기</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/openapi/usecase')}>활용사례</NavDropdown.Item>
                 </Nav>
               </NavDropdown>
               <NavDropdown title="이용안내" id="basic-nav-dropdown" className='custom-nav' onClick={() => handleDropdownClose('information-dropdown')}>
-                <Nav className="flex-row">  
+                <Nav className="flex-column">
                   <NavDropdown.Item onClick={() => handleNavItemClick('/Information/Notice')}>공지사항</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/Information/inquiryregister')}>Q&A</NavDropdown.Item>
                 </Nav>
               </NavDropdown>
               <NavDropdown title="마이페이지" id="basic-nav-dropdown" className='custom-nav' onClick={() => handleDropdownClose('mypage-dropdown')}>
-                <Nav className="flex-row">
-                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myinterestdata')}>관심데이터</NavDropdown.Item>
-                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myrecentusedata')}>최근사용데이터</NavDropdown.Item>
+                <Nav className="flex-column">
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myinterestdata')}>관심 API</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myrecentusedata')}>최근사용 API</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myinquiry')}>MY 문의사항</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myapiapply')}>API 신청현황</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => handleNavItemClick('/mypage/myapirsv')}>API 예약현황</NavDropdown.Item>
@@ -132,7 +133,7 @@ function Navigation() {
               </NavDropdown>
               {userRoles.includes('ROLE_ADMIN') && (
                 <NavDropdown title="관리자" id="basic-nav-dropdown" className='custom-nav' onClick={() => handleDropdownClose('admin-dropdown')}>
-                  <Nav className="flex-row">
+                  <Nav className="flex-column">
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/apilist')}>API 목록 관리</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/comcode')}>공통 코드 관리</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => handleNavItemClick('/admin/apikey')}>Api Key 관리</NavDropdown.Item>
@@ -146,11 +147,11 @@ function Navigation() {
               )}
             </Nav>
             {isLoggedIn !== '' && (
-                <Nav.Link onClick={() => handleNavItemClick('/mypage/myalarm')} className="custom-nav">
-                  알림 {notReadAlarmCount > 0 && `(${notReadAlarmCount})`}
-                </Nav.Link>
-              )}
-            <Nav.Link onClick={handleLoginLogout} href="#">
+              <Nav.Link onClick={() => handleNavItemClick('/mypage/myalarm')} className="custom-nav">
+                알림 {notReadAlarmCount > 0 && `(${notReadAlarmCount})`}
+              </Nav.Link>
+            )}
+            <Nav.Link className="custom-nav login-logout" onClick={handleLoginLogout} href="#">
               {isLoggedIn !== '' ? '로그아웃' : '로그인'}
             </Nav.Link>
           </Navbar.Collapse>

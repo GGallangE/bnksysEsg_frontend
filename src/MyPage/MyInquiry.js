@@ -76,80 +76,80 @@ function MyInquiry() {
         <div className="App">
             <Container style={{ margin: '100px auto' }}>
                 <div>
-                    <h5 style={{ marginTop: '50px', marginBottom: '50px' }}>My 문의사항</h5>
-                    <Table bordered>
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>제목</th>
-                                <th>등록일</th>
-                                <th>답변 현황</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {searchMyInquiry.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    <tr key={index} onClick={() => handleRowClick(item)}>
-                                        <td>{index + 1}</td>
-                                        <td>
-                                            <div>
-                                                {item.inquirynm}
-                                            </div>
-                                        </td>
-                                        <td><FormatDate dateString={item.regdt} /></td>
-                                        <td>{item.replycount === 0 ? "답변중" : "답변완료"}</td>
-                                    </tr>
+                    <h1 style={{ marginTop: '50px', marginBottom: '50px' }}>My 문의사항</h1>
+                    <div class="tb_w">
+                        <div class="st_tb_w ">
+                            <ul class="st_tb_col">
+                                <li class="tr">
+                                    <div class="th-num">
+                                        <span>NO</span>
+                                    </div>
+                                    <div class="th-tit">
+                                        <span>제목</span>
+                                    </div>
+                                    <div class="th-date">
+                                        <span>등록일</span>
+                                    </div>
+                                    <div class="th-writer">
+                                        <span>답변현황</span>
+                                    </div>
+                                </li>
+                                {searchMyInquiry.map((item, index) => (
+                                    <React.Fragment key={index}>
+                                        <li class="tr" key={index} onClick={() => handleRowClick(item)}>
+                                            <div class="td-num">{index + 1}</div>
+                                            <div class="td-tit">{item.noticenm}</div>
+                                            <div class="td-date"><FormatDate dateString={item.regdt} /></div>
+                                            <div class="td-writer">{item.replycount === 0 ? "답변중" : "답변완료"}</div>
+                                        </li>
 
-                                    {selectedRow === item.inquiryid && (
-                                        <tr>
-                                            {isLoading ? (
-                                                // 스피너 표시
-                                                <td colSpan="4" style={{ textAlign: 'center' }}>
-                                                    <Spinner animation="border" role="status" />
-                                                </td>)
-                                                : (
-                                                    <td colSpan="4" style={{ textAlign: 'left' }}>
+                                        {selectedRow === item.inquiryid && (
+                                            <tr>
+                                                {isLoading ? (
+                                                    // 스피너 표시
+                                                    <td colSpan="4" style={{ textAlign: 'center' }}>
+                                                        <Spinner animation="border" role="status" />
+                                                    </td>)
+                                                    : (
+                                                        <td colSpan="4" style={{ textAlign: 'left' }}>
 
-                                                        <div>
-                                                            <strong>질문 내용:</strong>
-                                                            <div style={{ marginTop: '20px' }}>{item.inquirycntn}</div>
-                                                        </div>
-                                                        <hr style={{ borderTop: '1px solid #ccc', marginBottom: '10px' }} />
-                                                        {inquiryAnswer && item.replycount === 1 && (
-                                                            <>
-                                                                <div>
-                                                                    <strong>답변 제목:</strong> {inquiryAnswer.inquirynm}
-                                                                </div>
-                                                                <div style={{ float: 'right' }}>
-                                                                    <strong>작성일:</strong> {inquiryAnswer.regdt && <FormatDate dateString={inquiryAnswer.regdt} />}
-                                                                </div>
-                                                                <br />
-                                                                <div>
-                                                                    <strong>답변 내용:</strong>
-                                                                    <div style={{ marginTop: '20px' }}>{inquiryAnswer.inquirycntn}</div>
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                        {inquiryAnswer && item.replycount === 0 && (
                                                             <div>
-                                                                아직 답변 중입니다.
+                                                                <strong>질문 내용:</strong>
+                                                                <div style={{ marginTop: '20px' }}>{item.inquirycntn}</div>
                                                             </div>
-                                                        )}
-                                                        {!inquiryAnswer && <p>Loading...</p>}
-                                                    </td>
-                                                )}
-                                        </tr>
-                                    )}
-
-
-
-                                </React.Fragment>
-                            ))}
-                        </tbody>
-                    </Table>
+                                                            <hr style={{ borderTop: '1px solid #ccc', marginBottom: '10px' }} />
+                                                            {inquiryAnswer && item.replycount === 1 && (
+                                                                <>
+                                                                    <div>
+                                                                        <strong>답변 제목:</strong> {inquiryAnswer.inquirynm}
+                                                                    </div>
+                                                                    <div style={{ float: 'right' }}>
+                                                                        <strong>작성일:</strong> {inquiryAnswer.regdt && <FormatDate dateString={inquiryAnswer.regdt} />}
+                                                                    </div>
+                                                                    <br />
+                                                                    <div>
+                                                                        <strong>답변 내용:</strong>
+                                                                        <div style={{ marginTop: '20px' }}>{inquiryAnswer.inquirycntn}</div>
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                            {inquiryAnswer && item.replycount === 0 && (
+                                                                <div>
+                                                                    아직 답변 중입니다.
+                                                                </div>
+                                                            )}
+                                                            {!inquiryAnswer && <p>Loading...</p>}
+                                                        </td>
+                                                    )}
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </Container>
-
             {/* 로그인 모달 */}
             <LoginPopup show={showLoginModal} handleClose={handleLoginModalClose} onLoginSuccess={handleLoginSuccess} />
 

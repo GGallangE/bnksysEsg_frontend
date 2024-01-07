@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container }from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate'
-import NoticeDetail from './NoticeDetail'
+import NoticeDetail from '../Modal/NoticeDetail'
 
 function Notice(){
     const [searchNotice, setSearchNotice] = useState([]);
@@ -35,8 +35,8 @@ function Notice(){
 
     return (
     <div className="App">
-      <Container style={{margin:'120px auto'}}>
-      <h1>공지사항</h1>
+      <Container style={{margin:'100px auto'}}>
+      <h1 style={{ marginTop: '50px', marginBottom: '50px' }}>공지사항</h1>
       <div class="tb_w">
             <div class="st_tb_w ">
               <ul class="st_tb_col">

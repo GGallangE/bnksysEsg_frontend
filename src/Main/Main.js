@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/Main.css';
-import NoticeDetail from '../Information/NoticeDetail'
+import NoticeDetail from '../Modal/NoticeDetail'
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 

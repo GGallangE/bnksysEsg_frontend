@@ -15,9 +15,9 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 
 function MyScheduleBusiness(props) {
-  const [finalDeleteRows, setFinalDeleteRows] = useState([]);
   const [batchlistId, setBatchlistId] = useState("");
   const [rsvData, setRsvData] = useState([]);
   const [serverData, setServerData] = useState([]);
@@ -62,8 +62,8 @@ function MyScheduleBusiness(props) {
       props.frequency === "monthly"
         ? props.dayofmonth
         : props.frequency === "weekly"
-        ? props.dayofweek
-        : ""
+          ? props.dayofweek
+          : ""
     );
     setFileOption(props.apiFormat);
     if (props.time) {
@@ -197,15 +197,18 @@ function MyScheduleBusiness(props) {
 
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-          Add record
-        </Button>
         <Button
-          color="primary"
-          startIcon={<DeleteIcon />}
+          style={{ background: "#ffffff", border: 'none', color: '#92bcea' }}
+          onClick={handleClick}
+        >
+          <AddIcon/>Add record
+        </Button>
+        <HorizontalRuleIcon style={{ width:'20px', transform: 'rotate(90deg)', color: '#92bcea' }} />
+        <Button
+          style={{ background: "#ffffff", border: 'none', color: '#92bcea', display:'flex' }}
           onClick={handleDeleteClick(rowSelectionModel)}
         >
-          삭제
+          <DeleteIcon style={{ width:'20px'}}/><div>삭제</div>
         </Button>
       </GridToolbarContainer>
     );
@@ -420,8 +423,8 @@ function MyScheduleBusiness(props) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">예약하기</Modal.Title>
+        <Modal.Header style={{ background: '#bbd4ef' }} closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">예약수정하기</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
@@ -466,7 +469,7 @@ function MyScheduleBusiness(props) {
               </Col>
               <Col xs={3} className="d-flex align-items-center">
                 <Form.Control
-                  style={{ margin: "0px 10px" }}
+                  style={{ margin: "0px 10px", border:'solid 1px #cccccc', height:'45px'}}
                   type="text"
                   placeholder="00"
                   value={selectedHour}
@@ -488,7 +491,7 @@ function MyScheduleBusiness(props) {
                 />
                 :
                 <Form.Control
-                  style={{ margin: "0px 10px" }}
+                  style={{ margin: "0px 10px", border:'solid 1px #cccccc', height:'45px'}}
                   type="text"
                   placeholder="00"
                   value={selectedMinute}
@@ -569,8 +572,8 @@ function MyScheduleBusiness(props) {
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={clickModify}>수정</Button>
-          <Button onClick={handleClose}>닫기</Button>
+          <Button style={{ background: "#92bcea", border: 'none' }} onClick={clickModify}>수정</Button>
+          <Button style={{ background: "#ffffff", borderColor: '#92bcea', color: '#92bcea' }} onClick={handleClose}>닫기</Button>
         </Modal.Footer>
       </Modal>
     </div>

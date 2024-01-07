@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import ApiList from './Api/ApiList';
 import ApiApply from './Apply/ApiApply';
 import Notice from './Information/Notice';
-import NoticeDetail from './Information/NoticeDetail';
+import NoticeDetail from './Modal/NoticeDetail';
 import Login from './User/Login';
 import Register from './User/Register';
 import UseCase from './UseCase/UseCase';

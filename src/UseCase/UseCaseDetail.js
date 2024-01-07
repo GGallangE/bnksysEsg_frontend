@@ -5,6 +5,8 @@ import Container from 'react-bootstrap/Container';
 import { Row, Col, Table } from 'react-bootstrap';
 import FormatDate from '../Format/FormatDate';
 import { useNavigate } from 'react-router-dom';
+import '../css/UseCaseDetail.css'
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 function UseCaseDetail() {
   const [searchResults, setSearchResults] = useState([]);
@@ -100,35 +102,56 @@ function UseCaseDetail() {
   };
 
   return (
-    <div>
-      <h3 style={{ textAlign: 'center', marginTop: '100px' }}>활용사례 상세</h3>
-      <Container style={{ marginTop: '50px' }}>
-        <Row className="mb-3">
-          <Col xs={12}>
-            <h5><span style={boldText}>제목:</span> {searchResults.title}</h5>
-          </Col>
-        </Row>
-        <Row className="mb-3" style={{ marginTop: '30px' }}>
-          <Col xs={12}>
-            <p style={{ textAlign: 'right' }}><span style={boldText}>등록인:</span> {searchResults.username}</p>
-            <p style={{ textAlign: 'right' }}><span style={boldText}>등록일:</span> {searchDate} </p>
-          </Col>
-        </Row>
-        <hr style={{ marginTop: '20px' }} />
-        <Row className="mb-3" style={{ marginTop: '40px' }}>
-          <Col xs={12}>
-            <h5 style={{ marginBottom: '10px' }}><span style={boldText}>활용사례 설명:</span></h5>
-            <div style={getContentStyle()}>{searchResults.content}</div>
-          </Col>
-        </Row>
-        <hr style={{ marginTop: '20px' }} />
-        <Row className="mb-3" style={{ marginTop: '40px' }}>
-          <Col xs={12}>
-            <h5 style={{ marginBottom: '10px' }}><span style={boldText}>사용 API:</span></h5>
-            {renderApiTable()}
-          </Col>
-        </Row>
+    <div class="wrap-a">
+      <div>
+      <h3 style={{ textAlign: 'center', paddingTop:'50px'}}>활용사례 상세</h3>
+      <Container style={{ marginTop: '20px' }}>
+
+      
+				<div class="wrap-cont">
+					<article class="box-detail">
+						<div class="box-detail-tit">
+							<h4>{searchResults.title}</h4>
+						</div>
+						<div class="box-detail-info">
+							
+							<div class="fl-item-r-box-detail-info-txt">
+								<span style={{fontSize:'15px', marginRight:'10px'}}>등록일</span><span class="en">{searchDate}</span>
+								<span class="txt-mark">|</span>
+								<span style={{fontSize:'15px', marginRight:'10px'}}>등록자</span><b>{searchResults.username}</b>
+							</div>
+							{/* <div class="fl-item-l-link-with">
+								<dl>
+									<dt>관련링크</dt>
+									<dd>
+										<a href="https://fluffy-begonia-6cbe0c.netlify.app/" target="_blank" class="btn-base-s-bgc-p1" title="새창 열림"><span>바로가기</span></a>
+									</dd>
+								</dl>
+							</div> */}
+						</div>
+						<div class="box-detail-body">	
+							{/* <h3 class="tit-check">주요기능 소개</h3>
+							<div class="box-line">
+								<p>지하철 과천역에서 현재 위치를&nbsp;&nbsp;공유하는&nbsp; 웹입니다.</p>
+<p>&nbsp;</p>
+							</div> */}
+							<h3 class="tit-check"><NavigateNextIcon/>활용사례 설명</h3>
+							<div class="box-line">
+              {searchResults.content}
+							</div>
+							<h3 class="tit-check" style={{marginTop:'30px'}}><NavigateNextIcon/>사용 API</h3>
+							<div>
+              {renderApiTable()}<br/>
+							</div>
+							<div class="box-detail-img">               
+                <img alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://data.seoul.go.kr/opendata/board/10005/1700057129984.png"/>                    
+							</div>
+						</div>
+					</article>
+				</div>
+			
       </Container>
+      </div>
     </div>
   );
 }

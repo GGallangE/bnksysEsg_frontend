@@ -6,7 +6,7 @@ import TokenManagement from '../TokenManagement';
 import { tokenState } from '../TokenState';
 import { isLoggedInAtom } from '../atom';
 import Container from 'react-bootstrap/Container';
-import { Button, Table, Modal } from 'react-bootstrap';
+import { Button, Table, Modal, Col, Row } from 'react-bootstrap';
 import ScheduleModify from '../Modal/ScheduleModify'
 import MyScheduleBusiness from '../Modal/MyScheduleBusiness'
 import FormatCode from '../Format/FormatCode';
@@ -86,45 +86,55 @@ function MyApiSchedule() {
   return (
     <div className="App">
       <Container style={{ margin: '100px auto' }}>
-        <div>
-          <h5 style={{ marginTop: '50px', marginBottom: '50px' }}>API예약현황</h5>
-          <Table bordered>
-            <thead>
-              <tr>
-                <th>선택</th>
-                <th>No</th>
-                <th>API이름</th>
-                <th>주기</th>
-              </tr>
-            </thead>
-            <tbody>
-              {searchResults.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <input
+        <h1>API예약현황</h1>
+        <div style={{ margin: '30px 0px' }}>
+          <Row className="justify-content-end">
+            <Col md="auto">
+              <Button style={{ margin: '20px 0px', background: "#bbd4ef", border: 'none' }} onClick={() => handleDeleteCheck()}>
+                삭제
+              </Button>
+            </Col>
+          </Row>
+          <div class="tb_w">
+            <div class="st_tb_w ">
+              <ul class="st_tb_col">
+                <li class="tr">
+                  <div class="th-num">
+                    <span>선택</span>
+                  </div>
+                  <div class="th-num">
+                    <span>No</span>
+                  </div>
+                  <div class="th-tit">
+                    <span>API이름</span>
+                  </div>
+                  <div class="th-date">
+                    <span>주기</span>
+                  </div>
+                </li>
+                {searchResults.map((item, index) => (
+                  <li class="tr" key={index}>
+                    <div class="td-num"><input
                       type="checkbox"
                       onChange={(event) => handleCheckboxChange(event, item)}
                       checked={selectedItems.includes(item)}
-                    />
-                  </td>
-                  <td>{index + 1}</td>
-                  <td>
+                    /></div>
+                    <div class="td-num">{index + 1}</div>
                     <div
+                      class="td-tit"
                       onClick={() => handleTitleClick(item)}
                       style={{ cursor: 'pointer', textDecoration: 'underline' }}
                     >
                       {item.apinm}
                     </div>
-                  </td>
-                  <td><FormatCode code="frequency" value={item.frequency} /> <FormatCode code="day" value={item.dayofweek} /> {item.dayofmonth && <>{item.dayofmonth}일</>} {item.time}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Button variant="primary" onClick={() => handleDeleteCheck()}>
-            삭제
-          </Button>
+                    <div class="td-date"><FormatCode code="frequency" value={item.frequency} /> <FormatCode code="day" value={item.dayofweek} /> {item.dayofmonth && <>{item.dayofmonth}일</>} {item.time}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
+
       </Container>
       <MyScheduleBusiness
         show={modalShow}

@@ -12,6 +12,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import MoveApiRegister from "../Modal/MoveApiRegister";
+import ApiDetailInfo from "../Modal/ApiDetailInfo";
+
 
 function ApiList() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,6 +28,10 @@ function ApiList() {
     totalpage % 30 === 0 ? parseInt(totalpage / 30) : parseInt(totalpage / 30);
   const [currentPage, setCurrentPage] = useState(1);
   const [modalShow, setModalShow] = useState(false);
+  const [detailInfoModalShow, setDetailInfoModalShow] = useState(false);
+  const [modalapilistid, setModalapilistid] = useState('');
+  const [modalapinm, setModalapinm] = useState('');
+  const [modalapiexpl, setModalapiexpl] = useState('');
 
   axios.defaults.headers.common["Authorization"] = `Bearer ${isLoggedIn}`;
 
@@ -126,16 +132,23 @@ function ApiList() {
     }
   };
 
-  const showApiRegisterModal = () => {
+  const showApiRegisterModal = (apilistid, apinm, apiexpl) => {
     setModalShow(true);
+    setModalapilistid(apilistid);
+    setModalapinm(apinm);
+    setModalapiexpl(apiexpl);
   };
 
-  const handleMoveApiDetail = (apilistid, usedvcd) => {
+  const handleMoveApiDetail = (apilistid, apinm, apiexpl, usedvcd) => {
     if (usedvcd === "01") {
       navigate(`/api/detailapi/${apilistid}`);
     } else {
-      showApiRegisterModal();
+      showApiRegisterModal(apilistid, apinm, apiexpl);
     }
+  };
+
+  const showApiDetailInfo = () => {
+    setDetailInfoModalShow(true);
   };
 
   return (
@@ -178,14 +191,123 @@ function ApiList() {
                   key={result.apilistid}
                   style={{ marginTop: "20px" }}
                 >
-                  <Link
-                    to={`/api/detailapi/${result.apilistid}`}
-                    className="Link"
-                  >
-                    <div>
-                      <div className="item-name">{result.apinm}</div>
+                  {result.usedvcd === "01" ? (
+                    <Link to={`/api/detailapi/${result.apilistid}`} className="Link">
+                      <div className="item-container">
+                        <div className="item-header">
+                          <div className="item-name">{result.apinm}</div>
+                          <Button
+                            style={{ border: "none", background: "transparent" }}
+
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleFavoriteToggle(
+                                result.apilistid,
+                                result.favorite
+                              );
+                            }}
+                            className="favorite-button"
+                          >
+                            {result.favorite ? (
+                              <BookmarkIcon style={{ color: "#a2d7d4", fontSize: "35px" }} />
+                            ) : (
+                              <BookmarkBorderIcon style={{ color: "#a2d7d4", fontSize: "35px" }} />
+                            )}
+
+                          </Button>
+                        </div>
+
+                        <div className="api-explanation">
+                          {result.apiexpl.length > 100
+                            ? result.apiexpl.substring(0, 100) + "..."
+                            : result.apiexpl}
+                        </div>
+                        <div className="item-info-container">
+                          <span style={{ width: "230px", fontSize: '15px' }}>
+                            제공기관: {result.prvorg}
+                          </span>
+                          <span className="item-info">
+                            조회수: {result.apiview}
+                          </span>
+                          <span className="item-info">
+                            사용수: {result.countapiuses}
+                          </span>
+                          <span style={{ display: "none" }}>
+                            {result.apilistid}
+                          </span>
+
+
+                          <Button
+                            className={`use-button ${result.usedvcd === "02" ? "apply-button" : ""}`}
+                            style={{
+                              background:
+                                result.usedvcd === "02" ? "white" : "#a2d7d4",
+                              border: "solid 3px #a2d7d4",
+                              marginLeft: "auto",
+                            }}
+
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleMoveApiDetail(
+                                result.apilistid,
+                                result.apinm,
+                                result.apiexpl,
+                                result.usedvcd
+                              );
+                            }}
+
+                          >
+                            {result.usedvcd === "01"
+                              ? "사용하러가기"
+                              : "사용신청하기"}
+                          </Button>
+                        </div>
+                        {/* 키워드 나열 */}
+                        {result.apikeyword !== null && (
+                          <ul className="cate_list">
+                            {result.apikeyword.split(',').map((keyword, index) => (
+                              <li key={index}>
+                                <span style={{ border: 'solid 1px #555', borderRadius: '3px', padding: '5px', margin: '5px', fontSize: '15px' }}>
+                                  {keyword.trim()}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </Link>) : (
+
+                    <div className="item-container">
+                      <div className="item-header">
+                        <div className="item-name">{result.apinm}</div>
+                        <Button
+                          style={{ border: "none", background: "transparent" }}
+
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleFavoriteToggle(
+                              result.apilistid,
+                              result.favorite
+                            );
+                          }}
+                          className="favorite-button"
+                        >
+                          {result.favorite ? (
+                            <BookmarkIcon style={{ color: "#a2d7d4", fontSize: "35px" }} />
+                          ) : (
+                            <BookmarkBorderIcon style={{ color: "#a2d7d4", fontSize: "35px" }} />
+                          )}
+
+                        </Button>
+                      </div>
+
+                      <div className="api-explanation">
+                        {result.apiexpl.length > 100
+                          ? result.apiexpl.substring(0, 100) + "..."
+                          : result.apiexpl}
+                      </div>
                       <div className="item-info-container">
-                        <span style={{ width: "200px" }}>
+                        <span style={{ width: "230px", fontSize: '15px' }}>
                           제공기관: {result.prvorg}
                         </span>
                         <span className="item-info">
@@ -198,40 +320,26 @@ function ApiList() {
                           {result.apilistid}
                         </span>
 
+
                         <Button
-                          style={{ border: "none" }}
-                          variant="outline-secondary"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleFavoriteToggle(
-                              result.apilistid,
-                              result.favorite
-                            );
-                          }}
-                          className="favorite-button"
-                        >
-                          {result.favorite ? (
-                            <BookmarkIcon style={{ color: "#a2d7d4" }} />
-                          ) : (
-                            <BookmarkBorderIcon style={{ color: "#a2d7d4" }} />
-                          )}
-                        </Button>
-                        <Button
+                          className={`use-button ${result.usedvcd === "02" ? "apply-button" : ""}`}
                           style={{
                             background:
                               result.usedvcd === "02" ? "white" : "#a2d7d4",
-                            border: "none",
+                            border: "solid 3px #a2d7d4",
+                            marginLeft: "auto",
                           }}
-                          variant={
-                            result.favorite ? "primary" : "outline-secondary"
-                          }
+
                           onClick={(e) => {
                             e.preventDefault();
                             handleMoveApiDetail(
                               result.apilistid,
+                              result.apinm,
+                              result.apiexpl,
                               result.usedvcd
                             );
                           }}
+
                         >
                           {result.usedvcd === "01"
                             ? "사용하러가기"
@@ -239,7 +347,8 @@ function ApiList() {
                         </Button>
                       </div>
                     </div>
-                  </Link>
+
+                  )}
                 </li>
               ))}
 
@@ -255,7 +364,8 @@ function ApiList() {
           )}
         </div>
       </div>
-      <MoveApiRegister show={modalShow} onHide={() => setModalShow(false)} />
+      <MoveApiRegister apilistid={modalapilistid} apinm={modalapinm} apiexpl={modalapiexpl} show={modalShow} onHide={() => setModalShow(false)} />
+      <ApiDetailInfo show={detailInfoModalShow} onHide={() => setDetailInfoModalShow(false)} />
     </div>
   );
 }

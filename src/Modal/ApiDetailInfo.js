@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 
-function MoveApiRegister(props) {
+function ApiDetailInfo(props) {
   const navigate = useNavigate();
   const handleCloseModal = () => {
     props.onHide();
@@ -18,12 +18,12 @@ function MoveApiRegister(props) {
         <Modal.Header closeButton>
           <Modal.Title>api 신청</Modal.Title>
         </Modal.Header>
-        <Modal.Body><p style={{fontWeight:'bold', fontSize:'18px'}}>{props.apinm}</p><p>상세설명: {props.apiexpl}</p>이 api를 신청하시겠습니까?</Modal.Body>
+        <Modal.Body>이 api를 신청하시겠습니까?</Modal.Body>
         <Modal.Footer>
-          <Button style={{border:'none'}}variant="secondary" onClick={handleCloseModal}>
+          <Button variant="secondary" onClick={handleCloseModal}>
             닫기
           </Button>
-          <Button style={{background:"#a2d7d4", border:'none'}} variant="secondary" onClick={handleMoveApiRegister}>
+          <Button variant="secondary" onClick={handleMoveApiRegister}>
             api 신청하기
           </Button>
         </Modal.Footer>
@@ -32,4 +32,4 @@ function MoveApiRegister(props) {
   );
 }
 
-export default MoveApiRegister;
+export default ApiDetailInfo;

@@ -5,7 +5,7 @@ import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate';
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
-import MyAlarmDetail from './MyAlarmDetail';
+import MyAlarmDetail from '../Modal/MyAlarmDetail';
 
 
 function MyAlarm() {
@@ -40,21 +40,28 @@ function MyAlarm() {
             <Container style={{ margin: '100px auto' }}>
                 <div>
                     <h5 style={{ marginTop: '50px', marginBottom: '50px' }}>MY 알림</h5>
-                    <Table bordered>
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>제목</th>
-                                <th>수신일시</th>
-                                <th>작성자</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {searchMyAlarm.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>
+                    <div class="tb_w">
+                        <div class="st_tb_w ">
+                            <ul class="st_tb_col">
+                                <li class="tr">
+                                    <div class="th-num">
+                                        <span>NO</span>
+                                    </div>
+                                    <div class="th-tit">
+                                        <span>제목</span>
+                                    </div>
+                                    <div class="th-writer">
+                                        <span>작성자</span>
+                                    </div>
+                                    <div class="th-date">
+                                        <span>수신일시</span>
+                                    </div>
+                                </li>
+                                {searchMyAlarm.map((item, index) => (
+                                    <li class="tr" key={index}>
+                                        <div class="td-num">{index + 1}</div>
                                         <div
+                                            class="td-tit"
                                             onClick={() => handleTitleClick(item)}
                                             style={{
                                                 cursor: 'pointer',
@@ -65,13 +72,13 @@ function MyAlarm() {
                                         >
                                             {item.title}
                                         </div>
-                                    </td>
-                                    <td><FormatDate dateString={item.regdt} /></td>
-                                    <td>{item.sendusername} </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
+                                        <div class="td-writer">{item.sendusername}</div>
+                                        <div class="td-date"><FormatDate dateString={item.regdt} /></div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </Container>
             <MyAlarmDetail

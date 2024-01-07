@@ -94,11 +94,8 @@ function NoticeDetail(props) {
         centered
       >
         <Modal.Header style={{ background: '#D7E7AF' }} closeButton>
-
           <InfoOutlinedIcon sx={{ fontSize: '28px', margin: '0px 5px' }} /><h4>NOTICE</h4>
-
         </Modal.Header>
-
         <Container
           className="border border-dashed p-3"
         >
@@ -158,10 +155,7 @@ function NoticeDetail(props) {
             border: 'none', 
             color: 'black', 
           }} onClick={props.onHide}>Close</Button>
-
         </Container>
-
-
       </Modal>
     </div>
   );

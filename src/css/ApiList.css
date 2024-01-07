@@ -101,11 +101,12 @@
 .item-info-container {
   display: flex;
   justify-content: space-between;
-  margin-right: 60px; 
+  margin-right: 60px;
 }
 
 .item-info {
   margin-left: 60px;
+  font-size: 15px;
 }
 
 .Link {
@@ -209,4 +210,61 @@
   
 }
 
+.use-button {
+  background: #a2d7d4;
+  border: solid 3px #a2d7d4;
+  color: black; /* Initial text color for "사용하러가기" */
 
+  /* Hover styles for "사용하러가기" */
+  &:hover {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+  }
+
+  /* Styles for "사용신청하기" */
+  &.apply-button {
+    color: rgb(0, 0, 0); /* Initial text color for "사용신청하기" */
+
+    /* Hover styles for "사용신청하기" */
+    &:hover {
+      color: black;
+      font-weight: bold;
+    }
+  }
+}
+
+.api-explanation {
+  max-height: 1.2em; /* Adjust the height as needed */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 25px;
+}
+
+.item-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+}
+.cate_list{
+  text-shadow: none;
+  color: #191919;
+  letter-spacing: -0.5px;
+  word-break: keep-all;
+  -webkit-text-size-adjust: none;
+  font: inherit;
+  vertical-align: baseline;
+  text-decoration: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  margin-top: 4px;
+  overflow: hidden;
+  max-height: 64px;
+  display:flex;
+}

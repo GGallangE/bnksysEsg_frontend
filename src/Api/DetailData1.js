@@ -21,6 +21,7 @@ import { randomId } from "@mui/x-data-grid-generator";
 import KeyboardArrowDownIcon from "@mui/icons-material/ArrowDownward";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import FileDownload from "../Modal/FileDownload";
+import CircleIcon from '@mui/icons-material/Circle';
 //import Parser from "react-xml-parser";
 
 //const API_KEY = process.env.REACT_APP_API_KEY;
@@ -174,7 +175,7 @@ function DetailData1(props) {
         },
       });
       setServerData(response.data);
-      console.log(response.data);
+      console.log('serverData', response.data);
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -231,7 +232,7 @@ function DetailData1(props) {
       const response = await axios.post("/spring/userapi/useapi", {
         apilistid: props.apilistid,
       });
-      console.log('사용',response);
+      console.log('사용', response);
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -374,6 +375,11 @@ function DetailData1(props) {
           <div class="detail-cont ">
             <div class="box-base-type-b">
               <h5 style={{ textAlign: "left" }}>입력값</h5>
+              <Box sx={{ padding:'10px', marginBottom:'10px', width: "100%", border:'solid 1px #7BBF57', borderRadius:'5px'}}>
+              {serverData.map((item) => (
+                <span style={{textAlign:'left', fontSize:'15px'}}><CircleIcon style={{fontSize:'8px'}}/> {item.itemexpl}</span>
+              ))}
+              </Box>
               <Box sx={{ height: 400, width: "100%" }}>
                 <DataGrid
                   initialState={{
@@ -401,7 +407,7 @@ function DetailData1(props) {
                   processRowUpdate={(updatedRow) =>
                     processRowUpdate(updatedRow)
                   }
-                  
+
                   onProcessRowUpdateError={handleProcessRowUpdateError}
                   slots={{
                     toolbar: EditToolbar,
@@ -474,7 +480,13 @@ function DetailData1(props) {
                   <FileDownloadOutlinedIcon />
                   파일 다운로드
                 </Button>
-                <Button style={{ margin: "30px" }} onClick={apiSchedule}>
+                <Button style={{
+                  border: "solid 2px #7BBF57",
+                  background: "#ffffff",
+                  color: "#7BBF57",
+                  margin: "30px",
+                }}
+                  onClick={apiSchedule}>
                   <AccessTimeIcon />
                   예약하기
                 </Button>

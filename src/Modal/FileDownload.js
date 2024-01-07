@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
+import '../css/FileDownload.css'
 
 function FileDownload(props) {
   const handleCloseModal = () => {
@@ -105,21 +106,21 @@ function FileDownload(props) {
         <Modal.Header closeButton>
           <Modal.Title>파일 다운로드</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          다운로드 형식을 선택해주세요!<br/><br/>
-          <Button variant="secondary" onClick={handleExcelDown}>
+        <Modal.Body style={{ textAlign:'center'}}>
+          <p style={{fontSize:'15px'}}>다운로드 형식을 선택해주세요!</p>
+          <Button className="green-button" onClick={handleExcelDown}>
             EXCEL
           </Button>
-          <Button variant="secondary" onClick={handleTxtDown}>
+          <Button className="green-button" onClick={handleTxtDown}>
             TXT
           </Button>
           {props.dataformat && props.dataformat.includes("JSON") && (
-            <Button variant="secondary" onClick={handleJsonDown}>
+            <Button className="green-button" onClick={handleJsonDown}>
               JSON
             </Button>
           )}
           {props.dataformat && props.dataformat.includes("XML") && (
-            <Button variant="secondary" onClick={handleXmlDown}>
+            <Button className="green-button" onClick={handleXmlDown}>
               XML
             </Button>
           )}

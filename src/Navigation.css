@@ -1,9 +1,5 @@
 /* Navigation.css */
 
-.custom-nav {
-  margin-right: 30px; 
-}
-
 .custom-nav:last-child {
   margin-right: 0; 
 }
@@ -24,3 +20,47 @@
   }
 }
 
+/* 네비게이션 바에 대한 스타일 추가 */
+.custom-navbar {
+  background-color: #ffffff; /* 원하는 배경색으로 설정 */
+  height:70px;
+}
+
+/* 드롭다운 메뉴에 대한 스타일 */
+.custom-navbar .nav-item.dropdown:hover .nav-link {
+  font-weight: bold;
+}
+
+/* 드롭다운 아이템에 대한 스타일 */
+.custom-navbar .nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* 활성 링크에 대한 스타일 */
+.custom-navbar .nav-item.active .nav-link {
+  background-color: #555; /* 활성 링크에 대한 배경색 설정 */
+  color: #000000; /* 활성 링크에 대한 텍스트 색상 설정 */
+}
+
+/* 비활성 링크에 대한 스타일 */
+.custom-navbar .nav-item .nav-link {
+  color: #000000; /* 비활성 링크에 대한 텍스트 색상 설정 */
+}
+
+/* 로그인/로그아웃 링크에 대한 스타일 */
+.custom-navbar .nav-link.login-logout:hover {
+  font-weight: bold;
+}
+
+/* 각 드롭다운 메뉴에 대한 스타일 */
+.custom-navbar .nav-item.dropdown:hover .nav-link,
+.custom-navbar .nav-item.dropdown .dropdown-menu.show .nav-link {
+  color: #000000; /* 드롭다운 메뉴의 링크 텍스트 색상 설정 */
+}
+
+/* 각 드롭다운 메뉴의 활성 링크에 대한 스타일 */
+.custom-navbar .nav-item.dropdown:hover .nav-item.active .nav-link,
+.custom-navbar .nav-item.dropdown .dropdown-menu.show .nav-item.active .nav-link {
+  background-color: #555; /* 드롭다운 메뉴의 활성 링크 배경색 설정 */
+  color: #000000; /* 드롭다운 메뉴의 활성 링크 텍스트 색상 설정 */
+}
