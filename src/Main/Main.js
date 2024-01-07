@@ -159,7 +159,7 @@ function Main() {
               <div className="box" style={{ background: '#bbd4ef6b', boxShadow: '15px 15px 30px #e6e6e6' }}>
                 <div className="h4_w">
                   <h4>POPULAR</h4>
-                  <a href="/openapi/apilist" className="ico"><AddIcon className="AddIcon" /></a>
+                  <a href="/openapi/apilist?sortby=view" className="ico"><AddIcon className="AddIcon" /></a>
                 </div>
                 <div className="box_cnt">
                   <ul className="cnt_list">
@@ -183,7 +183,7 @@ function Main() {
               <div className="box" style={{ background: '#fae9c06b', boxShadow: '15px 15px 30px #e6e6e6' }}>
                 <div className="h4_w">
                   <h4>RECENT</h4>
-                  <a href="/openapi/apilist" className="ico"><AddIcon className="AddIcon" /></a>
+                  <a href="/openapi/apilist?sortby=register" className="ico"><AddIcon className="AddIcon" /></a>
                 </div>
                 <div className="box_cnt">
                   <ul className="cnt_list">

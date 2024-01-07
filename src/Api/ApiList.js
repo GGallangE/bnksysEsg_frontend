@@ -14,14 +14,12 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import MoveApiRegister from "../Modal/MoveApiRegister";
 import ApiDetailInfo from "../Modal/ApiDetailInfo";
 
-
 function ApiList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [sortBy, setSortBy] = useState("");
+  const [sortBy, setSortBy] = useState("view");
   const location = useLocation();
   const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false);
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   const [totalpage, setTotalpage] = useState(1);
   const LAST_PAGE =
@@ -38,7 +36,7 @@ function ApiList() {
   const handleSearch = async () => {
     try {
       await updateSearchState();
-      console.log(currentPage);
+      console.log(sortBy);
       const response = await axios.get("/spring/main/search", {
         params: {
           name: searchTerm,
@@ -56,7 +54,16 @@ function ApiList() {
 
   useEffect(() => {
     handleSearch();
-  }, [currentPage]);
+  }, [currentPage, searchTerm, sortBy]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const sortby = searchParams.get('sortby');
+
+    if (sortby) {
+      setSortBy(sortby);
+    }
+  }, [location.search]);
 
   const handlePageChange = (event, page) => {
     console.log(page);
@@ -65,7 +72,7 @@ function ApiList() {
 
   const updateSearchState = async () => {
     if (location.state) {
-      console.log(location.state);
+      console.log('state',location.state);
       await setSearchTerm(location.state.name);
       await setSortBy(location.state.sortBy);
       navigate("/OPENAPI/ApiList", { state: null });
@@ -81,10 +88,6 @@ function ApiList() {
   useEffect(() => {
     updateSearchState();
   }, [location.state]);
-
-  useEffect(() => {
-    handleSearch();
-  }, [searchTerm, sortBy]);
 
   const SelectBox = () => {
     return (
@@ -103,14 +106,14 @@ function ApiList() {
         value={sortBy}
         onChange={(e) => setSortBy(e.target.value)}
       >
-        <option key="register" value="register">
-          등록순
-        </option>
         <option key="view" value="view">
           조회순
         </option>
         <option key="nbruses" value="nbruses">
           사용순
+        </option>
+        <option key="register" value="register">
+          등록순
         </option>
       </select>
     );
