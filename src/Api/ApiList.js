@@ -27,9 +27,9 @@ function ApiList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [modalShow, setModalShow] = useState(false);
   const [detailInfoModalShow, setDetailInfoModalShow] = useState(false);
-  const [modalapilistid, setModalapilistid] = useState('');
-  const [modalapinm, setModalapinm] = useState('');
-  const [modalapiexpl, setModalapiexpl] = useState('');
+  const [modalapilistid, setModalapilistid] = useState("");
+  const [modalapinm, setModalapinm] = useState("");
+  const [modalapiexpl, setModalapiexpl] = useState("");
 
   axios.defaults.headers.common["Authorization"] = `Bearer ${isLoggedIn}`;
 
@@ -58,7 +58,7 @@ function ApiList() {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const sortby = searchParams.get('sortby');
+    const sortby = searchParams.get("sortby");
 
     if (sortby) {
       setSortBy(sortby);
@@ -72,7 +72,7 @@ function ApiList() {
 
   const updateSearchState = async () => {
     if (location.state) {
-      console.log('state',location.state);
+      console.log("state", location.state);
       await setSearchTerm(location.state.name);
       await setSortBy(location.state.sortBy);
       navigate("/OPENAPI/ApiList", { state: null });
@@ -195,13 +195,18 @@ function ApiList() {
                   style={{ marginTop: "20px" }}
                 >
                   {result.usedvcd === "01" ? (
-                    <Link to={`/api/detailapi/${result.apilistid}`} className="Link">
+                    <Link
+                      to={`/api/detailapi/${result.apilistid}`}
+                      className="Link"
+                    >
                       <div className="item-container">
                         <div className="item-header">
                           <div className="item-name">{result.apinm}</div>
                           <Button
-                            style={{ border: "none", background: "transparent" }}
-
+                            style={{
+                              border: "none",
+                              background: "transparent",
+                            }}
                             onClick={(e) => {
                               e.preventDefault();
                               handleFavoriteToggle(
@@ -212,11 +217,14 @@ function ApiList() {
                             className="favorite-button"
                           >
                             {result.favorite ? (
-                              <BookmarkIcon style={{ color: "#a2d7d4", fontSize: "35px" }} />
+                              <BookmarkIcon
+                                style={{ color: "#a2d7d4", fontSize: "35px" }}
+                              />
                             ) : (
-                              <BookmarkBorderIcon style={{ color: "#a2d7d4", fontSize: "35px" }} />
+                              <BookmarkBorderIcon
+                                style={{ color: "#a2d7d4", fontSize: "35px" }}
+                              />
                             )}
-
                           </Button>
                         </div>
 
@@ -226,66 +234,81 @@ function ApiList() {
                             : result.apiexpl}
                         </div>
                         <div className="item-info-container">
-                          <span style={{ width: "230px", fontSize: '15px' }}>
+                          <span style={{ width: "230px", fontSize: "15px" }}>
                             제공기관: {result.prvorg}
                           </span>
-                          <span className="item-info">
+                          <span style={{ width: "230px", fontSize: "15px" }}>
                             조회수: {result.apiview}
                           </span>
-                          <span className="item-info">
+                          <span style={{ width: "230px", fontSize: "15px" }}>
                             사용수: {result.countapiuses}
                           </span>
                           <span style={{ display: "none" }}>
                             {result.apilistid}
                           </span>
-
-
-                          <Button
-                            className={`use-button ${result.usedvcd === "02" ? "apply-button" : ""}`}
+                          </div>
+                          <div
                             style={{
-                              background:
-                                result.usedvcd === "02" ? "white" : "#a2d7d4",
-                              border: "solid 3px #a2d7d4",
-                              marginLeft: "auto",
+                              display: "flex",
+                              margin: "10px 10px 0px -5px"
                             }}
-
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleMoveApiDetail(
-                                result.apilistid,
-                                result.apinm,
-                                result.apiexpl,
-                                result.usedvcd
-                              );
-                            }}
-
                           >
-                            {result.usedvcd === "01"
-                              ? "사용하러가기"
-                              : "사용신청하기"}
-                          </Button>
+                            {/* 키워드 나열 */}
+                            {result.apikeyword !== null && (
+                              <ul className="cate_list">
+                                {result.apikeyword
+                                  .split(",")
+                                  .map((keyword, index) => (
+                                    <li key={index}>
+                                      <span
+                                        style={{
+                                          border: "solid 3px #A2D7D4",
+                                          borderRadius: "30px",
+                                          padding: "8px",
+                                          margin: "5px",
+                                          fontSize: "15px",
+                                        }}
+                                      >
+                                        {keyword.trim()}
+                                      </span>
+                                    </li>
+                                  ))}
+                              </ul>
+                            )}
+                            <Button
+                              className={`use-button ${
+                                result.usedvcd === "02" ? "apply-button" : ""
+                              }`}
+                              style={{
+                                background:
+                                  result.usedvcd === "02" ? "white" : "#a2d7d4",
+                                border: "solid 3px #a2d7d4",
+                                marginLeft: "auto",
+                              }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleMoveApiDetail(
+                                  result.apilistid,
+                                  result.apinm,
+                                  result.apiexpl,
+                                  result.usedvcd
+                                );
+                              }}
+                            >
+                              {result.usedvcd === "01"
+                                ? "사용하러가기"
+                                : "사용신청하기"}
+                            </Button>
+                          
                         </div>
-                        {/* 키워드 나열 */}
-                        {result.apikeyword !== null && (
-                          <ul className="cate_list">
-                            {result.apikeyword.split(',').map((keyword, index) => (
-                              <li key={index}>
-                                <span style={{ border: 'solid 1px #555', borderRadius: '3px', padding: '5px', margin: '5px', fontSize: '15px' }}>
-                                  {keyword.trim()}
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
                       </div>
-                    </Link>) : (
-
+                    </Link>
+                  ) : (
                     <div className="item-container">
                       <div className="item-header">
                         <div className="item-name">{result.apinm}</div>
                         <Button
                           style={{ border: "none", background: "transparent" }}
-
                           onClick={(e) => {
                             e.preventDefault();
                             handleFavoriteToggle(
@@ -296,11 +319,14 @@ function ApiList() {
                           className="favorite-button"
                         >
                           {result.favorite ? (
-                            <BookmarkIcon style={{ color: "#a2d7d4", fontSize: "35px" }} />
+                            <BookmarkIcon
+                              style={{ color: "#a2d7d4", fontSize: "35px" }}
+                            />
                           ) : (
-                            <BookmarkBorderIcon style={{ color: "#a2d7d4", fontSize: "35px" }} />
+                            <BookmarkBorderIcon
+                              style={{ color: "#a2d7d4", fontSize: "35px" }}
+                            />
                           )}
-
                         </Button>
                       </div>
 
@@ -310,29 +336,57 @@ function ApiList() {
                           : result.apiexpl}
                       </div>
                       <div className="item-info-container">
-                        <span style={{ width: "230px", fontSize: '15px' }}>
+                        <span style={{ width: "230px", fontSize: "15px" }}>
                           제공기관: {result.prvorg}
                         </span>
-                        <span className="item-info">
+                        <span style={{ width: "230px", fontSize: "15px" }}>
                           조회수: {result.apiview}
                         </span>
-                        <span className="item-info">
+                        <span style={{ width: "230px", fontSize: "15px" }}>
                           사용수: {result.countapiuses}
                         </span>
                         <span style={{ display: "none" }}>
                           {result.apilistid}
                         </span>
-
-
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          margin: "10px 10px 0px -5px"
+                        }}
+                      >
+                        {/* 키워드 나열 */}
+                        {result.apikeyword !== null && (
+                          <ul className="cate_list">
+                            {result.apikeyword
+                              .split(",")
+                              .map((keyword, index) => (
+                                <li key={index}>
+                                  <span
+                                    style={{
+                                      border: "solid 3px #A2D7D4",
+                                      borderRadius: "30px",
+                                      padding: "8px",
+                                      margin: "5px",
+                                      fontSize: "15px",
+                                    }}
+                                  >
+                                    {keyword.trim()}
+                                  </span>
+                                </li>
+                              ))}
+                          </ul>
+                        )}
                         <Button
-                          className={`use-button ${result.usedvcd === "02" ? "apply-button" : ""}`}
+                          className={`use-button ${
+                            result.usedvcd === "02" ? "apply-button" : ""
+                          }`}
                           style={{
                             background:
                               result.usedvcd === "02" ? "white" : "#a2d7d4",
                             border: "solid 3px #a2d7d4",
                             marginLeft: "auto",
                           }}
-
                           onClick={(e) => {
                             e.preventDefault();
                             handleMoveApiDetail(
@@ -342,7 +396,6 @@ function ApiList() {
                               result.usedvcd
                             );
                           }}
-
                         >
                           {result.usedvcd === "01"
                             ? "사용하러가기"
@@ -350,11 +403,9 @@ function ApiList() {
                         </Button>
                       </div>
                     </div>
-
                   )}
                 </li>
               ))}
-
               <Box display="flex" justifyContent="center" mt={3}>
                 <Pagination
                   page={currentPage}
@@ -367,8 +418,17 @@ function ApiList() {
           )}
         </div>
       </div>
-      <MoveApiRegister apilistid={modalapilistid} apinm={modalapinm} apiexpl={modalapiexpl} show={modalShow} onHide={() => setModalShow(false)} />
-      <ApiDetailInfo show={detailInfoModalShow} onHide={() => setDetailInfoModalShow(false)} />
+      <MoveApiRegister
+        apilistid={modalapilistid}
+        apinm={modalapinm}
+        apiexpl={modalapiexpl}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
+      <ApiDetailInfo
+        show={detailInfoModalShow}
+        onHide={() => setDetailInfoModalShow(false)}
+      />
     </div>
   );
 }

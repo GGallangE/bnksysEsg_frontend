@@ -79,8 +79,8 @@ function MyInterestData() {
 
   return (
     <Container style={{ marginTop: '100px auto' }}>
-      <div className='App'>
-        <h3 style={{ marginTop: '100px', marginBottom: '50px' }}>관심 API</h3>
+      <div>
+        <h3 style={{ marginTop: '100px', marginBottom: '50px', textAlign:'center' }}>관심 API</h3>
         {Array.isArray(searchResults) && searchResults.length === 0 ? (
             <p>검색 결과 없음</p>
           ) : (

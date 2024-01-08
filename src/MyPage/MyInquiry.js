@@ -19,6 +19,7 @@ function MyInquiry() {
         try {
             const response = await axios.get('/spring/mypage/myinquiry');
             setSearchMyInquiry(response.data.data.data);
+            console.log(response.data.data.data);
         } catch (error) {
             if (error.response.status === 403) {
                 setShowLoginModal(true);
@@ -98,7 +99,7 @@ function MyInquiry() {
                                     <React.Fragment key={index}>
                                         <li class="tr" key={index} onClick={() => handleRowClick(item)}>
                                             <div class="td-num">{index + 1}</div>
-                                            <div class="td-tit">{item.noticenm}</div>
+                                            <div class="td-tit">{item.inquirynm}</div>
                                             <div class="td-date"><FormatDate dateString={item.regdt} /></div>
                                             <div class="td-writer">{item.replycount === 0 ? "답변중" : "답변완료"}</div>
                                         </li>
