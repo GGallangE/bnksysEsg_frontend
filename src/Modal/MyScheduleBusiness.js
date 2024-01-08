@@ -529,7 +529,7 @@ function MyScheduleBusiness(props) {
                   <option value="">선택하세요</option>
                   <option value="excel">EXCEL</option>
                   <option value="txt">TXT</option>
-                  <option value="json">JSON</option>
+                  {/* <option value="json">JSON</option> */}
                   <option value="xml">XML</option>
                 </Form.Select>
               </Col>

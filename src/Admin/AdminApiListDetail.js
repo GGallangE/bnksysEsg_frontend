@@ -296,7 +296,7 @@ const loadOptions = async (inputValue, codeType) => {
 
                 <Form.Group as={Row} className="mb-3">
                   <Form.Label column xs={12}>
-                    다운가능 메소드:
+                    전송 Type:
                   </Form.Label>
                   <Col xs={12}>
                     <Form.Control

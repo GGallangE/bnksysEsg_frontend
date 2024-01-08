@@ -17,7 +17,11 @@ function FileDownload(props) {
         type: "excel",
       });
 
-      console.log(response);
+      if (response.data === 'ok') {
+        alert('다운로드 완료');
+      } else {
+        console.error('다운로드 실패:', response.data);
+      }
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -40,7 +44,11 @@ function FileDownload(props) {
         type: "txt",
       });
 
-      console.log(response);
+      if (response.data === 'ok') {
+        alert('다운로드 완료');
+      } else {
+        console.error('다운로드 실패:', response.data);
+      }
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -62,8 +70,11 @@ function FileDownload(props) {
         params: dataToSend,
         type: "json",
       });
-
-      console.log(response);
+      if (response.data === 'ok') {
+        alert('다운로드 완료');
+      } else {
+        console.error('다운로드 실패:', response.data);
+      }
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -86,7 +97,11 @@ function FileDownload(props) {
         type: "xml",
       });
 
-      console.log(response);
+      if (response.data === 'ok') {
+        alert('다운로드 완료');
+      } else {
+        console.error('다운로드 실패:', response.data);
+      }
     } catch (error) {
       console.error("Error searching: ", error);
     }

@@ -377,7 +377,7 @@ function DetailData1(props) {
               <h5 style={{ textAlign: "left" }}>입력값</h5>
               <Box sx={{ padding:'10px', marginBottom:'10px', width: "100%", border:'solid 1px #7BBF57', borderRadius:'5px'}}>
               {serverData.map((item) => (
-                <span style={{textAlign:'left', fontSize:'15px'}}><CircleIcon style={{fontSize:'8px'}}/> {item.itemexpl}</span>
+                <span style={{textAlign:'left', fontSize:'15px'}}><CircleIcon style={{fontSize:'8px'}}/>  [{item.rqrditemnm}] : {item.itemexpl}</span>
               ))}
               </Box>
               <Box sx={{ height: 400, width: "100%" }}>

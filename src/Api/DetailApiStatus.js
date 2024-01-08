@@ -16,7 +16,7 @@ function DetailApiStatus() {
     const ApiInfo = async () => {
       try {
         const response = await axios.get(`/spring/connection/result/${apilistid}`)
-        console.log(response);
+        console.log('info', response);
         setSearchResults(response.data.data[0]);
         setLoading(false);
       } catch (error) {

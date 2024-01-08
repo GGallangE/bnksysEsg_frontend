@@ -144,7 +144,11 @@ function UseCaseDetail() {
               {renderApiTable()}<br/>
 							</div>
 							<div class="box-detail-img">               
-                <img alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://data.seoul.go.kr/opendata/board/10005/1700057129984.png"/>                    
+                <img style={{height:'300px'}}alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000002444385&fileDetailSn=2"/>
+                <img style={{height:'300px'}}alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000002444385&fileDetailSn=3"/> 
+                <img style={{height:'300px'}}alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000002444385&fileDetailSn=4"/> 
+                <img style={{height:'300px'}}alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000002444385&fileDetailSn=5"/> 
+                <img style={{height:'300px'}}alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000002444385&fileDetailSn=6"/>                     
 							</div>
 						</div>
 					</article>
