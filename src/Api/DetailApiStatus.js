@@ -6,6 +6,9 @@ import FormatDate from '../Format/FormatDate';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import datagokrImg from '../images/datagokr.png';
+import busanImg from '../images/Busan.jpg';
+import gumImg1 from '../images/금감원.svg';
+import gumImg2 from '../images/금결원.svg';
 
 function DetailApiStatus() {
   const { apilistid } = useParams();
@@ -62,7 +65,8 @@ function DetailApiStatus() {
                 <div class="box-base">
                   <div class="main-content-renewal01">
                     <textarea id="clip_target" style={{ position: 'absolute', top: '-9999em' }} title="URL복사" tabindex="-1"></textarea>
-                    <img style={{marginTop:'70px'}} src={datagokrImg} alt="공공데이터포털"/>
+                    <img style={{marginTop:'50px', height:'50px', width:'200px'}} src={searchResults.sitedvcd === '01' ? datagokrImg : searchResults.sitedvcd === '02' ? busanImg : searchResults.sitedvcd === '03' ? gumImg1: gumImg2}
+  alt={searchResults.site === '01' ? '공공데이터포털' : 'gum1IMG Alt Text'}/>
                     {/* <h1>img</h1> */}
                     {/* <h1 class="side-detail-head"><b>보건</b></h1> */}
                     <strong class="main-content-ctg">
