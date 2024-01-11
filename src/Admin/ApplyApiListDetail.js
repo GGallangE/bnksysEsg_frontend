@@ -21,6 +21,7 @@ function ApplyApiListDetail(props) {
         }
       });
       setSearchResults(response.data.data.data[0]);
+      console.log(response.data.data)
     } catch (error) {
       console.error("Error searching: ", error);
     } finally {
@@ -71,6 +72,11 @@ function ApplyApiListDetail(props) {
             </Modal.Header>
             <Modal.Body>
             <Container className="border border-dashed p-3">
+               <Row className="mb-3">
+                <Col xs={12}>
+                    <h5>신청 API: {searchResults.apinm}</h5>
+                </Col>
+                </Row>
                 <Row className="mb-3">
                 <Col xs={12}>
                     <h5>신청 제목: {searchResults.applynm}</h5>
