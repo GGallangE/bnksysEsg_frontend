@@ -8,8 +8,8 @@ function MoveApiRegister(props) {
     props.onHide();
   };
 
-  const handleMoveApiRegister = () => {
-    navigate("/OPENAPI/ApiApply");
+  const handleMoveApiRegister = (apilistid) => {
+    navigate("/OPENAPI/ApiApply", { state: { apilistid } });
   };
 
   return (
@@ -23,7 +23,7 @@ function MoveApiRegister(props) {
           <Button style={{border:'none'}}variant="secondary" onClick={handleCloseModal}>
             닫기
           </Button>
-          <Button style={{background:"#a2d7d4", border:'none'}} variant="secondary" onClick={handleMoveApiRegister}>
+          <Button style={{background:"#a2d7d4", border:'none'}} variant="secondary" onClick={handleMoveApiRegister(props.apilistid)}>
             api 신청하기
           </Button>
         </Modal.Footer>

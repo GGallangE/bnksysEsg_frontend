@@ -37,6 +37,7 @@ function ScheduleBusiness(props) {
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   const isMounted = useRef(false);
   axios.defaults.headers.common["Authorization"] = `Bearer ${isLoggedIn}`;
+  const [inputEmail, setInputEmail] = useState("");
 
   useEffect(() => {
     requiredItem();
@@ -457,6 +458,20 @@ function ScheduleBusiness(props) {
                 </Form.Select>
               </Col>
             </Row>
+            <Row className="mb-3">
+              <Col xs={2} className="d-flex align-items-center" style={{ width: "104px" }}>
+                이메일:
+              </Col>
+              <Col xs={3}>
+                <Form.Control
+                  type="email"
+                  placeholder="이메일 입력"
+                  value={inputEmail}
+                  onChange={(e) => setInputEmail(e.target.value)}
+                />
+              </Col>
+            </Row>
+
             <h5 style={{ textAlign: "left" }}>입력값</h5>
             <Box sx={{ height: 400, width: "100%" }}>
               <DataGrid

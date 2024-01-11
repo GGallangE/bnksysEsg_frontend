@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Form, Container} from 'react-bootstrap';
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
@@ -11,8 +11,10 @@ function ApiApply(){
     const [content, setContent] = useState('');
     const [modalShow, setModalShow] = React.useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
     const isLoggedIn= useRecoilValue(isLoggedInAtom);
     axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
+    const apilistid = location.state?.apilistid || null;
     
     const usecaseRegister = async () => {
         try {
@@ -44,6 +46,10 @@ function ApiApply(){
       <Form.Group>
         <Form.Label className='form-label'>제목</Form.Label>
         <Form.Control onChange={(e) => setTitle(e.target.value)} value={title} type="text" placeholder="제목을 입력하세요" style={{ height: '50px', fontSize: '15px', borderColor:'#bcbcbc' }}/>
+      </Form.Group>
+      <Form.Group>
+        <Form.Label className='form-label'>제목</Form.Label>
+        <Form.Control value={apilistid} type="text" placeholder="제목을 입력하세요" style={{ height: '50px', fontSize: '15px', borderColor:'#bcbcbc' }}/>
       </Form.Group>
       <Form.Group>
         <Form.Label className='form-label'>신청이유</Form.Label>
