@@ -47,7 +47,7 @@ function InquiryRgt() {
 
             <Form.Label className='form-label'>제목</Form.Label>
 
-            <Form.Control onChange={(e) => setTitle(e.target.value)} value={title} type="text" placeholder="제목을 입력하세요" style={{ height: '50px', fontSize: '15px', borderColor: '#bcbcbc' }} />
+            <Form.Control onChange={(e) => setTitle(e.target.value)} value={title} type="text" placeholder="제목을 입력하세요" style={{ height: '38px', fontSize: '15px', borderColor: '#bcbcbc' }} />
           </Form.Group>
           <Form.Group>
             <Form.Label className='form-label'>내용</Form.Label>

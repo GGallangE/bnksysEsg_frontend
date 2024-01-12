@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container }from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate'
-import NoticeDetail from '../Modal/NoticeDetail'
+import NoticeDetailModal from '../Modal/NoticeDetailModal'
 
 function Notice(){
     const [searchNotice, setSearchNotice] = useState([]);
@@ -72,7 +72,7 @@ function Notice(){
             </div>
           </div>
       </Container>
-      <NoticeDetail
+      <NoticeDetailModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         selectedItem = {selectedItem}

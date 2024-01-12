@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import ApiList from './Api/ApiList';
 import ApiApply from './Apply/ApiApply';
 import Notice from './Information/Notice';
-import NoticeDetail from './Modal/NoticeDetail';
+import NoticeDetailModal from './Modal/NoticeDetailModal';
 import Login from './User/Login';
 import Register from './User/Register';
 import UseCase from './UseCase/UseCase';
@@ -42,7 +42,7 @@ root.render(
   <Route path="/api/detailapi/:apilistid" element={<DetailApi_Status />}/>
   <Route path="/signup" element={<Register />} />
   <Route path="/information/notice" element={<Notice />} />
-  <Route path="/information/noticeDetail/:noticeid" element={<NoticeDetail />} />
+  <Route path="/information/noticeDetailModal/:noticeid" element={<NoticeDetailModal />} />
   <Route path="/information/inquiryregister" element={<InquiryRgt/>} />
   <Route path="/login" element={<Login />} />
   <Route path="/openapi/apilist" element={<ApiList />} />

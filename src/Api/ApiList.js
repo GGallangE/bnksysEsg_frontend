@@ -12,7 +12,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import MoveApiRegister from "../Modal/MoveApiRegister";
-import ApiDetailInfo from "../Modal/ApiDetailInfo";
 
 function ApiList() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -148,10 +147,6 @@ function ApiList() {
     } else {
       showApiRegisterModal(apilistid, apinm, apiexpl);
     }
-  };
-
-  const showApiDetailInfo = () => {
-    setDetailInfoModalShow(true);
   };
 
   return (
@@ -424,10 +419,6 @@ function ApiList() {
         apiexpl={modalapiexpl}
         show={modalShow}
         onHide={() => setModalShow(false)}
-      />
-      <ApiDetailInfo
-        show={detailInfoModalShow}
-        onHide={() => setDetailInfoModalShow(false)}
       />
     </div>
   );

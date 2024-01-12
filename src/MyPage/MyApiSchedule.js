@@ -7,8 +7,7 @@ import { tokenState } from '../TokenState';
 import { isLoggedInAtom } from '../atom';
 import Container from 'react-bootstrap/Container';
 import { Button, Table, Modal, Col, Row } from 'react-bootstrap';
-import ScheduleModify from '../Modal/ScheduleModify'
-import MyScheduleBusiness from '../Modal/MyScheduleBusiness'
+import MyScheduleModal from '../Modal/MyScheduleModal'
 import FormatCode from '../Format/FormatCode';
 
 function MyApiSchedule() {
@@ -18,10 +17,12 @@ function MyApiSchedule() {
   const [batchlistId, setBatchlistId] = useState(null);
   const [apilistid, setApilistid] = useState(null);
   const [apiFormat, setApiFormat] = useState(null);
+  const [dataFormat, setDataFormat] = useState(null);
   const [frequency, setFrequency] = useState(null);
   const [time, setTime] = useState(null);
   const [dayofmonth, setDayofmonth] = useState(null);
   const [dayofweek, setDayofweek] = useState(null);
+  const [email, setEmail] = useState(null);
   const [showDeleteCheck, setShowDeleteCheck] = useState(false);
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
@@ -30,21 +31,22 @@ function MyApiSchedule() {
     try {
       const response = await axios.get('/spring/mypage/myapischedule');
       setSearchResults(response.data.data.data);
-      console.log(response.data.data.data)
+      console.log("myschedule",response.data.data.data)
     } catch (error) {
       console.error("Error searching: ", error);
     }
   };
 
   const handleTitleClick = (item) => {
-    console.log(item)
     setBatchlistId(item.batchlistid);
     setApilistid(item.apilistid);
     setApiFormat(item.apiformat);
+    setDataFormat(item.dataformat);
     setFrequency(item.frequency);
     setTime(item.time);
     setDayofmonth(item.dayofmonth);
     setDayofweek(item.dayofweek);
+    setEmail(item.email);
     setModalShow(true);
   };
 
@@ -136,16 +138,18 @@ function MyApiSchedule() {
         </div>
 
       </Container>
-      <MyScheduleBusiness
+      <MyScheduleModal
         show={modalShow}
         onHide={() => { setModalShow(false); window.location.reload(); setSelectedItems([]); }}
         batchlistId={batchlistId}
         apilistid={apilistid}
         apiFormat={apiFormat}
+        dataFormat={dataFormat}
         frequency={frequency}
         time={time}
         dayofmonth={dayofmonth}
         dayofweek={dayofweek}
+        email={email}
       />
       {/* 삭제 확인 팝업 */}
       <Modal show={showDeleteCheck} onHide={() => setShowDeleteCheck(false)}>

@@ -85,6 +85,7 @@ function MyAlarm() {
                 show={modalShow}
                 onHide={() => {
                     setModalShow(false);
+                    handleSearch();
                 }}
                 selectedItem={selectedItem}
             />

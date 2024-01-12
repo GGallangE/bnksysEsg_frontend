@@ -15,9 +15,11 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 
-function ScheduleBusiness(props) {
-  //const [dataformat, setdataformat] = useState([]);
+function MyScheduleBusiness(props) {
+  const [batchlistId, setBatchlistId] = useState("");
+  const [rsvData, setRsvData] = useState([]);
   const [serverData, setServerData] = useState([]);
   const [dataToSend, setDataToSend] = useState([]);
   const [rows, setRows] = useState([]);
@@ -29,6 +31,7 @@ function ScheduleBusiness(props) {
   const [selectedMinute, setSelectedMinute] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedFrequency, setSelectedFrequency] = useState("");
+  const [selectedEmail, setSelectedEmail] = useState("");
   const [secondOptions, setSecondOptions] = useState([]);
   const [content, setContent] = useState("");
   const [fileOption, setFileOption] = useState("");
@@ -37,25 +40,70 @@ function ScheduleBusiness(props) {
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   const isMounted = useRef(false);
   axios.defaults.headers.common["Authorization"] = `Bearer ${isLoggedIn}`;
-  const [inputEmail, setInputEmail] = useState("");
+
+  const handleRsvData = async () => {
+    try {
+      const response = await axios.get("/spring/mypage/myapischedule", {
+        params: {
+          batchlistid: props.batchlistId,
+        },
+      });
+      setRsvData(response.data.data.data[0].batchDetailargsDto);
+      console.log("rsv", response.data.data.data[0].batchDetailargsDto);
+    } catch (error) {
+      console.error("Error searching: ", error);
+    }
+  };
 
   useEffect(() => {
+    //setBatchlistId(props.batchlistId);
+    handleRsvData();
+    setSelectedFrequency(props.frequency);
+    setSelectedDay(
+      props.frequency === "monthly"
+        ? props.dayofmonth
+        : props.frequency === "weekly"
+          ? props.dayofweek
+          : ""
+    );
+    setFileOption(props.apiFormat);
+    if (props.time) {
+      setSelectedHour(props.time.substring(0, 2));
+      setSelectedMinute(props.time.substring(props.time.length - 2));
+    }
+    setSelectedEmail(props.email);
     requiredItem();
-  }, []);
+    handleOptionChange(props.frequency);
+  }, [props.show]);
 
   //입력값 grid에 필수 값 컬럼 설정
   useEffect(() => {
-    if (serverData.length > 0) {
-      const columnKeys = serverData.map((item) => ({
-        field: item.rqrdrqstnm,
+    if (serverData && serverData.length > 0 && rsvData && rsvData.length > 0) {
+      const columnKeys = serverData.map((item, index) => ({
+        field: `arg${index + 1}`,
         headerName: item.rqrditemnm,
         width: 150,
         editable: true,
       }));
+
+      // rsv 데이터에서 row만 추출하여 가공
+      const gridRows = rsvData.map((rowData, index) => {
+        const gridRow = { id: index }; // 각 row의 고유한 id 설정
+        Object.keys(rowData).forEach((key) => {
+          // 앞에 공백을 추가하여 값을 설정
+          gridRow[key] = rowData[key];// 기존의 key와 value 그대로 복사
+        });
+        return gridRow;
+      });
+
+      // 기존 컬럼 정보와 rsv 데이터로 가공한 row 정보를 합쳐서 최종적인 rows 설정
+      const finalRows = [...gridRows];
+      setRows(finalRows);
+      //setFinalDeleteRowsDelete(finalRows);
       setColumns(columnKeys);
-      handleAddRow();
+      //handleAddRow();
     }
-  }, [serverData]);
+  }, [serverData, rsvData]);
 
   //입력값 grid 새로운 행 추가
   const handleAddRow = () => {
@@ -70,7 +118,7 @@ function ScheduleBusiness(props) {
       ...prevModel,
       [newRowId]: {
         mode: "edit", // 수정 모드로 설정
-        fieldToFocus: props.columns[0]?.field || "", // 포커스할 필드 설정 (예시: 첫 번째 컬럼)
+        fieldToFocus: columns[0]?.field || "", // 포커스할 필드 설정 (예시: 첫 번째 컬럼)
       },
     }));
   };
@@ -84,7 +132,7 @@ function ScheduleBusiness(props) {
         },
       });
       setServerData(response.data);
-      console.log(response.data);
+      console.log("serverdata", response.data);
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -105,12 +153,17 @@ function ScheduleBusiness(props) {
 
     const handleClick = () => {
       const id = randomId();
-      const newEmptyRow = { id, isNew: true };
+      const newEmptyRow = {
+        id,
+        isNew: true,
+        batchDetailListId: null,
+        batchListId: rows[0].batchListId,
+        stcd: "01",
+      };
 
-      // Set default values for each column
-      columns.forEach((column) => {
-        newEmptyRow[column.field] = "";
-      });
+      for (let i = 1; i <= 10; i++) {
+        newEmptyRow[`arg${i}`] = null;
+      }
 
       setRows((oldRows) => [...oldRows, newEmptyRow]);
 
@@ -124,21 +177,37 @@ function ScheduleBusiness(props) {
     };
 
     const handleDeleteClick = (ids) => () => {
-      setRows(rows.filter((row) => !ids.includes(row.id)));
-      // setRows(rows.filter((row) => row.id !== id));
+
+      // 새로운 rows 배열 생성
+      const newRows = rows.map((row) => {
+        // 만약 ids 배열에 현재 row의 id가 포함되어 있다면
+        if (ids.includes(row.id)) {
+          // 현재 row의 stcd를 99로 변경하여 반환
+          return { ...row, stcd: 99 };
+        } else {
+          // ids 배열에 포함되지 않은 경우 그대로 반환
+          return row;
+        }
+      });
+
+      // 변경된 rows 배열을 설정
+      setRows(newRows);
     };
 
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-          Add record
-        </Button>
         <Button
-          color="primary"
-          startIcon={<DeleteIcon />}
+          style={{ background: "#ffffff", border: 'none', color: '#92bcea' }}
+          onClick={handleClick}
+        >
+          <AddIcon/>Add record
+        </Button>
+        <HorizontalRuleIcon style={{ width:'20px', transform: 'rotate(90deg)', color: '#92bcea' }} />
+        <Button
+          style={{ background: "#ffffff", border: 'none', color: '#92bcea', display:'flex' }}
           onClick={handleDeleteClick(rowSelectionModel)}
         >
-          삭제
+          <DeleteIcon style={{ width:'20px'}}/><div>삭제</div>
         </Button>
       </GridToolbarContainer>
     );
@@ -153,15 +222,13 @@ function ScheduleBusiness(props) {
   };
 
   //주기 선택
-  const handleOptionChange = (e) => {
-    const selectedFrequency = e.target.value;
-    setSelectedFrequency(selectedFrequency);
-
-    if (selectedFrequency === "monthly") {
+  const handleOptionChange = (value) => {
+    setSelectedFrequency(value);
+    if (value === "monthly") {
       setSecondOptions(
         Array.from({ length: 31 }, (_, index) => `${index + 1}`)
       );
-    } else if (selectedFrequency === "weekly") {
+    } else if (value === "weekly") {
       setSecondOptions(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]);
     } else {
       setSecondOptions([]);
@@ -173,22 +240,11 @@ function ScheduleBusiness(props) {
     setFileOption(e.target.value);
   };
 
-  const clickRsv = () => {
+  const clickModify = () => {
     //시간 형식에 맞을 때만 실행
     if (parseInt(selectedHour, 10) < 23 && parseInt(selectedMinute, 10) < 59) {
       setSelectedTime(selectedHour + ":" + selectedMinute);
-      setDataToSend(
-        rows.map(({ id, isNew, ...rest }) => {
-          const mappedObject = {};
-
-          // rest 객체의 값들을 순서대로 'arg1', 'arg2', ...로 매핑
-          Object.values(rest).forEach((value, index) => {
-            mappedObject[`arg${index + 1}`] = value;
-          });
-
-          return mappedObject;
-        })
-      );
+      setDataToSend(rows.map(({ id, isNew, ...rest }) => rest));
     } else {
       alert("올바른 시간을 입력하세요");
     }
@@ -200,47 +256,65 @@ function ScheduleBusiness(props) {
       const handleSchedule = async () => {
         try {
           if (selectedFrequency === "monthly") {
-            const response = await axios.post("/spring/reservation/schedule", {
-              apilistid: props.apilistid,
-              frequency: selectedFrequency,
-              time: selectedTime,
-              dayofmonth: selectedDay,
-              apiformat: fileOption,
-              batchDetailargsDto: dataToSend,
-            });
+            const response = await axios.post(
+              "/spring/mypage/myapischedule/update",
+              {
+                apilistid: props.apilistid,
+                batchlistid: props.batchlistId,
+                frequency: selectedFrequency,
+                time: selectedTime,
+                dayofmonth: selectedDay,
+                email:selectedEmail,
+                apiformat: fileOption,
+                batchDetailargsDto: dataToSend,
+              }
+            );
             const freKorean = getFreKorean(selectedFrequency);
             alert(
-              `${freKorean} ${selectedDay}일 ${selectedTime}에 예약이 완료되었습니다.`
+              `${freKorean} ${selectedDay}일 ${selectedTime}으로 수정이 완료되었습니다.`
             );
           } else if (selectedFrequency === "weekly") {
-            const response = await axios.post("/spring/reservation/schedule", {
-              apilistid: props.apilistid,
-              frequency: selectedFrequency,
-              time: selectedTime,
-              dayofweek: selectedDay,
-              apiformat: fileOption,
-              batchDetailargsDto: dataToSend,
-            });
+            const response = await axios.post(
+              "/spring/mypage/myapischedule/update",
+              {
+                apilistid: props.apilistid,
+                batchlistid: props.batchlistId,
+                frequency: selectedFrequency,
+                time: selectedTime,
+                dayofweek: selectedDay,
+                email:selectedEmail,
+                apiformat: fileOption,
+                batchDetailargsDto: dataToSend,
+              }
+            );
             const freKorean = getFreKorean(selectedFrequency);
             //const dayKorean = FormatCode({ code: "day", value: selectedDay });
             //const dayKorean = getDayKorean(selectedDay);
-            //console.log(dayKorean)
-            alert(`${freKorean}요일 ${selectedTime}에 예약이 완료되었습니다.`);
+
+            alert(
+              `${freKorean} 요일 ${selectedTime}으로 수정이 완료되었습니다.`
+            );
           } else {
-            const response = await axios.post("/spring/reservation/schedule", {
-              apilistid: props.apilistid,
-              frequency: selectedFrequency,
-              time: selectedTime,
-              apiformat: fileOption,
-              batchDetailargsDto: dataToSend,
-            });
+            const response = await axios.post(
+              "/spring/mypage/myapischedule/update",
+              {
+                apilistid: props.apilistid,
+                batchlistid: props.batchlistId,
+                frequency: selectedFrequency,
+                time: selectedTime,
+                email:selectedEmail,
+                apiformat: fileOption,
+                batchDetailargsDto: dataToSend,
+              }
+            );
             const freKorean = getFreKorean(selectedFrequency);
-            alert(`${freKorean} ${selectedTime}에 예약이 완료되었습니다.`);
+            alert(`${freKorean} ${selectedTime}으로 수정이 완료되었습니다.`);
           }
           setExcelArray([]);
           setContent("");
           setSelectedHour("");
           setSelectedMinute("");
+
           props.onHide();
         } catch (error) {
           console.log(error);
@@ -351,8 +425,8 @@ function ScheduleBusiness(props) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header style={{ background: '#D7E7AF' }} closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">예약하기</Modal.Title>
+        <Modal.Header style={{ background: '#bbd4ef' }} closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">예약수정하기</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
@@ -365,7 +439,10 @@ function ScheduleBusiness(props) {
                 예약일시:
               </Col>
               <Col xs={3}>
-                <Form.Select onChange={handleOptionChange}>
+                <Form.Select
+                  value={selectedFrequency}
+                  onChange={(e) => handleOptionChange(e.target.value)}
+                >
                   <option value="">선택하세요</option>
                   <option value="monthly">매달</option>
                   <option value="weekly">매주</option>
@@ -374,6 +451,7 @@ function ScheduleBusiness(props) {
               </Col>
               <Col xs={3}>
                 <Form.Select
+                  value={selectedDay}
                   onChange={(e) => setSelectedDay(e.target.value)}
                   disabled={selectedFrequency === "daily"}
                 >
@@ -446,11 +524,14 @@ function ScheduleBusiness(props) {
                 파일형식:
               </Col>
               <Col xs={3}>
-                <Form.Select onChange={handlefileOptionChange}>
+                <Form.Select
+                  value={fileOption}
+                  onChange={handlefileOptionChange}
+                >
                   <option value="">선택하세요</option>
                   <option value="excel">EXCEL</option>
                   <option value="txt">TXT</option>
-                  {props.dataformat.split(",").map((format, index) => (
+                  {(props.dataFormat) && props.dataFormat.split(",").map((format, index) => (
                     <option key={index} value={format.toLowerCase()}>
                       {format.toUpperCase()}
                     </option>
@@ -464,14 +545,14 @@ function ScheduleBusiness(props) {
               </Col>
               <Col xs={3}>
                 <Form.Control
+                  style={{border:'solid 1px #cccccc', height:'45px', width:'300px'}}
                   type="email"
                   placeholder="이메일 입력"
-                  value={inputEmail}
-                  onChange={(e) => setInputEmail(e.target.value)}
+                  value={selectedEmail}
+                  onChange={(e) => setSelectedEmail(e.target.value)}
                 />
               </Col>
             </Row>
-
             <h5 style={{ textAlign: "left" }}>입력값</h5>
             <Box sx={{ height: 400, width: "100%" }}>
               <DataGrid
@@ -482,8 +563,8 @@ function ScheduleBusiness(props) {
                     },
                   },
                 }}
-                rows={rows}
-                columns={props.columns}
+                rows={rows.filter(row => row.stcd !== 99)}
+                columns={columns}
                 pageSizeOptions={[5]}
                 checkboxSelection
                 onRowSelectionModelChange={(newRowSelectionModel) => {
@@ -500,44 +581,22 @@ function ScheduleBusiness(props) {
                 processRowUpdate={(updatedRow) => processRowUpdate(updatedRow)}
                 onProcessRowUpdateError={handleProcessRowUpdateError}
                 slots={{
-                  toolbar: props.EditToolbar,
+                  toolbar: EditToolbar,
                 }}
                 slotProps={{
                   toolbar: { setRows, setRowModesModel },
                 }}
               />
             </Box>
-            {/* <Row className="mb-2">
-              <Col className="d-flex align-items-center">
-                <label htmlFor="content" style={{ marginRight: '20px' }}>사업자번호: </label>
-                <Form.Control type="text" id="content" name="content" onChange={handleContent} value={content} style={{ width: '600px' }} />
-              </Col>
-            </Row> */}
-            {/* <Row className="mb-3">
-              <Col style={{ fontSize: '14px' }}>
-                ',' 로 구분해 주세요. (예시) 0000000000, 1111111111
-              </Col>
-            </Row> */}
-            {/* <Row className="mb-3">
-              <Col>
-                <Form.Label>Excel파일 업로드</Form.Label>
-                <Form.Control
-                  type="file"
-                  name="file"
-                  onChange={handleFileInputChange}
-                  accept=".xlsx, .xls"
-                />
-              </Col>
-            </Row> */}
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button style={{background:"#7BBF57", border:'none'}} onClick={clickRsv}>예약</Button>
-          <Button style={{background:"#ffffff", borderColor:'#7BBF57', color:'#7BBF57'}} onClick={handleClose}>닫기</Button>
+          <Button style={{ background: "#92bcea", border: 'none' }} onClick={clickModify}>수정</Button>
+          <Button style={{ background: "#ffffff", borderColor: '#92bcea', color: '#92bcea' }} onClick={handleClose}>닫기</Button>
         </Modal.Footer>
       </Modal>
     </div>
   );
 }
 
-export default ScheduleBusiness;
+export default MyScheduleBusiness;
