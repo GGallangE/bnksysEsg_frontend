@@ -89,7 +89,7 @@ function ApiApply() {
               type="text"
               placeholder="제목을 입력하세요"
               style={{
-                height: "38px",
+                height: "50px",
                 fontSize: "15px",
                 borderColor: "#bcbcbc",
               }}

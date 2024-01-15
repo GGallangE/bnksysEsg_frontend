@@ -86,9 +86,9 @@ function MyRecentUseData() {
   };
 
   return (
-    <Container style={{ marginTop: '100px' }}>
+    <Container style={{ marginTop: '100px auto' }}>
       <div>
-        <h5 style={{ marginTop: '50px', marginBottom: '50px', textAlign:'center' }}>최근 사용 API</h5>
+      <h1 style={{ marginTop: '50px', marginBottom: '50px' }}>최근 사용 API</h1>
         {Array.isArray(searchResults) && searchResults.length === 0 ? (
             <p>검색 결과 없음</p>
           ) : (

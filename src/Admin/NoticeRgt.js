@@ -80,11 +80,12 @@ function NoticeRgt() {
   return (
     <div>
       <Container>
-        <h5 style={{ marginTop: '100px' }}>공지사항 작성</h5>
+      <h1 style={{ marginTop: '50px', marginBottom: '50px' }}>공지사항 작성</h1>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>제목</Form.Label>
             <Form.Control
+            className="form-input"
               onChange={(e) => setTitle(e.target.value)}
               value={title}
               type="text"
@@ -95,6 +96,7 @@ function NoticeRgt() {
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
             <Form.Label>내용</Form.Label>
             <Form.Control
+            className="form-input"
               onChange={(e) => setContent(e.target.value)}
               value={content}
               placeholder="내용을 입력하세요"
@@ -105,7 +107,7 @@ function NoticeRgt() {
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlFile1">
             <Form.Label>첨부 파일</Form.Label>
-            <Form.Control type="file" multiple onChange={handleFileChange} />
+            <Form.Control className="form-input" type="file" multiple onChange={handleFileChange} />
           </Form.Group>
           {files.length > 0 && (
             <div>
@@ -118,14 +120,9 @@ function NoticeRgt() {
             </div>
          )}  
         </Form>
-        <Button
-          onClick={noticeRegister}
-          style={{ margin: '50px 0px' }}
-          variant="primary"
-          type="submit"
-        >
-          등록
-        </Button>
+        <div className="btm_area">
+          <input type="submit" value="등록" className="btn_rgt" style={{background:'#f5c856', border:'none'}} onClick={noticeRegister} />
+        </div>
       </Container>
       <ModalRgt
         show={modalShow}

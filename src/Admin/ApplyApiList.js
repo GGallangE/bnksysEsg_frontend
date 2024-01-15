@@ -39,40 +39,51 @@ function ApplyApiList(){
     <div className="App">
       <Container style={{margin:'100px auto'}}>
         <div>
-        <h5 style={{marginTop : '50px', marginBottom : '50px'}}>API 신청 관리</h5>
-        <Table bordered>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>API 신청 이름</th>
-                    <th>신청자</th>
-                    <th>신청일</th>
-                    <th>답변일</th>
-                    <th>상태</th>
-                </tr>
-            </thead>
-            <tbody>
+
+        <h1 style={{ marginTop: '50px', marginBottom: '50px' }}>API 신청관리</h1>
+      <div class="tb_w-yellow">
+            <div class="st_tb_w-yellow">
+              <ul class="st_tb_col-yellow">
+                <li class="tr-yellow">
+                  <div class="th-num-yellow">
+                    <span>NO</span>
+                  </div>
+                  <div class="th-tit-yellow">
+                    <span>API 신청 이름</span>
+                  </div>
+                  <div class="th-writer-yellow">
+                    <span>신청자</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>신청일</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>답변일</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>상태</span>
+                  </div>
+                </li>
                 {searchApplyApiList.map((item, index) => (
-                    <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>
+                  <li class="tr" key={index}>
+                    <div class="td-num">{index + 1}</div>
                     <div
+                    class="td-tit"
                     onClick={() => handleTitleClick(item)}
                     style={{ cursor: 'pointer', textDecoration: 'underline' }}
                     >
                     {item.applynm}
-                    </div>
-                    </td>
-                    <td>{item.username}</td>
-                    <td>{item.applydate ? <FormatDate dateString={item.applydate} /> : ''}</td>
-                    <td>{item.rplydate ? <FormatDate dateString={item.rplydate} /> : ''}</td>
-                    <td>
-                      {item.applydvcd === '01' ? '신청중' : (item.applydvcd === '02' ? '반려' : '승인완료')}
-                    </td>
-                  </tr>
+                  </div>
+                    <div class="td-writer">{item.username}</div>
+                    <div class="td-date">{item.applydate ? <FormatDate dateString={item.applydate} /> : ''}</div>
+                    <div class="td-date">{item.rplydate ? <FormatDate dateString={item.rplydate} /> : ''}</div>
+                    <div class="td-writer">{item.applydvcd === '01' ? '신청중' : (item.applydvcd === '02' ? '반려' : '승인완료')}</div>
+                  </li>
                 ))}
-            </tbody>
-        </Table>
+              </ul>
+            </div>
+          </div>
+        
         </div>
       </Container>
       <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}></div>

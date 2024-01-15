@@ -4,7 +4,7 @@ h1{
     font-weight: bold;
 }
 
-.tb_w{
+.tb_w-green{
     text-shadow: none;
     color: #191919;
     letter-spacing: -0.5px;
@@ -19,7 +19,7 @@ h1{
     padding: 0;
     overflow-x: auto;
 }
-.st_tb_w{
+.st_tb_w-green{
     text-shadow: none;
     color: #191919;
     letter-spacing: -0.5px;
@@ -32,9 +32,9 @@ h1{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    border-top: 1px solid #bbd4ef;
+    border-top: 1px solid #d7e7af;
 }
-.st_tb_col{
+.st_tb_col-green{
     text-shadow: none;
     color: #191919;
     letter-spacing: -0.5px;
@@ -53,7 +53,7 @@ h1{
     width: 100%;
     border-top: none;
 }
-.tr{
+.tr-green{
     text-shadow: none;
     color: #191919;
     letter-spacing: -0.5px;
@@ -69,7 +69,7 @@ h1{
     list-style: none;
     display: table-row;
 }
-.th-num{
+.th-num-green{
     text-shadow: none;
     letter-spacing: -0.5px;
     word-break: keep-all;
@@ -86,15 +86,15 @@ h1{
     padding-left: 0.25rem;
     color: #191919;
     text-align: center;
-    border-bottom: 1px solid #bbd4ef;
-    background: #bbd4ef56;
+    border-bottom: 1px solid #d7e7af;
+    background: #d7e7af56;
     vertical-align: middle;
     height: 58px;
     line-height: 1.3;
     white-space: nowrap;
     width: 15%;
 }
-.th-tit{
+.th-tit-green{
     text-shadow: none;
     letter-spacing: -0.5px;
     word-break: keep-all;
@@ -111,14 +111,14 @@ h1{
     padding-left: 0.25rem;
     width: 180px;
     color: #191919;
-    border-bottom: 1px solid #bbd4ef;
-    background: #bbd4ef56;
+    border-bottom: 1px solid #d7e7af;
+    background: #d7e7af56;
     vertical-align: middle;
     height: 58px;
     line-height: 1.3;
     text-align: center;
 }
-.th-writer{
+.th-writer-green{
     text-shadow: none;
     letter-spacing: -0.5px;
     word-break: keep-all;
@@ -135,15 +135,15 @@ h1{
     padding-left: 0.25rem;
     color: #191919;
     text-align: center;
-    border-bottom: 1px solid #bbd4ef;
-    background: #bbd4ef56;
+    border-bottom: 1px solid #d7e7af;
+    background: #d7e7af56;
     vertical-align: middle;
     height: 58px;
     line-height: 1.3;
     white-space: nowrap;
     width: 20%;
 }
-.th-date{
+.th-date-green{
     text-shadow: none;
     letter-spacing: -0.5px;
     word-break: keep-all;
@@ -160,8 +160,8 @@ h1{
     padding-left: 0.25rem;
     color: #191919;
     text-align: center;
-    border-bottom: 1px solid #bbd4ef;
-    background: #bbd4ef56;
+    border-bottom: 1px solid #d7e7af;
+    background: #d7e7af56;
     vertical-align: middle;
     height: 58px;
     line-height: 1.3;

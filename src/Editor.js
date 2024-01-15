@@ -43,7 +43,7 @@ function Editor({onQuillChange}){
           // src가 base64가 아닌 짧은 URL이기 때문에 데이터베이스에 에디터의 전체 글 내용을 저장할 수있게된다
           // 이미지는 꼭 로컬 백엔드 uploads 폴더가 아닌 다른 곳에 저장해 URL로 사용하면된다.
         
-          // 이미지 태그를 에디터에 써주기 - 여러 방법이 있다.
+          // 이미지 태그를 에디터에 써주기
           const editor = quillRef.current.getEditor(); // 에디터 객체 가져오기
           // 1. 에디터 root의 innerHTML을 수정해주기
           // editor의 root는 에디터 컨텐츠들이 담겨있다. 거기에 img태그를 추가해준다.
@@ -56,7 +56,7 @@ function Editor({onQuillChange}){
           const range = editor.getSelection();
           // 가져온 위치에 이미지를 삽입한다
           editor.insertEmbed(range.index, 'image', result.data.messages[0]);
-          //editor.setSelection(range.index + 1);
+          editor.setSelection(range.index + 1);
         } catch (error) {
           console.log('실패했어요ㅠ');
         }

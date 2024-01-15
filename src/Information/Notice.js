@@ -5,6 +5,7 @@ import { Button, Container }from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import FormatDate from '../Format/FormatDate'
 import NoticeDetailModal from '../Modal/NoticeDetailModal'
+import '../css/Notice.css'
 
 function Notice(){
     const [searchNotice, setSearchNotice] = useState([]);
@@ -36,21 +37,21 @@ function Notice(){
     return (
     <div className="App">
       <Container style={{margin:'100px auto'}}>
-      <h1 style={{ marginTop: '50px', marginBottom: '50px' }}>공지사항</h1>
-      <div class="tb_w">
-            <div class="st_tb_w ">
-              <ul class="st_tb_col">
-                <li class="tr">
-                  <div class="th-num">
+      <h1 style={{ marginBottom: '50px' }}>공지사항</h1>
+      <div class="tb_w-green">
+            <div class="st_tb_w-green">
+              <ul class="st_tb_col-green">
+                <li class="tr-green">
+                  <div class="th-num-green">
                     <span>NO</span>
                   </div>
-                  <div class="th-tit">
+                  <div class="th-tit-green">
                     <span>제목</span>
                   </div>
-                  <div class="th-writer">
+                  <div class="th-writer-green">
                     <span>등록자</span>
                   </div>
-                  <div class="th-date">
+                  <div class="th-date-green">
                     <span>등록일</span>
                   </div>
                 </li>

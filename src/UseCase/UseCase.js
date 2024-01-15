@@ -41,18 +41,18 @@ function UseCase() {
 
         <div>
           <h1>활용사례</h1>
-          <div className="use_sch_total_w">
-            <div className="use_sch_total">
-              <div className="use_input_wrap">
+          <div className="use_sch_total_w-yellow">
+            <div className="use_sch_total-yellow">
+              <div className="use_input_wrap-yellow">
                 <input
                   type="text"
                   placeholder="검색어를 입력하세요"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="use_sch_ip"
+                  className="use_sch_ip-yellow"
                 />
-                <a onClick={handleSearch} className="use_btn_sch" id="submit">
+                <a onClick={handleSearch} className="use_btn_sch-yellow" id="submit">
                   <SearchIcon sx={{ fontSize: '30px', color: '#fff', margin: '5px 0px 0px 0px' }} />
                 </a>
               </div>
@@ -60,26 +60,26 @@ function UseCase() {
           </div>
           <Row className="justify-content-end">
             <Col md="auto">
-              <Button onClick={() => { navigate('/openapi/usecaseregister'); }} style={{ margin: '10px', background: '#fff', borderColor: '#bbd4ef', borderWidth: '2px', fontWeight: 'bold', color: '#000' }} variant="primary" type="submit">
+              <Button onClick={() => { navigate('/openapi/usecaseregister'); }} style={{ margin: '10px', background: '#fff', borderColor: '#FAEAC0', borderWidth: '2px', fontWeight: 'bold', color: '#000' }} variant="primary" type="submit">
                 활용사례 등록하기
               </Button>
             </Col>
           </Row>
 
-          <div class="tb_w">
-            <div class="st_tb_w ">
-              <ul class="st_tb_col">
-                <li class="tr">
-                  <div class="th-num">
+          <div class="tb_w-yellow">
+            <div class="st_tb_w-yellow">
+              <ul class="st_tb_col-yellow">
+                <li class="tr-yellow">
+                  <div class="th-num-yellow">
                     <span>NO</span>
                   </div>
-                  <div class="th-tit">
+                  <div class="th-tit-yellow">
                     <span>제목</span>
                   </div>
-                  <div class="th-writer">
+                  <div class="th-writer-yellow">
                     <span>등록자</span>
                   </div>
-                  <div class="th-date">
+                  <div class="th-date-yellow">
                     <span>등록일</span>
                   </div>
                 </li>
