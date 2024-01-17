@@ -7,6 +7,7 @@ import FormatDate from '../Format/FormatDate';
 import { useNavigate } from 'react-router-dom';
 import '../css/UseCaseDetail.css'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import DOMPurify from 'dompurify';
 
 function UseCaseDetail() {
   const [searchResults, setSearchResults] = useState([]);
@@ -136,19 +137,11 @@ function UseCaseDetail() {
 <p>&nbsp;</p>
 							</div> */}
 							<h3 class="tit-check"><NavigateNextIcon/>활용사례 설명</h3>
-							<div class="box-line">
-              {searchResults.content}
-							</div>
+							<div className="box-line" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(searchResults.content) }} />
+              {/* HTML태그가 그대로 렌더링이 안되게 하기*/}
 							<h3 class="tit-check" style={{marginTop:'30px'}}><NavigateNextIcon/>사용 API</h3>
 							<div>
               {renderApiTable()}<br/>
-							</div>
-							<div class="box-detail-img">               
-                <img style={{height:'300px'}}alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000002444385&fileDetailSn=2"/>
-                <img style={{height:'300px'}}alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000002444385&fileDetailSn=3"/> 
-                <img style={{height:'300px'}}alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000002444385&fileDetailSn=4"/> 
-                <img style={{height:'300px'}}alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000002444385&fileDetailSn=5"/> 
-                <img style={{height:'300px'}}alt="지하철 현재 위치 공유 웹 글의 사용자 업로드 이미지" src="https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000002444385&fileDetailSn=6"/>                     
 							</div>
 						</div>
 					</article>

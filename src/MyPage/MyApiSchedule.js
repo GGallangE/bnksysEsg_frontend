@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link, useLocation } from 'react-router-dom';
-import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil';
-import TokenManagement from '../TokenManagement';
-import { tokenState } from '../TokenState';
-import { isLoggedInAtom } from '../atom';
-import Container from 'react-bootstrap/Container';
-import { Button, Table, Modal, Col, Row } from 'react-bootstrap';
-import MyScheduleModal from '../Modal/MyScheduleModal'
-import FormatCode from '../Format/FormatCode';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link, useLocation } from "react-router-dom";
+import { RecoilRoot, useRecoilValue, useRecoilState } from "recoil";
+import TokenManagement from "../TokenManagement";
+import { tokenState } from "../TokenState";
+import { isLoggedInAtom } from "../atom";
+import Container from "react-bootstrap/Container";
+import { Button, Table, Modal, Col, Row } from "react-bootstrap";
+import MyScheduleModal from "../Modal/MyScheduleModal";
+import FormatCode from "../Format/FormatCode";
+import { Pagination, Box } from "@mui/material";
 
 function MyApiSchedule() {
   const [searchResults, setSearchResults] = useState([]);
@@ -24,14 +25,25 @@ function MyApiSchedule() {
   const [dayofweek, setDayofweek] = useState(null);
   const [email, setEmail] = useState(null);
   const [showDeleteCheck, setShowDeleteCheck] = useState(false);
+  const [totalpage, setTotalpage] = useState(1);
+  const LAST_PAGE =
+    totalpage % 10 === 0
+      ? parseInt(totalpage / 10)
+      : parseInt(totalpage / 10) + 1;
+  const [currentPage, setCurrentPage] = useState(1);
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
-  axios.defaults.headers.common['Authorization'] = `Bearer ${isLoggedIn}`;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${isLoggedIn}`;
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get('/spring/mypage/myapischedule');
+      const response = await axios.get("/spring/mypage/myapischedule", {
+        params: {
+          page: currentPage - 1,
+        },
+      });
       setSearchResults(response.data.data.data);
-      console.log("myschedule",response.data.data.data)
+      setTotalpage(response.data.data.data[0].total);
+      console.log("myschedule", response.data.data.data);
     } catch (error) {
       console.error("Error searching: ", error);
     }
@@ -50,6 +62,15 @@ function MyApiSchedule() {
     setModalShow(true);
   };
 
+  const handlePageChange = (event, page) => {
+    console.log(page);
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [currentPage]);
+
   useEffect(() => {
     handleSearch();
   }, []);
@@ -59,7 +80,9 @@ function MyApiSchedule() {
     if (checked) {
       setSelectedItems((prevItems) => [...prevItems, item]);
     } else {
-      setSelectedItems((prevItems) => prevItems.filter((selectedItem) => selectedItem !== item));
+      setSelectedItems((prevItems) =>
+        prevItems.filter((selectedItem) => selectedItem !== item)
+      );
     }
   };
 
@@ -72,9 +95,12 @@ function MyApiSchedule() {
       // selectedItems 배열에 있는 모든 batchlistid에 대해 삭제 요청을 보냄
       await Promise.all(
         selectedItems.map(async (selectedItem) => {
-          const response = await axios.post('/spring/mypage/myapischedule/delete', {
-            batchlistid: selectedItem.batchlistid,
-          });
+          const response = await axios.post(
+            "/spring/mypage/myapischedule/delete",
+            {
+              batchlistid: selectedItem.batchlistid,
+            }
+          );
         })
       );
       // 삭제 후 초기화
@@ -87,12 +113,19 @@ function MyApiSchedule() {
 
   return (
     <div className="App">
-      <Container style={{ margin: '100px auto' }}>
+      <Container style={{ margin: "100px auto" }}>
         <h1>API예약현황</h1>
-        <div style={{ margin: '30px 0px' }}>
+        <div style={{ margin: "30px 0px" }}>
           <Row className="justify-content-end">
             <Col md="auto">
-              <Button style={{ margin: '20px 0px', background: "#bbd4ef", border: 'none' }} onClick={() => handleDeleteCheck()}>
+              <Button
+                style={{
+                  margin: "20px 0px",
+                  background: "#bbd4ef",
+                  border: "none",
+                }}
+                onClick={() => handleDeleteCheck()}
+              >
                 삭제
               </Button>
             </Col>
@@ -116,31 +149,52 @@ function MyApiSchedule() {
                 </li>
                 {searchResults.map((item, index) => (
                   <li class="tr" key={index}>
-                    <div class="td-num"><input
-                      type="checkbox"
-                      onChange={(event) => handleCheckboxChange(event, item)}
-                      checked={selectedItems.includes(item)}
-                    /></div>
-                    <div class="td-num">{index + 1}</div>
+                    <div class="td-num">
+                      <input
+                        type="checkbox"
+                        onChange={(event) => handleCheckboxChange(event, item)}
+                        checked={selectedItems.includes(item)}
+                      />
+                    </div>
+                    <div class="td-num">
+                      {currentPage === 1
+                        ? index + 1
+                        : (currentPage - 1) * 10 + index + 1}
+                    </div>
                     <div
                       class="td-tit"
                       onClick={() => handleTitleClick(item)}
-                      style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                      style={{ cursor: "pointer", textDecoration: "underline" }}
                     >
                       {item.apinm}
                     </div>
-                    <div class="td-date"><FormatCode code="frequency" value={item.frequency} /> <FormatCode code="day" value={item.dayofweek} /> {item.dayofmonth && <>{item.dayofmonth}일</>} {item.time}</div>
+                    <div class="td-date">
+                      <FormatCode code="frequency" value={item.frequency} />{" "}
+                      <FormatCode code="day" value={item.dayofweek} />{" "}
+                      {item.dayofmonth && <>{item.dayofmonth}일</>} {item.time}
+                    </div>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
         </div>
-
+        <Box margin="50px" display="flex" justifyContent="center" mt={3}>
+          <Pagination
+            page={currentPage}
+            count={LAST_PAGE}
+            defaultPage={1}
+            onChange={handlePageChange}
+          />
+        </Box>
       </Container>
       <MyScheduleModal
         show={modalShow}
-        onHide={() => { setModalShow(false); window.location.reload(); setSelectedItems([]); }}
+        onHide={() => {
+          setModalShow(false);
+          window.location.reload();
+          setSelectedItems([]);
+        }}
         batchlistId={batchlistId}
         apilistid={apilistid}
         apiFormat={apiFormat}
@@ -156,14 +210,18 @@ function MyApiSchedule() {
         <Modal.Header closeButton>
           <Modal.Title>삭제 확인</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          삭제하시겠습니까?
-        </Modal.Body>
+        <Modal.Body>삭제하시겠습니까?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteCheck(false)}>
             취소
           </Button>
-          <Button variant="primary" onClick={() => { setShowDeleteCheck(false); handleDelete(); }}>
+          <Button
+            variant="primary"
+            onClick={() => {
+              setShowDeleteCheck(false);
+              handleDelete();
+            }}
+          >
             확인
           </Button>
         </Modal.Footer>

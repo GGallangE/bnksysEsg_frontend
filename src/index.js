@@ -16,7 +16,7 @@ import DetailApi_Status from './Api/DetailApiStatus';
 import { RecoilRoot } from 'recoil';
 import TokenManagement from './TokenManagement';
 import Navigation from './Navigation';
-import InquiryRgt from './Inquiry/InquiryRgt';
+import InquiryRgt from './Information/InquiryRgt';
 import MyInterestData from './MyPage/MyInterestData';
 import MyInquiry from './MyPage/MyInquiry';
 import MyRecentUseData from './MyPage/MyRecentUseData';

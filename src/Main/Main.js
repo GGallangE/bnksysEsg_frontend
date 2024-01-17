@@ -145,7 +145,7 @@ function Main() {
               className="search-button"
               onClick={handleSearch}
               type="submit">
-              <SearchIcon sx={{ fontSize: '23px' }} />Search
+              <SearchIcon sx={{ fontSize: '35px' }} />
             </button>
           </div>
         </div>

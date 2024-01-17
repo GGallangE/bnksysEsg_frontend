@@ -39,10 +39,6 @@ function ApiApply() {
     setSelectedApiName(selectedOption);
 };
 
-  useEffect(() => {
-    console.log(selectedApiName);
-  }, [selectedApiName]);
-
   const usecaseRegister = async () => {
     try {
       const response = await axios.post("/spring/request/apiapply", {

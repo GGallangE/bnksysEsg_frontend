@@ -23,7 +23,9 @@ function MyRecentUseData() {
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   const [totalpage, setTotalpage] = useState(1);
   const LAST_PAGE =
-    totalpage % 30 === 0 ? parseInt(totalpage / 30) : parseInt(totalpage / 30);
+    totalpage % 10 === 0
+      ? parseInt(totalpage / 10)
+      : parseInt(totalpage / 10) + 1;
   const [currentPage, setCurrentPage] = useState(1);
   const [modalShow, setModalShow] = useState(false);
   const [detailInfoModalShow, setDetailInfoModalShow] = useState(false);
@@ -34,12 +36,22 @@ function MyRecentUseData() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get('/spring/mypage/myrecentuseapi');
+      const response = await axios.get('/spring/mypage/myrecentuseapi', {
+        params: {
+          page: currentPage - 1,
+        },
+      });
       setSearchResults(response.data.data.data);
+      setTotalpage(response.data.data.data[0].total);
+      console.log(response);
     } catch (error) {
       console.error("Error searching: ", error);
     }
   }
+
+  useEffect(() => {
+    handleSearch();
+  }, [currentPage]);
 
   useEffect(() => {
     handleSearch();
