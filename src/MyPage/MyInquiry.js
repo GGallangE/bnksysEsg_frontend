@@ -6,6 +6,8 @@ import { isLoggedInAtom } from "../atom";
 import { useRecoilValue } from "recoil";
 import LoginPopup from "../User/LoginPopup";
 import { Pagination, Box } from "@mui/material";
+import instance from "../apiAxios/axios";
+import requests from "../apiAxios/requests";
 
 function MyInquiry() {
   const [searchMyInquiry, setSearchMyInquiry] = useState([]);
@@ -22,6 +24,17 @@ function MyInquiry() {
   const [currentPage, setCurrentPage] = useState(1);
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   axios.defaults.headers.common["Authorization"] = `Bearer ${isLoggedIn}`;
+
+  const handleSearch2 = async () => {
+    //나의 문의사항 가져오기
+    
+    const response = await instance.get(requests.fetchMyInquiry);
+    console.log('axios', response);
+  };
+
+  useEffect(()=>{
+    handleSearch2();
+  }, [])
 
   const handleSearch = async () => {
     try {

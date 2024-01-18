@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
@@ -32,10 +32,15 @@ import Apikey from './Admin/ApiKey';
 import ComCode from './Admin/ComCode';
 import AdminApiRequest from './Admin/AdminApiRequest';
 import AdminApiResponse from './Admin/AdminApiResponse';
+import { AxiosInterceptor } from './apiAxios/axios'
+import Loading from './Component/Loading'
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const [loading, setLoading] = useState(false);
 root.render(
   <RecoilRoot>
+    <AxiosInterceptor>
   <BrowserRouter>
+  <React.Suspense fallback={<Loading loading={loading}/>}>
   <Navigation />
   <Routes>
   <Route path="/" element={<Main />}/>
@@ -65,7 +70,9 @@ root.render(
   <Route path="/admin/adminapirequest" element={<AdminApiRequest/>} />
   <Route path="/admin/adminapiresponse" element={<AdminApiResponse/>} />
   </Routes>
+  </React.Suspense>
   </BrowserRouter>
+  </AxiosInterceptor>
   </RecoilRoot>
 );
 
