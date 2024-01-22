@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Table, Container, Spinner } from "react-bootstrap";
 import axios from "axios";
 import FormatDate from "../Format/FormatDate";
@@ -8,8 +8,10 @@ import LoginPopup from "../User/LoginPopup";
 import { Pagination, Box } from "@mui/material";
 import instance from "../apiAxios/axios";
 import requests from "../apiAxios/requests";
+import Loading from '../Component/Loading';
 
 function MyInquiry() {
+  const [loading, setLoading] = useState(true);
   const [searchMyInquiry, setSearchMyInquiry] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [inquiryAnswer, setInquiryAnswer] = useState(null);
@@ -23,8 +25,8 @@ function MyInquiry() {
       : parseInt(totalpage / 10) + 1;
   const [currentPage, setCurrentPage] = useState(1);
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
-  axios.defaults.headers.common["Authorization"] = `Bearer ${isLoggedIn}`;
-
+  //axios.defaults.headers.common["Authorization"] = `Bearer ${isLoggedIn}`;
+  //instance.defaults.headers.common["Authorization"] = `Bearer ${isLoggedIn}`;
   const handleSearch2 = async () => {
     //나의 문의사항 가져오기
     
@@ -32,13 +34,14 @@ function MyInquiry() {
     console.log('axios', response);
   };
 
-  useEffect(()=>{
-    handleSearch2();
-  }, [])
+  // useEffect(()=>{
+  //   handleSearch2();
+  // }, [])
 
   const handleSearch = async () => {
+    debugger
     try {
-      const response = await axios.get("/spring/mypage/myinquiry", {
+      const response = await axios.get('/spring/mypage/myinquiry', {
         params: {
           page: currentPage - 1,
         },
@@ -110,14 +113,17 @@ function MyInquiry() {
 
   useEffect(() => {
     handleSearch();
+    //handleSearch2();
+    
   }, [currentPage]);
 
-  useEffect(() => {
-    handleSearch();
-  }, []);
+  // useEffect(() => {
+  //   handleSearch();
+  // }, []);
 
   return (
     <div className="App">
+      
       <Container style={{ margin: "100px auto" }}>
         <div>
           <h1 style={{ marginTop: "50px", marginBottom: "50px" }}>
@@ -242,6 +248,7 @@ function MyInquiry() {
           </Box>
         )}
       </Container>
+      
       {/* 로그인 모달 */}
       <LoginPopup
         show={showLoginModal}

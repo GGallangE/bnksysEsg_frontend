@@ -3,7 +3,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import '../css/Loading.css';
 
 const Loading = (props) => {
-    const check = props.loading == null ? false : props.Loading
+    const check = props.loading == null ? false : props.loading
     
     return(
         check &&
