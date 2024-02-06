@@ -8,7 +8,7 @@ import * as FileSaver from "file-saver";
 import Container from "react-bootstrap/Container";
 import FormatDate from "../Format/FormatDate";
 import { Link } from "react-router-dom";
-import ScheduleBusiness from "../Modal/ScheduleBusiness";
+import ScheduleModal from "../Modal/ScheduleModal";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 // import EditToolbar from '../Component/EditToolbar';
@@ -498,7 +498,7 @@ function DetailData1(props) {
 
       {/* 예약 모달 */}
       {modalShow && (
-        <ScheduleBusiness
+        <ScheduleModal
           show={modalShow}
           onHide={() => setModalShow(false)}
           onShow={handleModalShow}

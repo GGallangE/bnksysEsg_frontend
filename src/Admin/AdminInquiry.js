@@ -39,36 +39,46 @@ function AdminInquiry(){
     <div className="App">
       <Container style={{margin:'100px auto'}}>
         <div>
-        <h5 style={{marginTop : '50px', marginBottom : '50px'}}>문의사항 관리</h5>
-        <Table bordered>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>문의제목</th>
-                    <th>등록자</th>
-                    <th>등록일</th>
-                    <th>답변여부</th>
-                </tr>
-            </thead>
-            <tbody>
+
+        <h1 style={{ marginTop: '50px', marginBottom: '50px' }}>문의사항 관리</h1>
+      <div class="tb_w-yellow">
+            <div class="st_tb_w-yellow">
+              <ul class="st_tb_col-yellow">
+                <li class="tr-yellow">
+                  <div class="th-num-yellow">
+                    <span>NO</span>
+                  </div>
+                  <div class="th-tit-yellow">
+                    <span>문의제목</span>
+                  </div>
+                  <div class="th-writer-yellow">
+                    <span>등록자</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>등록일</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>답변여부</span>
+                  </div>
+                </li>
                 {searchInquiryList.map((item, index) => (
-                    <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>
+                  <li class="tr" key={index}>
+                    <div class="td-num">{index + 1}</div>
                     <div
+                    class="td-tit"
                     onClick={() => handleTitleClick(item)}
                     style={{ cursor: 'pointer', textDecoration: 'underline' }}
                     >
                     {item.inquirynm}
-                    </div>
-                    </td>
-                    <td>{item.username}</td>
-                    <td><FormatDate dateString={item.regdt} /></td>
-                    <td>{item.replycount === 0 ? '' : '답변 완료'}</td>
-                  </tr>
+                  </div>
+                    <div class="td-writer">{item.username}</div>
+                    <div class="td-date"><FormatDate dateString={item.regdt} /></div>
+                    <div class="td-writer">{item.replycount === 0 ? '' : '답변 완료'}</div>
+                  </li>
                 ))}
-            </tbody>
-        </Table>
+              </ul>
+            </div>
+          </div>
         </div>
       </Container>
        {/* 화면 중앙에 스피너 표시 */}

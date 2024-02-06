@@ -1,20 +1,19 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { Modal, Button, Form, Spinner } from 'react-bootstrap';
-import AsyncSelect from 'react-select/async';
-
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { Modal, Button, Form, Spinner } from "react-bootstrap";
+import AsyncSelect from "react-select/async";
 
 function ApiKeyDetail(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [searchResult, setSearchResults] = useState([]);
   const [error, setError] = useState(null);
-  const [sitenm, setSiteNm] = useState('');
-  const [apikey, setApiKey] = useState('');
-  const [strdt, setStrdt] = useState('');
-  const [edt, setEdt] = useState('');
+  const [sitenm, setSiteNm] = useState("");
+  const [apikey, setApiKey] = useState("");
+  const [strdt, setStrdt] = useState("");
+  const [edt, setEdt] = useState("");
   const [apiSites, setApiSites] = useState([]);
   const [selectedSite, setSelectedSite] = useState(null);
 
@@ -23,18 +22,18 @@ function ApiKeyDetail(props) {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await axios.get('/spring/admin/api/key', {
-          params: { apikeyid: props.selectedItem }
+        const response = await axios.get("/spring/admin/api/key", {
+          params: { apikeyid: props.selectedItem },
         });
         const data = response.data.data.data[0];
-        setSearchResults(response.data.data.data[0]); 
-        setSiteNm(data.sitenm || '');
-        setApiKey(data.apikey || '');
-        setStrdt(data.strdt || '');
-        setEdt(data.edt || '');
+        setSearchResults(response.data.data.data[0]);
+        setSiteNm(data.sitenm || "");
+        setApiKey(data.apikey || "");
+        setStrdt(data.strdt || "");
+        setEdt(data.edt || "");
 
-        if(data.sitenm) {
-          setSelectedSite({ label: data.sitenm, value: data.sitedvcd }); 
+        if (data.sitenm) {
+          setSelectedSite({ label: data.sitenm, value: data.sitedvcd });
         }
       } catch (error) {
         console.error("Error", error);
@@ -55,53 +54,53 @@ function ApiKeyDetail(props) {
     setIsLoading(true);
 
     let payload = {
-      apikeyid: props.selectedItem || 0,  
-      sitedvcd: selectedSite ? selectedSite.value : '', 
+      apikeyid: props.selectedItem || 0,
+      sitedvcd: selectedSite ? selectedSite.value : "",
       apikey: apikey,
       strdt: strdt,
-      edt: edt
+      edt: edt,
     };
 
     try {
-      const response = await axios.post('/spring/admin/api/key', payload);
+      const response = await axios.post("/spring/admin/api/key", payload);
       if (response.data.success) {
-        alert(response.data.messages.join('\n')); 
+        alert(response.data.messages.join("\n"));
       } else {
-        alert('Error: ' + response.data.messages.join('\n')); 
+        alert("Error: " + response.data.messages.join("\n"));
       }
     } catch (error) {
       console.error("Error saving API key:", error);
-      alert('Failed to save API key: ' + error.message); 
+      alert("Failed to save API key: " + error.message);
     } finally {
       setIsLoading(false);
-      handleClose(); 
+      handleClose();
     }
   };
 
   const loadOptions = async (inputValue) => {
     try {
-      const response = await axios.get('/spring/admin/api/comcode_search', {
+      const response = await axios.get("/spring/admin/api/comcode_search", {
         params: {
-          code: 'SITE',  
-          codevalue: inputValue  
-        }
+          code: "SITE",
+          codevalue: inputValue,
+        },
       });
-      return response.data.data.data.map(site => ({
+      return response.data.data.data.map((site) => ({
         label: site.codevalue,
         value: site.codelabel,
       }));
     } catch (error) {
       console.error("Error fetching API sites:", error);
-      return [];  
+      return [];
     }
   };
 
   const resetFormFields = () => {
-    setSiteNm('');
-    setApiKey('');
-    setStrdt('');
-    setEdt('');
-    setSelectedSite('');
+    setSiteNm("");
+    setApiKey("");
+    setStrdt("");
+    setEdt("");
+    setSelectedSite("");
   };
 
   const handleClose = () => {
@@ -114,63 +113,119 @@ function ApiKeyDetail(props) {
       {isLoading ? (
         <Spinner animation="border" role="status" />
       ) : searchResult ? (
-        <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          API KEY 관리
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {isLoading ? (
-          <Spinner animation="border" role="status" />
-        ) : (
-          <Container className="border border-dashed p-3">
-            <Form>
-              <Form.Group as={Row} className="mb-3">
-                  <Form.Label column xs={12}>API 사이트:</Form.Label>
-                  <Col xs={12}>
-                    <AsyncSelect
-                      cacheOptions
-                      defaultOptions={apiSites}
-                      loadOptions={loadOptions}
-                      value={selectedSite}
-                      onChange={setSelectedSite}
-                      placeholder="API 사이트 검색..."
-                    />
-                  </Col>
-                </Form.Group>
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column xs={12}>API KEY:</Form.Label>
-                <Col xs={12}>
-                  <Form.Control type="text" value={apikey} onChange={e => setApiKey(e.target.value)} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column xs={12}>KEY 유효기간(시작일):</Form.Label>
-                <Col xs={12}>
-                  <Form.Control type="text" value={strdt} onChange={e => setStrdt(e.target.value)} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column xs={12}>KEY 유효기간(종료일):</Form.Label>
-                <Col xs={12}>
-                  <Form.Control type="text" value={edt} onChange={e => setEdt(e.target.value)} />
-                </Col>
-              </Form.Group>
-            </Form>
-          </Container>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleSave}>저장</Button>
-        <Button onClick={handleClose}>닫기</Button>
-      </Modal.Footer>
-    </Modal>
+        <Modal
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header style={{ background: "#FAEAC0" }} closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              API KEY 관리
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {isLoading ? (
+              <Spinner animation="border" role="status" />
+            ) : (
+              <Container>
+                <Form>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column xs={12}>
+                      API 사이트
+                    </Form.Label>
+                    <Col xs={12}>
+                      <AsyncSelect
+                        cacheOptions
+                        defaultOptions={apiSites}
+                        loadOptions={loadOptions}
+                        value={selectedSite}
+                        onChange={setSelectedSite}
+                        placeholder="API 사이트 검색..."
+                      />
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column xs={12}>
+                      API KEY
+                    </Form.Label>
+                    <Col xs={12}>
+                      <Form.Control
+                        className="form-input"
+                        type="text"
+                        value={apikey}
+                        onChange={(e) => setApiKey(e.target.value)}
+                      />
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column xs={12}>
+                      KEY 유효기간(시작일)
+                    </Form.Label>
+                    <Col xs={12}>
+                      <Form.Control
+                        className="form-input"
+                        type="text"
+                        value={strdt}
+                        onChange={(e) => setStrdt(e.target.value)}
+                      />
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column xs={12}>
+                      KEY 유효기간(종료일)
+                    </Form.Label>
+                    <Col xs={12}>
+                      <Form.Control
+                        className="form-input"
+                        type="text"
+                        value={edt}
+                        onChange={(e) => setEdt(e.target.value)}
+                      />
+                    </Col>
+                  </Form.Group>
+                </Form>
+              </Container>
+            )}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "right",
+                margin: "30px auto 10px",
+              }}
+            >
+              <Button
+                style={{
+                  padding: "10px 30px",
+                  margin: "0 10px",
+                  background: "#FAEAC0",
+                  border: "none",
+                  color: "black",
+                }}
+                onClick={handleSave}
+              >
+                저장
+              </Button>
+              <Button
+                style={{
+                  padding: "10px 30px",
+                  margin: "0 10px",
+                  background: "#FAEAC0",
+                  border: "none",
+                  color: "black",
+                }}
+                onClick={handleClose}
+              >
+                닫기
+              </Button>
+            </div>
+          </Modal.Body>
+        </Modal>
       ) : (
         <div>데이터가 없습니다.</div>
       )}
     </div>
   );
-  }
+}
 
 export default ApiKeyDetail;

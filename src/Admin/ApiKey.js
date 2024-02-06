@@ -5,6 +5,7 @@ import FormatDate from '../Format/FormatDate';
 import { useRecoilValue } from 'recoil';
 import { isLoggedInAtom } from '../atom';
 import ApiKeyDetail from './ApiKeyDetail';
+import SearchIcon from '@mui/icons-material/Search';
 
 function Apikey() {
   const [apiKeyList, setApiKeyList] = useState([]);
@@ -52,6 +53,12 @@ function Apikey() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      searchApiKeys(e);
+    }
+  };
+
   const handleRegisterClick = () => {
     setSelectedItem(null); 
     setModalShow(true);
@@ -66,55 +73,71 @@ function Apikey() {
   return (
     <div className="App">
       <Container style={{ margin: '100px auto' }}>
-        <h5 style={{ marginTop: '50px', marginBottom: '50px' }}>API 키 관리</h5>
-        <Form onSubmit={searchApiKeys}>
-          <Row className="justify-content-md-center">
-            <Col md = {4}>
-              <Form.Control 
-                type="text" 
-                placeholder="검색" 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </Col>
-            <Col xs="auto">
-              <Button variant="primary" type="submit">검색</Button>
+      <h1 style={{ marginTop: '50px', marginBottom: '50px' }}>API 키 관리</h1>
+
+      <div className="use_sch_total_w-yellow">
+            <div className="use_sch_total-yellow">
+              <div className="use_input_wrap-yellow">
+                <input
+                  type="text"
+                  placeholder="검색어를 입력하세요"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="use_sch_ip-yellow"
+                />
+                <a onClick={searchApiKeys} className="use_btn_sch-yellow" id="submit">
+                  <SearchIcon sx={{ fontSize: '30px', color: '#fff', margin: '5px 0px 0px 0px' }} />
+                </a>
+              </div>
+            </div>
+          </div>
+          <Row className="justify-content-end">
+            <Col md="auto">
+              <Button onClick={handleRegisterClick} style={{ margin: '10px', background: '#fff', borderColor: '#FAEAC0', borderWidth: '2px', fontWeight: 'bold', color: '#000' }} variant="primary" type="submit">
+                등록
+              </Button>
             </Col>
           </Row>
-        </Form>
-        <Row className="justify-content-end">
-          <Col xs="auto">
-            <Button variant="primary" onClick={handleRegisterClick} style={{ marginBottom: '20px', marginRight: '30px' }}>
-              등록
-            </Button>
-          </Col>
-        </Row>
 
-        <Table bordered hover>
-          <thead>
-            <tr>
-              <th>NO</th>
-              <th>API 사이트</th>
-              <th>APIKEY</th>
-              <th>사용일</th>
-              <th>종료일</th>
-            </tr>
-          </thead>
-          <tbody>
-            {apiKeyList.map((apiKey, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td className="truncate" 
-                onClick={() => handleApiSiteClick(apiKey)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
-                  {truncateText(apiKey.sitenm, 15)}
-                </td>
-                <td className="truncate">{truncateText(apiKey.apikey, 40)}</td>
-                <td>{apiKey.strdt}</td>
-                <td>{apiKey.edt}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+      <div class="tb_w-yellow">
+            <div class="st_tb_w-yellow">
+              <ul class="st_tb_col-yellow">
+                <li class="tr-yellow">
+                  <div class="th-num-yellow">
+                    <span>NO</span>
+                  </div>
+                  <div class="th-tit-yellow">
+                    <span>API 사이트</span>
+                  </div>
+                  <div class="th-writer-yellow">
+                    <span>APIKEY</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>사용일</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>종료일</span>
+                  </div>
+                </li>
+                {apiKeyList.map((apiKey, index) => (
+                  <li class="tr" key={index}>
+                    <div class="td-num">{index + 1}</div>
+                    <div
+                    class="td-tit"
+                    onClick={() => handleApiSiteClick(apiKey)}
+                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                    {truncateText(apiKey.sitenm, 15)}
+                  </div>
+                    <div class="td-writer">{truncateText(apiKey.apikey, 40)}</div>
+                    <div class="td-date">{apiKey.strdt}</div>
+                    <div class="td-date">{apiKey.edt}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
       </Container>
       <ApiKeyDetail
         show={modalShow}

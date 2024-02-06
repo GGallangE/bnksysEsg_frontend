@@ -42,11 +42,8 @@ function InquiryRgt() {
 
         <h1>Q&A   <img src={xioImage} alt="캐릭터 지오" style={{ width: '80px' }}></img></h1>
         <Form>
-
           <Form.Group>
-
             <Form.Label className='form-label'>제목</Form.Label>
-
             <Form.Control onChange={(e) => setTitle(e.target.value)} value={title} type="text" placeholder="제목을 입력하세요" style={{ height: '50px', fontSize: '15px', borderColor: '#bcbcbc' }} />
           </Form.Group>
           <Form.Group>

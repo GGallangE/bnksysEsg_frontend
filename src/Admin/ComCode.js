@@ -4,6 +4,7 @@ import { Form, Container, Button, Row, Col, Table } from 'react-bootstrap';
 import { useRecoilValue } from 'recoil';
 import { isLoggedInAtom } from '../atom';
 import ComCodeDetail from './ComCodeDetail';
+import SearchIcon from '@mui/icons-material/Search';
 
 function ComCode() {
   const [comCodeList, setComCodeList] = useState([]);
@@ -60,6 +61,11 @@ function ComCode() {
     }
 };
 
+const handleKeyDown = (e) => {
+  if (e.key === 'Enter') {
+    searchComCode(e);
+  }
+};
 
   const handleRegisterClick = () => {
     setSelectedItem(null); 
@@ -75,51 +81,67 @@ function ComCode() {
   return (
     <div className="App">
       <Container style={{ margin: '100px auto' }}>
-        <h5 style={{ marginTop: '50px', marginBottom: '50px' }}>공통 코드 관리</h5>
-        <Form onSubmit={(e) => searchComCode(e)}>
-          <Row className="justify-content-md-center">
-            <Col md = {4}>
-              <Form.Control 
-                type="text" 
-                placeholder="검색" 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </Col>
-            <Col xs="auto">
-                 <Button variant="primary" type="submit">검색</Button>
+      <h1 style={{ marginTop: '50px', marginBottom: '50px' }}>공통 코드 관리</h1>
+
+      <div className="use_sch_total_w-yellow">
+            <div className="use_sch_total-yellow">
+              <div className="use_input_wrap-yellow">
+                <input
+                  type="text"
+                  placeholder="검색어를 입력하세요"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="use_sch_ip-yellow"
+                />
+                <a onClick={(e) => searchComCode(e)} className="use_btn_sch-yellow" id="submit">
+                  <SearchIcon sx={{ fontSize: '30px', color: '#fff', margin: '5px 0px 0px 0px' }} />
+                </a>
+              </div>
+            </div>
+          </div>
+          <Row className="justify-content-end">
+            <Col md="auto">
+              <Button onClick={handleRegisterClick} style={{ margin: '10px', background: '#fff', borderColor: '#FAEAC0', borderWidth: '2px', fontWeight: 'bold', color: '#000' }} variant="primary" type="submit">
+                등록
+              </Button>
             </Col>
           </Row>
-        </Form>
-        <Row className="justify-content-end">
-          <Col xs="auto">
-            <Button variant="primary" onClick={handleRegisterClick} style={{ marginBottom: '20px', marginRight: '30px' }}>
-              등록
-            </Button>
-          </Col>
-        </Row>
 
-        <Table bordered hover>
-          <thead>
-            <tr>
-              <th>NO</th>
-              <th>CODE</th>
-              <th>CODE_LABEL</th>
-              <th>CODE_VALUE</th>
-            </tr>
-          </thead>
-          <tbody>
-            {comCodeList.map((comCode, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td onClick={() => handleComCodeClick(comCode)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
-                    {comCode.code}</td>
-                <td>{comCode.codelabel}</td>
-                <td>{comCode.codevalue}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+      <div class="tb_w-yellow">
+            <div class="st_tb_w-yellow">
+              <ul class="st_tb_col-yellow">
+                <li class="tr-yellow">
+                  <div class="th-num-yellow">
+                    <span>NO</span>
+                  </div>
+                  <div class="th-tit-yellow">
+                    <span>CODE</span>
+                  </div>
+                  <div class="th-writer-yellow">
+                    <span>CODE_LABEL</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>CODE_VALUE</span>
+                  </div>
+                </li>
+                {comCodeList.map((comCode, index) => (
+                  <li class="tr" key={index}>
+                    <div class="td-num">{index + 1}</div>
+                    <div
+                    class="td-writer"
+                    onClick={() => handleComCodeClick(comCode)}
+                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                    {comCode.code}
+                  </div>
+                    <div class="td-writer">{comCode.codelabel}</div>
+                    <div class="td-writer">{comCode.codevalue}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
       </Container>
       <ComCodeDetail
         show={modalShow}

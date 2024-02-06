@@ -6,6 +6,8 @@ import FormatDate from '../Format/FormatDate';
 import AdminApiListDetail from './AdminApiListDetail'
 import { isLoggedInAtom } from '../atom'
 import { useRecoilValue } from 'recoil';
+import SearchIcon from '@mui/icons-material/Search';
+import '../css/AdminApiList.css';
 
 
 function AdminApiList(){
@@ -54,6 +56,12 @@ const handleSearchSubmit = (event) => {
         }
     }
 
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        handleSearch();
+      }
+    };
+
     const handleRegister = () => {
         setSelectedItem();
         setModalShow(true);
@@ -73,64 +81,83 @@ const handleSearchSubmit = (event) => {
     <div className="App">
       <Container style={{margin:'100px auto'}}>
         <div>
-        <h5 style={{marginTop : '50px', marginBottom : '50px'}}>API 목록 관리</h5>
-        <Form onSubmit={handleSearchSubmit}>
-                        <Row className="justify-content-md-center">
-                            <Col md={4}>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="검색"
-                                    value={searchTerm}
-                                    onChange={handleSearchInputChange}
-                                />
-                            </Col>
-                            <Col xs="auto">
-                                <Button variant="primary" type="submit" style={{ marginBottom: '20px' }}>
-                                    검색
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Form>
-        <Row className="justify-content-end">
-            <Col xs="auto">
-                <Button variant="primary" onClick={handleRegister} style={{ marginBottom: '20px', marginRight : '30px' }}>
-                     등록
-                </Button>
+        <h1 style={{marginTop : '50px', marginBottom : '50px'}}>API 목록 관리</h1>
+
+        <div className="use_sch_total_w-yellow">
+            <div className="use_sch_total-yellow">
+              <div className="use_input_wrap-yellow">
+                <input
+                  type="text"
+                  placeholder="검색어를 입력하세요"
+                  value={searchTerm}
+                  onChange={handleSearchInputChange}
+                  onKeyDown={handleKeyDown}
+                  className="use_sch_ip-yellow"
+                />
+                <a onClick={handleSearchSubmit} className="use_btn_sch-yellow" id="submit">
+                  <SearchIcon sx={{ fontSize: '30px', color: '#fff', margin: '5px 0px 0px 0px' }} />
+                </a>
+              </div>
+            </div>
+          </div>
+          <Row className="justify-content-end">
+            <Col md="auto">
+              <Button 
+                onClick={handleRegister}
+                style={{ margin: '10px', background: '#fff', borderColor: '#FAEAC0', borderWidth: '2px', fontWeight: 'bold', color: '#000' }}
+                variant="primary"
+                type="submit">
+                등록
+              </Button>
             </Col>
-        </Row>
-        <Table bordered>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>API 이름</th>
-                    <th>제공기관</th>
-                    <th>제공사이트</th>
-                    <th>등록일</th>
-                    <th>API 신청 이름</th>
-                    <th>개발상태</th>
-                </tr>
-            </thead>
-            <tbody>
+          </Row>
+
+        <div class="tb_w-yellow">
+            <div class="st_tb_w-yellow">
+              <ul class="st_tb_col-yellow">
+                <li class="tr-yellow">
+                  <div class="th-num-yellow">
+                    <span>NO</span>
+                  </div>
+                  <div class="th-tit-yellow">
+                    <span>API 이름</span>
+                  </div>
+                  <div class="th-writer-yellow">
+                    <span>제공기관</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>제공사이트</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>등록일</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>API 신청 이름</span>
+                  </div>
+                  <div class="th-date-yellow">
+                    <span>개발상태</span>
+                  </div>
+                </li>
                 {searchApplyApiList.map((item, index) => (
-                    <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>
+                  <li class="tr" key={index}>
+                    <div class="td-num">{index + 1}</div>
                     <div
+                    class="td-tit"
                     onClick={() => handleTitleClick(item)}
                     style={{ cursor: 'pointer', textDecoration: 'underline' }}
                     >
                     {item.apinm}
-                    </div>
-                    </td>
-                    <td>{item.prvorg}</td>
-                    <td>{item.sitenm}</td>
-                    <td><FormatDate dateString={item.apirgdt} /></td>
-                    <td>{item.apiapplynm}</td>
-                    <td>{item.usedvcd === '01' ? '사용가능' : item.usedvcd === '02' ? '읽기가능' : '개발중'}</td>
-                  </tr>
+                  </div>
+                    <div class="td-date">{item.prvorg}</div>
+                    <div class="td-date">{item.sitenm}</div>
+                    <div class="td-date"><FormatDate dateString={item.apirgdt} /></div>
+                    <div class="td-date">{item.apiapplynm}</div>
+                    <div class="td-date">{item.usedvcd === '01' ? '사용가능' : item.usedvcd === '02' ? '읽기가능' : '개발중'}</div>
+                  </li>
                 ))}
-            </tbody>
-        </Table>
+              </ul>
+            </div>
+          </div>
         </div>
       </Container>
       <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}></div>

@@ -31,6 +31,7 @@ function MyScheduleBusiness(props) {
   const [selectedMinute, setSelectedMinute] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedFrequency, setSelectedFrequency] = useState("");
+  const [selectedEmail, setSelectedEmail] = useState("");
   const [secondOptions, setSecondOptions] = useState([]);
   const [content, setContent] = useState("");
   const [fileOption, setFileOption] = useState("");
@@ -70,13 +71,10 @@ function MyScheduleBusiness(props) {
       setSelectedHour(props.time.substring(0, 2));
       setSelectedMinute(props.time.substring(props.time.length - 2));
     }
+    setSelectedEmail(props.email);
     requiredItem();
     handleOptionChange(props.frequency);
   }, [props.show]);
-
-  // useEffect(()=>{
-  //   debugger
-  // },[selectedDay])
 
   //입력값 grid에 필수 값 컬럼 설정
   useEffect(() => {
@@ -92,7 +90,8 @@ function MyScheduleBusiness(props) {
       const gridRows = rsvData.map((rowData, index) => {
         const gridRow = { id: index }; // 각 row의 고유한 id 설정
         Object.keys(rowData).forEach((key) => {
-          gridRow[key] = rowData[key]; // 기존의 key와 value 그대로 복사
+          // 앞에 공백을 추가하여 값을 설정
+          gridRow[key] = rowData[key];// 기존의 key와 value 그대로 복사
         });
         return gridRow;
       });
@@ -265,6 +264,7 @@ function MyScheduleBusiness(props) {
                 frequency: selectedFrequency,
                 time: selectedTime,
                 dayofmonth: selectedDay,
+                email:selectedEmail,
                 apiformat: fileOption,
                 batchDetailargsDto: dataToSend,
               }
@@ -282,6 +282,7 @@ function MyScheduleBusiness(props) {
                 frequency: selectedFrequency,
                 time: selectedTime,
                 dayofweek: selectedDay,
+                email:selectedEmail,
                 apiformat: fileOption,
                 batchDetailargsDto: dataToSend,
               }
@@ -301,6 +302,7 @@ function MyScheduleBusiness(props) {
                 batchlistid: props.batchlistId,
                 frequency: selectedFrequency,
                 time: selectedTime,
+                email:selectedEmail,
                 apiformat: fileOption,
                 batchDetailargsDto: dataToSend,
               }
@@ -529,9 +531,26 @@ function MyScheduleBusiness(props) {
                   <option value="">선택하세요</option>
                   <option value="excel">EXCEL</option>
                   <option value="txt">TXT</option>
-                  {/* <option value="json">JSON</option> */}
-                  <option value="xml">XML</option>
+                  {(props.dataFormat) && props.dataFormat.split(",").map((format, index) => (
+                    <option key={index} value={format.toLowerCase()}>
+                      {format.toUpperCase()}
+                    </option>
+                  ))}
                 </Form.Select>
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col xs={2} className="d-flex align-items-center" style={{ width: "104px" }}>
+                이메일:
+              </Col>
+              <Col xs={3}>
+                <Form.Control
+                  style={{border:'solid 1px #cccccc', height:'45px', width:'300px'}}
+                  type="email"
+                  placeholder="이메일 입력"
+                  value={selectedEmail}
+                  onChange={(e) => setSelectedEmail(e.target.value)}
+                />
               </Col>
             </Row>
             <h5 style={{ textAlign: "left" }}>입력값</h5>

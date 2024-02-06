@@ -3,9 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/Main.css';
-import NoticeDetail from '../Modal/NoticeDetail'
+import NoticeDetailModal from '../Modal/NoticeDetailModal'
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
+import MoveApiRegister from "../Modal/MoveApiRegister";
 
 function Main() {
   const [searchNotice, setSearchNotice] = useState([]);
@@ -15,6 +16,10 @@ function Main() {
   const [showNoticeDetail, setShowNoticeDetail] = useState(false);
   const [selectedNoticeItem, setSelectedNoticeItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [modalShow, setModalShow] = useState(false);
+  const [modalapilistid, setModalapilistid] = useState("");
+  const [modalapinm, setModalapinm] = useState("");
+  const [modalapiexpl, setModalapiexpl] = useState("");
   const navigate = useNavigate();
 
   const notice = async () => {
@@ -94,6 +99,29 @@ function Main() {
     navigate('/information/notice');
   };
 
+  const CustomLink = ({ apilistid, apinm, apiexpl, usedvcd }) => {
+    const handleMoveApiDetail = () => {
+      if (usedvcd === "01") {
+        navigate(`/api/detailapi/${apilistid}`);
+      } else {
+        showApiRegisterModal(apilistid, apinm, apiexpl);
+      }
+    };
+  
+    return (
+      <span className="tite" onClick={handleMoveApiDetail}>
+        {apinm.length > 15 ? `${apinm.substring(0, 15)}...` : apinm}
+      </span>
+    );
+  };
+
+  const showApiRegisterModal = (apilistid, apinm, apiexpl) => {
+    setModalShow(true);
+    setModalapilistid(apilistid);
+    setModalapinm(apinm);
+    setModalapiexpl(apiexpl);
+  };
+
   useEffect(() => {
     notice();
     popular();
@@ -117,12 +145,11 @@ function Main() {
               className="search-button"
               onClick={handleSearch}
               type="submit">
-              <SearchIcon sx={{ fontSize: '23px' }} />Search
+              <SearchIcon sx={{ fontSize: '35px' }} />
             </button>
           </div>
         </div>
       </div>
-      {/* <div className="article"> */}
         <div className="intelligence_list_w">
           <div className="h_w">
             <h2 style={{textAlign: 'center'}}><em className="b">TOP 5</em></h2>
@@ -167,11 +194,7 @@ function Main() {
                       <li key={index}>
                         <div className="w">
                           <p className="category" style={{ background: '#BBD4EF' }}><span>{index + 1}</span></p>
-                          <Link to={`/api/detailapi/${item.apilistid}`} className="tite">
-                            {item.apinm.length > 15
-                              ? `${item.apinm.substring(0, 15)}...`
-                              : item.apinm}
-                          </Link>
+                          <CustomLink apilistid={item.apilistid} apinm={item.apinm} apiexpl={item.apiexpl} usedvcd={item.usedvcd} />
                         </div>
                       </li>
                     ))}
@@ -191,11 +214,7 @@ function Main() {
                       <li key={index}>
                         <div className="w">
                           <p className="category" style={{ background: '#FAEAC0' }}><span>{index + 1}</span></p>
-                          <Link to={`/api/detailapi/${item.apilistid}`} className="tite">
-                            {item.apinm.length > 15
-                              ? `${item.apinm.substring(0, 15)}...`
-                              : item.apinm}
-                          </Link>
+                          <CustomLink apilistid={item.apilistid} apinm={item.apinm} apiexpl={item.apiexpl} usedvcd={item.usedvcd} />
                         </div>
                       </li>
                     ))}
@@ -205,11 +224,17 @@ function Main() {
             </li>
           </ul>
         </div>
-      {/* </div> */}
-      <NoticeDetail
+      <NoticeDetailModal
         show={showNoticeDetail}
         onHide={() => setShowNoticeDetail(false)}
         selectedItem={selectedNoticeItem}
+      />
+      <MoveApiRegister
+        apilistid={modalapilistid}
+        apinm={modalapinm}
+        apiexpl={modalapiexpl}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
       />
     </div>
   );

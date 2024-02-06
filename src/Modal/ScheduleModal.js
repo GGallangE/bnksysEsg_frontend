@@ -29,6 +29,7 @@ function ScheduleBusiness(props) {
   const [selectedMinute, setSelectedMinute] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedFrequency, setSelectedFrequency] = useState("");
+  const [selectedEmail, setSelectedEmail] = useState("");
   const [secondOptions, setSecondOptions] = useState([]);
   const [content, setContent] = useState("");
   const [fileOption, setFileOption] = useState("");
@@ -204,6 +205,7 @@ function ScheduleBusiness(props) {
               frequency: selectedFrequency,
               time: selectedTime,
               dayofmonth: selectedDay,
+              email:selectedEmail,
               apiformat: fileOption,
               batchDetailargsDto: dataToSend,
             });
@@ -217,6 +219,7 @@ function ScheduleBusiness(props) {
               frequency: selectedFrequency,
               time: selectedTime,
               dayofweek: selectedDay,
+              email:selectedEmail,
               apiformat: fileOption,
               batchDetailargsDto: dataToSend,
             });
@@ -230,6 +233,7 @@ function ScheduleBusiness(props) {
               apilistid: props.apilistid,
               frequency: selectedFrequency,
               time: selectedTime,
+              email:selectedEmail,
               apiformat: fileOption,
               batchDetailargsDto: dataToSend,
             });
@@ -455,6 +459,20 @@ function ScheduleBusiness(props) {
                     </option>
                   ))}
                 </Form.Select>
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col xs={2} className="d-flex align-items-center" style={{ width: "104px" }}>
+                이메일:
+              </Col>
+              <Col xs={3}>
+                <Form.Control
+                  style={{border:'solid 1px #cccccc', height:'45px', width:'300px'}}
+                  type="email"
+                  placeholder="이메일 입력"
+                  value={selectedEmail}
+                  onChange={(e) => setSelectedEmail(e.target.value)}
+                />
               </Col>
             </Row>
             <h5 style={{ textAlign: "left" }}>입력값</h5>

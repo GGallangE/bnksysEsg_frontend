@@ -12,7 +12,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import MoveApiRegister from "../Modal/MoveApiRegister";
-import ApiDetailInfo from "../Modal/ApiDetailInfo";
 
 function ApiList() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,7 +22,7 @@ function ApiList() {
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   const [totalpage, setTotalpage] = useState(1);
   const LAST_PAGE =
-    totalpage % 30 === 0 ? parseInt(totalpage / 30) : parseInt(totalpage / 30);
+    totalpage % 30 === 0 ? parseInt(totalpage / 30) : parseInt(totalpage / 30) + 1;
   const [currentPage, setCurrentPage] = useState(1);
   const [modalShow, setModalShow] = useState(false);
   const [detailInfoModalShow, setDetailInfoModalShow] = useState(false);
@@ -148,10 +147,6 @@ function ApiList() {
     } else {
       showApiRegisterModal(apilistid, apinm, apiexpl);
     }
-  };
-
-  const showApiDetailInfo = () => {
-    setDetailInfoModalShow(true);
   };
 
   return (
@@ -424,10 +419,6 @@ function ApiList() {
         apiexpl={modalapiexpl}
         show={modalShow}
         onHide={() => setModalShow(false)}
-      />
-      <ApiDetailInfo
-        show={detailInfoModalShow}
-        onHide={() => setDetailInfoModalShow(false)}
       />
     </div>
   );
